@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('name_creator')->nullable();
             $table->text('difficulty');
             $table->text('category');
+            $table->ENUM('type', array('daily', 'demo', 'normal'))->DEFAULT('normal');
         });
     }
 
