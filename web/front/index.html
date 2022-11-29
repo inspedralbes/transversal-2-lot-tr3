@@ -19,16 +19,20 @@
         <!-- Load the following for BootstrapVueIcons support -->
         <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
     
+        <!-- Para las rutas-->
         <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
         
+        <!-- Para pinia  -->
         <script src="https://unpkg.com/@vue/composition-api"></script>
         <script src="https://unpkg.com/vue-demi"></script>
         <script src="https://unpkg.com/pinia"></script>
+
+        <!-- css -->
         <link rel="stylesheet" href="style.css">
     </head>
 <body>
     <div id = "app">
-        <div class="card">
+        <!-- <div class="card">
             <div class="card__pregunta"></div>
             <div class="card__respuestas respuesta">
                 <div class="respuestas_respuesta"></div>
@@ -36,7 +40,8 @@
                 <div class="respuestas_respuesta"></div>
                 <div class="respuestas_respuesta"></div>
             </div>
-        </div>
+        </div> -->
+        <router-view @userLogged='userLogged' @userUnlogged='userUnlogged'></router-view>
     </div>
     <script src="app.js"></script>
 </body>
