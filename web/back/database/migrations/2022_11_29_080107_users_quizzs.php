@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('quizz_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quizz_id')->references('id')->on('quizzs')->onDelete('cascade');
-            $table->bigInteger('score');   
-            $table->bigInteger('time_resolution');  
+            $table->bigInteger('score')->default(0);   
+            $table->bigInteger('time_resolution')->default(150);  
             $table->timestamp('date'); 
         });
     }
