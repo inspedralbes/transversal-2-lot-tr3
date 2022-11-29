@@ -19,7 +19,7 @@ class QuizzsController extends Controller
         $daily = Quizz::inRandomOrder()
             ->limit(1)
             ->where('type', 'daily')
-            ->where('date_creation', 'daily')
+            ->where('date_creation', date('Y-m-d'))
             ->first();
         return response()->json($daily->game);
     }
