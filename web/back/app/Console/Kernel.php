@@ -13,10 +13,24 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+    // protected function schedule(Schedule $schedule)
+    // {
+    //     $schedule->call(function () {
+    //         $inscripciones = Inscripcion::all();
+    //         foreach ($inscripciones as $inscripcion) {
+    //             $evento = Evento::find($inscripcion->evento_id);
+    //             $objDemo = new Email();
+    //             $objDemo->sender = 'Alessia';
+    //             $objDemo->receiver = $inscripcion->nom;
+    //             $objDemo->titol = $evento->titol;
+    //             $objDemo->data = $evento->data;
+    //             $objDemo->hora = $evento->hora;
+    //             $objDemo->minuts = $evento->minuts;
+    //             $objDemo->id = $id;
+    //             Mail::to($inscripcion->email)->send(new confirmacio($objDemo)); 
+    //         }  
+    //     })->daily();
+    // }
 
     /**
      * Register the commands for the application.

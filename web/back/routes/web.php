@@ -34,3 +34,4 @@ require __DIR__.'/auth.php';
 Route::get('quizzs', [QuizzsController::class , 'getQuizzs']);
 Route::get('demo', [QuizzsController::class , 'getDemo']);
 Route::get('daily', [QuizzsController::class , 'getDaily']);
+Route::get('curl', [QuizzsController::class , 'curl']);

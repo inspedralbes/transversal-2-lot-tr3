@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('quizzs', function (Blueprint $table) {
             $table->id();
             $table->json('game');
-            $table->timestamp('date_creation');
+            $table->date('date_creation')->default(date('Y-m-d'));
             $table->text('name_creator')->nullable();
             $table->text('difficulty');
             $table->text('category');
