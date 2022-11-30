@@ -1,17 +1,28 @@
 //Componentes
 const Questions={
     //props:true,
-    props:['category','difficulty'],
+    props:['category','difficulty','type'],
     data:function(){
         return{
             quizz:null,
             correct:0,
             time:0,
-            nQuestion:0
+            nQuestion:0,
+            actualQ:0
         }
     },
     methods:{
-        
+        goNext:function(correct){
+            if(correct==true){
+                this.correct++
+            }
+            this.actualQ++;
+            // if(this.actualQ < this.nQuestion ){
+            //     this.actualQ++;
+            // }else{
+            //     this.quizz=null;
+            // }
+        }
     },
     computed: {
         isLogged() {
@@ -26,16 +37,18 @@ const Questions={
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
+                this.nQuestion=Object.keys(this.quizz).length-1;
             }).catch((error) => {
                 console.error('Error:', error);
             });
             console.log('fetch');
         }else if(type=='daily'){
             //fetch a diaria
-            fetch(`../../back/daily`)
+            fetch(`../back/public/daily`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
+                this.nQuestion=Object.keys(this.quizz).length-1;
             }).catch((error) => {
                 console.error('Error:', error);
             });
@@ -46,13 +59,38 @@ const Questions={
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
+                this.nQuestion=Object.keys(this.quizz).length-1;
+
+                var question=new FormData();
+                question.append('id_user', userStore().loginInfo.idUser);
+                question.append('user_name', userStore().loginInfo.name);
+                question.append('json', data);
+                question.append('difficulty', this.difficulty);
+                question.append('category', this.category);
+                fetch('../back/public/newGame',{
+                    method: "POST",
+                    body: question
+                })
+                .then ((response)=>response.json())
+                .then((data)=>{
+                });
+
+
             });
         }
     },
     template:`
     <b-container>
         <div v-if="this.quizz">
-            <question :question_info=this.quizz[this.nQuestion]></question>
+            <div v-for="(question,index) in this.quizz">
+                <div v-show="index==actualQ">
+                    <p>{{index+1}}</p>
+                    <question :question_info=question @answered='goNext'></question>
+                </div>
+            </div>
+            <div v-show="nQuestion<actualQ">
+            <h1>Correctas: {{this.correct}}/{{this.nQuestion+1}}</h1>
+            </div>
         </div>
     </b-container>`
 
@@ -121,17 +159,31 @@ Vue.component('question',{
         }
     },
     methods:{
+        sleep(milliseconds) {
+            const date = Date.now();
+            let currentDate = null;
+            do {
+              currentDate = Date.now();
+            } while (currentDate - date < milliseconds);
+        },
         validate(i){
             console.log(this.answers[i].answer);
             answer=this.answers[i];
+            let ok=false;
            if(answer.answer==this.question_info.correctAnswer){
                 answer.correct=true;
                 console.log('correcto');
+                ok=true;
            }else{
                 answer.incorrect=true;
                 console.log('incorrecto');
            }
+           //this.sleep(5000)
+            this.$emit('answered',ok);
         }
+    },
+    sendInfo:function(ok){
+        //this.$emit('answered',ok);
     },
     mounted(){
         this.question_info.incorrectAnswers.forEach(element => {
@@ -194,7 +246,6 @@ const userStore = Pinia.defineStore('usuario', {
             loginInfo: {
                 success: true,
                 name: 'Nombre del almacen',
-                image: '',
                 idUser: ''
             }
         }
