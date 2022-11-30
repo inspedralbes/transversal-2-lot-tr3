@@ -18,9 +18,11 @@ return new class extends Migration
             $table->json('game');
             $table->date('date_creation')->default(date('Y-m-d'));
             $table->text('name_creator')->nullable();
-            $table->text('difficulty');
-            $table->text('category');
+            $table->text('difficulty')->nullable();
+            $table->text('category')->nullable();
             $table->ENUM('type', array('daily', 'demo', 'normal'))->DEFAULT('normal');
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
