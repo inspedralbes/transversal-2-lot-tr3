@@ -1,6 +1,7 @@
 //Componentes
 const Questions={
-    props:true,
+    //props:true,
+    props:['category','difficulty'],
     data:function(){
         return{
             quizz:null,
@@ -20,16 +21,31 @@ const Questions={
     mounted(){
         if(!userStore().logged){
             // fetch a demo
-            fetch('https://the-trivia-api.com/api/questions?categories=film_and_tv&limit=10&difficulty=easy')
+            fetch(`../../back/demo`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
+            }).catch((error) => {
+                console.error('Error:', error);
             });
             console.log('fetch');
         }else if(type=='daily'){
             //fetch a diaria
+            fetch(`../../back/dayli`)
+            .then ((response)=>response.json())
+            .then((data)=>{
+                this.quizz=data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+
         }else{
             //fetch a la api externa 
+            fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
+            .then ((response)=>response.json())
+            .then((data)=>{
+                this.quizz=data;
+            });
         }
     },
     template:`
@@ -38,6 +54,51 @@ const Questions={
             <question :question_info=this.quizz[this.nQuestion]></question>
         </div>
     </b-container>`
+
+}
+
+const Index={
+    //props:true,
+    props:['category','difficulty'],
+    data:function(){
+        return{
+            quizz:null
+        }
+    },
+    methods:{
+        
+    },
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        }
+    },
+    mounted(){
+    },
+    template:`
+        <div>
+            <div class="wrapper">
+                <RouterLink class="wrapper__routerRanking" to="/"><button class="wrapper__ranking">Ranking</button></RouterLink>
+                <div v-show='!isLogged'>
+                    <RouterLink class="wrapper__routerLogin" to="/"><button class="wrapper__login">Log in</button></RouterLink>
+                </div>
+                <div v-show='isLogged'>
+                    <RouterLink class="wrapper__routerProfile" to="/"><button class="wrapper__profile">Profile</button></RouterLink>
+                </div>
+            </div>
+            <div class="center">
+                <div v-if='!isLogged'>
+                    <input type="text" placeholder="Introduce nickname" class="center__input">
+                    <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
+                </div>
+                <div v-else>
+                    <input type="text" placeholder="Introduce nickname" class="center__input">
+                    <RouterLink class="center__routerPlay" to="/ruta"><button class="center__play">Play</button></RouterLink>
+                </div>
+            </div>
+        
+        </div>
+    `
 
 }
 
