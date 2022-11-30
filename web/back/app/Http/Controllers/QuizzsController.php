@@ -22,6 +22,7 @@ class QuizzsController extends Controller
             ->where('type', 'daily')
             ->where('date_creation', date('Y-m-d'))
             ->first();
-        return response()->json($daily->game);
+        $quizz = json_decode($daily->game); 
+        return response()->json($quizz);
     }
 }
