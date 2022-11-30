@@ -10,9 +10,10 @@ class QuizzsController extends Controller
     public function getDemo(Request $request) {
         $demo = Quizz::inRandomOrder()
             ->limit(1)
-            ->where('type', 'demo')
+            ->where('type', 'daily')
             ->first();
-        return response()->json($demo->game);
+        $quizz = json_decode($demo->game);  
+        return response()->json($quizz);
     }
 
     public function getDaily(Request $request) {
