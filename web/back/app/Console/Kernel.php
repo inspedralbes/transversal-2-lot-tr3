@@ -13,24 +13,34 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    // protected function schedule(Schedule $schedule)
-    // {
-    //     $schedule->call(function () {
-    //         $inscripciones = Inscripcion::all();
-    //         foreach ($inscripciones as $inscripcion) {
-    //             $evento = Evento::find($inscripcion->evento_id);
-    //             $objDemo = new Email();
-    //             $objDemo->sender = 'Alessia';
-    //             $objDemo->receiver = $inscripcion->nom;
-    //             $objDemo->titol = $evento->titol;
-    //             $objDemo->data = $evento->data;
-    //             $objDemo->hora = $evento->hora;
-    //             $objDemo->minuts = $evento->minuts;
-    //             $objDemo->id = $id;
-    //             Mail::to($inscripcion->email)->send(new confirmacio($objDemo)); 
-    //         }  
-    //     })->daily();
-    // }
+
+    public function insertDaily($quizz) {
+        
+    }
+    
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->call(function () {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://the-trivia-api.com/api/questions?limit=10",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache"
+              ),
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            
+            json_decode($response);
+            $this->insertDaily($response);
+        })->daily();
+    }
 
     /**
      * Register the commands for the application.
