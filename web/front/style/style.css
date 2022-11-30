@@ -1,0 +1,9 @@
+.resposta__correcte {
+    background-color: #409626;
+    color: white;
+}
+
+.resposta__incorrecte {
+    background-color: #962626;
+    color: white;
+}

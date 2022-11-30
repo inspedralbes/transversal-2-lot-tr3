@@ -21,7 +21,8 @@ const Questions={
     mounted(){
         if(!userStore().logged){
             // fetch a demo
-            fetch(`../back/public/demo`)
+            //fetch(`../back/public/demo`)
+            fetch(`https://the-trivia-api.com/api/questions?limit=10`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -120,8 +121,16 @@ Vue.component('question',{
         }
     },
     methods:{
-        validate(){
-           
+        validate(i){
+            console.log(this.answers[i].answer);
+            answer=this.answers[i];
+           if(answer.answer==this.question_info.correctAnswer){
+                answer.correct=true;
+                console.log('correcto');
+           }else{
+                answer.incorrect=true;
+                console.log('incorrecto');
+           }
         }
     },
     mounted(){
@@ -152,7 +161,7 @@ Vue.component('question',{
         </div>
         <div class="targeta__respostes resposta"  v-for="(answer,index) in this.answers">
             <div class="respostes__resposta">
-                <button @click="validate(this.answer)" :class="{answer--correct: correct},{}">{{answer.answer}}</button>
+                <button @click="validate(index)" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
         </div>
     </div>`
