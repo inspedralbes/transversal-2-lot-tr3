@@ -21,7 +21,7 @@ const Questions={
     mounted(){
         if(!userStore().logged){
             // fetch a demo
-            fetch(`../../back/demo`)
+            fetch(`../back/public/demo`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -31,14 +31,14 @@ const Questions={
             console.log('fetch');
         }else if(type=='daily'){
             //fetch a diaria
-            fetch(`../../back/dayli`)
+            fetch(`../../back/daily`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
             }).catch((error) => {
                 console.error('Error:', error);
             });
-
+            
         }else{
             //fetch a la api externa 
             fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
@@ -114,12 +114,47 @@ const Index={
 
 Vue.component('question',{
     props: ['question_info'],
+    data:function(){
+        return{
+            answers:[]
+        }
+    },
     methods:{
         validate(){
-        },
+           
+        }
     },
-    template:`<div>
-        {{question_info}}
+    mounted(){
+        this.question_info.incorrectAnswers.forEach(element => {
+            let a={
+                correct: false, 
+                incorrect: false,
+                answer: element
+            }
+            
+            this.answers.push(a);
+        });
+        // this.answers.push(this.question_info.correctAnswer);
+        let a={
+            correct: false, 
+            incorrect: false,
+            answer: this.question_info.correctAnswer
+        }
+        
+        this.answers.push(a);
+        this.answers=this.answers.sort((a, b) => 0.5 - Math.random());
+
+    },
+    template:`
+    <div class="targeta">
+        <div class="targeta__pregunta">
+            <h1>{{this.question_info.question}}</h1>
+        </div>
+        <div class="targeta__respostes resposta"  v-for="(answer,index) in this.answers">
+            <div class="respostes__resposta">
+                <button @click="validate(this.answer)" :class="{answer--correct: correct},{}">{{answer.answer}}</button>
+            </div>
+        </div>
     </div>`
     // template:`<p>{{info.Title}}</p>`
     
@@ -130,7 +165,7 @@ Vue.component('question',{
 const routes = [
     {
         path: '/',
-        component: Questions
+        component: Index
     }, 
     {
         path: '/questions',
