@@ -14,16 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('challenges', function (Blueprint $table) {
-            $table->unsignedBigInteger('challenger');
-            $table->unsignedBigInteger('challenged');
+            $table->bigInteger('challenger')->unsigned()->index();
+            $table->bigInteger('challenged')->unsigned();
+            $table->bigInteger('quizz_id')->unsigned();
             $table->unsignedBigInteger('winner');
-            $table->unsignedBigInteger('quizz_id');
+            $table->date('date_creation'); 
+            $table->ENUM('status', array('pending', 'declined', 'completed'))->DEFAULT('pending');
+
             $table->foreign('challenger')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('challenged')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('winner')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quizz_id')->references('id')->on('quizzs')->onDelete('cascade');
-            $table->date('date_creation'); 
-            $table->ENUM('status', array('pending', 'declined', 'completed'))->DEFAULT('pending');
+
+            $table->primary(['challenger', 'challenged', 'quizz_id']);
         });
     }
 

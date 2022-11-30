@@ -24,10 +24,14 @@ class QuizzsController extends Controller
         return response()->json($daily->game);
     }
 
+    public function insertDaily($quizz) {
+        
+    }
+
     public function curl(Request $request) {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-          CURLOPT_URL => "https://the-trivia-api.com/api/questions?categories=science&limit=10&difficulty=hard",
+          CURLOPT_URL => "https://the-trivia-api.com/api/questions?limit=10",
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_TIMEOUT => 30,
           CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
@@ -39,10 +43,8 @@ class QuizzsController extends Controller
         
         $response = curl_exec($curl);
         $err = curl_error($curl);
-        
         curl_close($curl);
-
-        return $response;
+        
+        return json_decode($response);
     }
-
 }
