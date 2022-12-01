@@ -33,7 +33,14 @@ const Questions={
         if(!userStore().logged){
             // fetch a demo
             //fetch(`../back/public/demo`)
-            fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            //fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            var question=new FormData();
+            question.append('id_user', userStore().loginInfo.idUser);
+            question.append('user_name', userStore().loginInfo.name);
+            fetch('../back/public/newGame',{
+                method: "POST",
+                body: question
+            })
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -245,8 +252,8 @@ const userStore = Pinia.defineStore('usuario', {
             logged: false,
             loginInfo: {
                 success: true,
-                name: 'Nombre del almacen',
-                idUser: ''
+                name: 'alessia',
+                idUser: 1
             }
         }
     },

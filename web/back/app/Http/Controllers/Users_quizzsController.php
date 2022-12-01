@@ -9,8 +9,9 @@ use App\Models\Quizz;
 class Users_quizzsController extends Controller
 {
     public function newGame(Request $request) {
+        json_decode($request);
         $addQuizz = new Quizz();
-        $addQuizz -> game = $request -> json;
+        $addQuizz -> game = json_encode($request -> json);
         $addQuizz -> date_creation = date('Y-m-d');
         $addQuizz -> name_creator = $request -> user_name;
         $addQuizz -> difficulty = $request -> difficulty;
