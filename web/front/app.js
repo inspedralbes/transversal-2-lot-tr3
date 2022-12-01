@@ -33,21 +33,21 @@ const Questions = {
         if (!userStore().logged) {
             // fetch a demo
             //fetch(`../back/public/demo`)
-            //fetch(`https://the-trivia-api.com/api/questions?limit=10`)
-            var question=new FormData();
-            question.append('id_user', userStore().loginInfo.idUser);
-            question.append('user_name', userStore().loginInfo.name);
-            fetch('../back/public/newGame',{
-                method: "POST",
-                body: question
-            })
-            .then ((response)=>response.json())
-            .then((data)=>{
-                this.quizz=data;
-                this.nQuestion=Object.keys(this.quizz).length-1;
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
+            fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+                // var question=new FormData();
+                // question.append('id_user', userStore().loginInfo.idUser);
+                // question.append('user_name', userStore().loginInfo.name);
+                // fetch('../back/public/newGame',{
+                //     method: "POST",
+                //     body: question
+                // })
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
             console.log('fetch');
         } else if (type == 'daily') {
             //fetch a diaria
@@ -220,7 +220,7 @@ Vue.component('question', {
         </div>
         <div class="card__answers answers">
             <div class="answers__answer" v-for="(answer,index) in this.answers">
-                <button @click="validate(index)" id="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+                <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
         </div>
     </div>`
