@@ -31,16 +31,16 @@ const Questions = {
     },
     mounted() {
         if (!userStore().logged) {
-            // fetch a demo
-            //fetch(`../back/public/demo`)
-            //fetch(`https://the-trivia-api.com/api/questions?limit=10`)
             var question=new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
             question.append('user_name', userStore().loginInfo.name);
-            fetch('../back/public/newGame',{
-                method: "POST",
-                body: question
-            })
+            // fetch a demo
+            //fetch(`../back/public/demo`)
+            fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            // fetch('../back/public/newGame',{
+            //     method: "POST",
+            //     body: question
+            // })
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -103,11 +103,13 @@ const Questions = {
 }
 
 const Index = {
-    //props:true,
-    props: ['category', 'difficulty'],
+    //params:true,
+    // props: ['', ''],
     data: function() {
         return {
-            quizz: null
+            quizz: null,
+            category:'film_and_tv',
+            difficulty:'easy'
         }
     },
     methods: {
@@ -137,25 +139,13 @@ const Index = {
                 </div>
                 <div v-else>
                     <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <RouterLink class="center__routerPlay" to="/ruta"><button class="center__play">Play</button></RouterLink>
+                    <button class="center__play" onclick="alertPartida()">Play</button>
                 </div>
             </div>
         
         </div>
     `
 
-}
-
-{
-    /* <div class="card">
-                <div class="card__pregunta">{{question_info.}}</div>
-                <div class="card__respuestas respuesta">
-                    <div class="respuestas_respuesta"></div>
-                    <div class="respuestas_respuesta"></div>
-                    <div class="respuestas_respuesta"></div>
-                    <div class="respuestas_respuesta"></div>
-                </div>
-            </div> */
 }
 
 Vue.component('question', {
@@ -248,7 +238,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
                 success: true,
                 name: 'alessia',
@@ -295,3 +285,63 @@ var app = new Vue({
         ...Pinia.mapActions(userStore, ['setEstado'])
     }
 });
+
+
+// Alerts
+
+// import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+// import 'sweetalert2/src/sweetalert2.scss';
+function alertPartida(){
+    Swal.fire({
+        title: 'Are you sure?',
+        html: `
+        <div class="category">
+                <div class="selectCat">
+                    <select name="select" id="selectCategory">
+                        <option value="arts_and_literature">Arts & Literature</option>
+                        <option value="film_and_tv">Film & TV</option>
+                        <option value="food_and_drink">Food & Drink</option>
+                        <option value="general_knowledge">General Knowledge</option>
+                        <option value="geography">Geography</option>
+                        <option value="history">History</option>
+                        <option value="music">Music</option>
+                        <option value="science">Science</option>
+                        <option value="society_and_culture">Society & Culture</option>
+                        <option value="sport_and_leisure">Sport & Leisure</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="difficulty">
+                <div class="selectDif">
+                    <select name="select" id="selectDif">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+            <RouterLink class="routerPlay" :to="{ path: '/ruta', params: {}"><button class="play">Play</button></RouterLink>`,
+        // icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let selectCategory=document.getElementById("selectCategory");
+            let category=selectCategory.options[selectCategory.selectedIndex].value;
+
+            let selectDif=document.getElementById("selectDif");
+            let dif=selectDif.options[selectDif.selectedIndex].value;
+            console.log(category+" "+dif);
+            // this.$router.push({ path: 'home' })
+        }
+    })
+}
