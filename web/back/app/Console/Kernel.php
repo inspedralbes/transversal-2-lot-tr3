@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
         $quizzInsert -> game = $quizz;
         $quizzInsert -> date_creation = date('Y-m-d');
         $quizzInsert -> name_creator = 'SYSTEM';
-        $quizzInsert -> type = 'demo';
+        $quizzInsert -> type = 'daily';
         $quizzInsert -> save();
     }
 
@@ -29,14 +29,14 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $curl = curl_init();
             curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://the-trivia-api.com/api/questions?limit=10",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache"
-            ),
+                CURLOPT_URL => "https://the-trivia-api.com/api/questions?limit=10",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache"
+                ),
             ));
             
             $response = curl_exec($curl);

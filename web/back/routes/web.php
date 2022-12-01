@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizzsController;
+use App\Http\Controllers\Users_quizzsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,3 +36,4 @@ Route::get('quizzs', [QuizzsController::class , 'getQuizzs']);
 Route::get('demo', [QuizzsController::class , 'getDemo']);
 Route::get('daily', [QuizzsController::class , 'getDaily']);
 Route::get('curl', [QuizzsController::class , 'curl']);
+Route::get('newGame', [Users_quizzsController::class , 'newGame']);
