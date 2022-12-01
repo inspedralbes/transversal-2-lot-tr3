@@ -210,7 +210,7 @@ Vue.component('question', {
         </div>
         <div class="card__answers answers">
             <div class="answers__answer" v-for="(answer,index) in this.answers">
-                <button @click="validate(index)" id="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+                <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
         </div>
     </div>`
