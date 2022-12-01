@@ -26,20 +26,7 @@ class QuizzsController extends Controller
         return response()->json($quizz);
     }
 
-    public function insertNewGame(Request $request, $quizz) {
-        $quizzInsert = new Quizz;
-        $quizzInsert -> game = $quizz;
-        $quizzInsert -> date_creation = date('Y-m-d');
-        $quizzInsert -> name_creator = $request -> user_name;
-        $quizzInsert -> type = 'normal';
-        $quizzInsert -> save();
-
-        $quizzInsert = json_decode($quizzInsert->game); 
-        return response()->json($quizzInsert);
-    }
-
     public function newGame(Request $request) {
-        csrf_token();
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://the-trivia-api.com/api/questions?limit=10",
@@ -51,10 +38,17 @@ class QuizzsController extends Controller
                 "cache-control: no-cache"
             ),
         ));
-        
         $response = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-        $this->insertNewGame($request, $response);
+
+        $quizzInsert = new Quizz;
+        $quizzInsert -> game = $response;
+        $quizzInsert -> date_creation = date('Y-m-d');
+        $quizzInsert -> name_creator = $request -> user_name;
+        $quizzInsert -> type = 'normal';
+        $quizzInsert -> save();
+        $quizzInsert = json_decode($quizzInsert->game); 
+        return response()->json($quizzInsert);
     }
 }
