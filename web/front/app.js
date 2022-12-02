@@ -1,12 +1,12 @@
 //Componentes
 const Questions = {
-    //props:true,
+    params:true,
     props: ['category', 'difficulty', 'type'],
     data: function() {
         return {
             quizz: null,
             correct: 0,
-            time: 0,
+            time: 10,
             nQuestion: 0,
             actualQ: 0
         }
@@ -17,11 +17,22 @@ const Questions = {
                 this.correct++
             }
             this.actualQ++;
-            // if(this.actualQ < this.nQuestion ){
-            //     this.actualQ++;
-            // }else{
-            //     this.quizz=null;
-            // }
+            if(this.nQuestion<this.actualQ && userStore().logged){
+                console.log('final');
+                var score=new FormData();
+                score.append('score',this.correct);
+                score.append('time_resolution', this.time);
+
+                fetch(`../back/public/recordGame`,{
+                    method:'POST',
+                    body:score
+                })    
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                });
+            }
         }
     },
     computed: {
@@ -31,16 +42,9 @@ const Questions = {
     },
     mounted() {
         if (!userStore().logged) {
-            var question=new FormData();
-            question.append('id_user', userStore().loginInfo.idUser);
-            question.append('user_name', userStore().loginInfo.name);
             // fetch a demo
-            //fetch(`../back/public/demo`)
-            fetch(`https://the-trivia-api.com/api/questions?limit=10`)
-            // fetch('../back/public/newGame',{
-            //     method: "POST",
-            //     body: question
-            // })
+            // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            fetch('../back/public/demo')
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -49,7 +53,9 @@ const Questions = {
                 console.error('Error:', error);
             });
             console.log('fetch');
-        } else if (type == 'daily') {
+
+        } else if (this.$route.params.type == 'daily') {
+            
             //fetch a diaria
             fetch(`../back/public/daily`)
                 .then((response) => response.json())
@@ -62,26 +68,21 @@ const Questions = {
 
         } else {
             //fetch a la api externa 
-            fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
-                .then((response) => response.json())
+
+            var question=new FormData();
+            question.append('id_user', userStore().loginInfo.idUser);
+            question.append('user_name', userStore().loginInfo.name);
+            question.append('difficulty', this.$route.params.difficulty);
+            question.append('category', this.$route.params.category);
+            // fetch(`https://the-trivia-api.com/api/questions?categories=${this.$route.params.category}&limit=10&difficulty=${this.$route.params.difficulty}`)
+            fetch(`../back/public/newGame`,{
+                method:'POST',
+                body:question
+            })    
+            .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-
-                    var question = new FormData();
-                    question.append('id_user', userStore().loginInfo.idUser);
-                    question.append('user_name', userStore().loginInfo.name);
-                    question.append('json', data);
-                    question.append('difficulty', this.difficulty);
-                    question.append('category', this.category);
-                    fetch('../back/public/newGame', {
-                            method: "POST",
-                            body: question
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {});
-
-
                 });
         }
     },
@@ -143,6 +144,24 @@ const Index = {
                 </div>
             </div>
         
+        </div>
+    `
+
+}
+const Prueva = {
+    params:true,
+    data: function() {
+        return {
+        }
+    },
+    mounted() {
+        console.log(this.$route.params.category);
+    },
+    template: `
+        <div>
+            <h1>{{$route.params.category}}</h1>
+            <h1>{{$route.params.difficulty}}</h1>
+            <h1>{{$route.params.type}}</h1>
         </div>
     `
 
@@ -234,8 +253,22 @@ const routes = [{
     },
     {
         path: '/questions',
-        component: Questions
+        component: Questions,
     },
+    {
+        path: `/prueva/:info/:info2`,
+        component: Prueva,
+        params:true,
+        props:true,
+        name:'try'
+    },
+    {
+        path: `/question/:category/:difficulty/:type`,
+        component: Questions,
+        params:true,
+        props:true,
+        name:'quizz'
+    }
 ]
 
 const router = new VueRouter({
@@ -246,7 +279,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
                 success: true,
                 name: 'alessia',
@@ -348,8 +381,8 @@ function alertPartida(){
 
             let selectDif=document.getElementById("selectDif");
             let dif=selectDif.options[selectDif.selectedIndex].value;
-            console.log(category+" "+dif);
-            // this.$router.push({ path: 'home' })
+            // console.log(category+" "+dif);
+            router.push({ name:`quizz`,params:{category:category, difficulty:dif,type:'new'}})
         }
     })
 }
