@@ -37,3 +37,4 @@ Route::get('demo', [QuizzsController::class , 'getDemo']);
 Route::get('daily', [QuizzsController::class , 'getDaily']);
 Route::get('curl', [QuizzsController::class , 'curl']);
 Route::post('newGame', [QuizzsController::class , 'newGame']);
+Route::get('recordGame', [QuizzsController::class , 'recordGame']);
