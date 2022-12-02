@@ -123,23 +123,24 @@ const Index = {
     mounted() {},
     template: `
         <div>
-            <div class="wrapper">
-                <RouterLink class="wrapper__routerRanking" to="/"><button class="wrapper__ranking">Ranking</button></RouterLink>
+            <div>
+                <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
-                    <RouterLink class="wrapper__routerLogin" to="/"><button class="wrapper__login">Log in</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerLogin" to="/"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
-                    <RouterLink class="wrapper__routerProfile" to="/"><button class="wrapper__profile">Profile</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
                 </div>
             </div>
+
             <div class="center">
                 <div v-if='!isLogged'>
                     <input type="text" placeholder="Introduce nickname" class="center__input">
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <button class="center__play" id="play" onclick="alertPartida()"><h1>Play</h1></button>
+                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid2"><button id="foot"><button class="center__play" id="play" onclick="alertPartida()"><h1>Play</h1></button></button></div>
                 </div>
             </div>
         
