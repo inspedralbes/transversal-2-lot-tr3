@@ -1,6 +1,6 @@
 //Componentes
 const Questions = {
-    params:true,
+    params: true,
     props: ['category', 'difficulty', 'type'],
     data: function() {
         return {
@@ -17,10 +17,10 @@ const Questions = {
                 this.correct++
             }
             this.actualQ++;
-            if(this.nQuestion<this.actualQ && userStore().logged){
+            if (this.nQuestion < this.actualQ && userStore().logged) {
                 console.log('final');
-                var score=new FormData();
-                score.append('score',this.correct);
+                var score = new FormData();
+                score.append('score', this.correct);
                 score.append('time_resolution', this.time);
 
                 fetch(`../back/public/recordGame`,{
@@ -40,6 +40,9 @@ const Questions = {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        confPlay(){
+            return userStore().configPlay;
         }
     },
     mounted() {
@@ -48,16 +51,16 @@ const Questions = {
             // fetch a demo
             // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
             fetch(`../back/public/demo`)
-            .then ((response)=>response.json())
-            .then((data)=>{
-                this.quizz=data;
-                this.nQuestion=Object.keys(this.quizz).length-1;
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
             console.log('fetch');
 
-        } else if (this.$route.params.type == 'daily') {
+        } else if (userStore().configPlay.type == 'daily') {
             
             //fetch a diaria
             fetch(`../back/public/daily`)
@@ -72,17 +75,17 @@ const Questions = {
         } else {
             //fetch a la api externa 
 
-            var question=new FormData();
+            var question = new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
             question.append('user_name', userStore().loginInfo.name);
             question.append('difficulty', this.$route.params.difficulty);
             question.append('category', this.$route.params.category);
             // fetch(`https://the-trivia-api.com/api/questions?categories=${this.$route.params.category}&limit=10&difficulty=${this.$route.params.difficulty}`)
-            fetch(`../back/public/newGame`,{
-                method:'POST',
-                body:question
-            })    
-            .then((response) => response.json())
+            fetch(`../back/public/newGame`, {
+                    method: 'POST',
+                    body: question
+                })
+                .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
@@ -127,23 +130,24 @@ const Index = {
     mounted() {},
     template: `
         <div>
-            <div class="wrapper">
-                <RouterLink class="wrapper__routerRanking" to="/"><button class="wrapper__ranking">Ranking</button></RouterLink>
+            <div>
+                <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
-                    <RouterLink class="wrapper__routerLogin" to="/"><button class="wrapper__login">Log in</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerLogin" to="/"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
-                    <RouterLink class="wrapper__routerProfile" to="/"><button class="wrapper__profile">Profile</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
                 </div>
             </div>
+
             <div class="center">
                 <div v-if='!isLogged'>
                     <input type="text" placeholder="Introduce nickname" class="center__input">
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <button class="center__play" id="play" onclick="alertPartida()"><h1>Play</h1></button>
+                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid2"><button class="center__play" id="play" onclick="alertPartida()">Play</button></div>
                 </div>
             </div>
         
@@ -152,10 +156,9 @@ const Index = {
 
 }
 const Prueva = {
-    params:true,
+    params: true,
     data: function() {
-        return {
-        }
+        return {}
     },
     mounted() {
         console.log(this.$route.params.category);
@@ -261,16 +264,16 @@ const routes = [{
     {
         path: `/prueva/:info/:info2`,
         component: Prueva,
-        params:true,
-        props:true,
-        name:'try'
+        params: true,
+        props: true,
+        name: 'try'
     },
     {
         path: `/question/:category/:difficulty/:type`,
         component: Questions,
-        params:true,
-        props:true,
-        name:'quizz'
+        params: true,
+        props: true,
+        name: 'quizz'
     }
 ]
 
@@ -287,6 +290,11 @@ const userStore = Pinia.defineStore('usuario', {
                 success: true,
                 name: 'alessia',
                 idUser: 1
+            },
+            configPlay:{
+                category:'',
+                difficulty:'',
+                type:''
             }
         }
     },
@@ -340,7 +348,7 @@ function alertPartida() {
     Swal.fire({
         title: 'Are you sure?',
         html: `
-        <div class="category">
+            <div class="category">
                 <div class="selectCat">
                     <select name="select" id="selectCategory">
                         <option value="arts_and_literature">Arts & Literature</option>
@@ -365,13 +373,12 @@ function alertPartida() {
                         <option value="hard">Hard</option>
                     </select>
                 </div>
-            </div>
-            <RouterLink class="routerPlay" :to="{ path: '/ruta', params: {}"><button class="play">Play</button></RouterLink>`,
+            </div>`,
         // icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Play',
         backdrop: `
             rgba(0,0,123,0.4)
             url("/images/nyan-cat.gif")
@@ -382,10 +389,40 @@ function alertPartida() {
             let selectCategory = document.getElementById("selectCategory");
             let category = selectCategory.options[selectCategory.selectedIndex].value;
 
-            let selectDif=document.getElementById("selectDif");
-            let dif=selectDif.options[selectDif.selectedIndex].value;
+            let selectDif = document.getElementById("selectDif");
+            let dif = selectDif.options[selectDif.selectedIndex].value;
             // console.log(category+" "+dif);
-            router.push({ name:`quizz`,params:{category:category, difficulty:dif,type:'new'}})
+            userStore().configPlay.category=category;
+            userStore().configPlay.difficulty=dif;
+            userStore().configPlay.type='new';
+
+            router.push('/questions');
         }
     })
+}
+
+function gameType(){
+    Swal.fire({
+        title: 'Type of game',
+        // html: ``,
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'New',
+        denyButtonText: `Daily`,
+        denyButtonColor:'#b18597',
+        cancelButtonColor: '#d33',
+        backdrop: `
+        rgba(0,0,123,0.4)
+        url("nyan-cat.gif")
+        left top
+        no-repeat`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            alertPartida();
+        } else if (result.isDenied) {
+            userStore().configPlay.type='daily';
+            router.push('/questions');
+        }
+      })
 }
