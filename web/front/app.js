@@ -23,15 +23,17 @@ const Questions = {
                 score.append('score', this.correct);
                 score.append('time_resolution', this.time);
 
-                fetch(`../back/public/recordGame`, {
-                        method: 'POST',
-                        body: score
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.quizz = data;
-                        this.nQuestion = Object.keys(this.quizz).length - 1;
-                    });
+                fetch(`../back/public/recordGame`,{
+                    method:'POST',
+                    body:score
+                })    
+                .then ((response)=>response.json())
+                .then((data)=>{
+                    console.log(data)
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+                console.log('fetch');
             }
         }
     },
