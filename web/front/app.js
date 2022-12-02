@@ -42,9 +42,10 @@ const Questions = {
     },
     mounted() {
         if (!userStore().logged) {
+
             // fetch a demo
             // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
-            fetch('../back/public/demo')
+            fetch(`../back/public/demo`)
             .then ((response)=>response.json())
             .then((data)=>{
                 this.quizz=data;
@@ -109,8 +110,8 @@ const Index = {
     data: function() {
         return {
             quizz: null,
-            category:'film_and_tv',
-            difficulty:'easy'
+            category: 'film_and_tv',
+            difficulty: 'easy'
         }
     },
     methods: {
@@ -140,7 +141,7 @@ const Index = {
                 </div>
                 <div v-else>
                     <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <button class="center__play" onclick="alertPartida()">Play</button>
+                    <button class="center__play" id="play" onclick="alertPartida()"><h1>Play</h1></button>
                 </div>
             </div>
         
@@ -172,7 +173,7 @@ Vue.component('question', {
     data: function() {
         return {
             answers: [],
-            answered:false
+            answered: false
         }
     },
     methods: {
@@ -184,8 +185,8 @@ Vue.component('question', {
             } while (currentDate - date < milliseconds);
         },
         validate(i) {
-            if(!this.answered){
-                this.answered=true;
+            if (!this.answered) {
+                this.answered = true;
                 console.log(this.answers[i].answer);
                 answer = this.answers[i];
                 let ok = false;
@@ -333,7 +334,7 @@ var app = new Vue({
 // import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 // import 'sweetalert2/src/sweetalert2.scss';
-function alertPartida(){
+function alertPartida() {
     Swal.fire({
         title: 'Are you sure?',
         html: `
@@ -376,8 +377,8 @@ function alertPartida(){
             no-repeat`
     }).then((result) => {
         if (result.isConfirmed) {
-            let selectCategory=document.getElementById("selectCategory");
-            let category=selectCategory.options[selectCategory.selectedIndex].value;
+            let selectCategory = document.getElementById("selectCategory");
+            let category = selectCategory.options[selectCategory.selectedIndex].value;
 
             let selectDif=document.getElementById("selectDif");
             let dif=selectDif.options[selectDif.selectedIndex].value;

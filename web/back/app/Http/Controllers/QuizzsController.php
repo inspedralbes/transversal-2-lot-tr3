@@ -56,7 +56,10 @@ class QuizzsController extends Controller
         $addNewGame -> user_id = $request -> id_user;
         $addNewGame -> quizz_id = $quizz_id;
         $addNewGame -> save();
-
         return response()->json($quizzInsert);
+    }
+
+    public function recordGame(Request $request) {
+        //
     }
 }
