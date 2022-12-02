@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Quizz;
+use App\Models\Users_quizz;
 
 class QuizzsController extends Controller
 {
@@ -48,7 +49,14 @@ class QuizzsController extends Controller
         $quizzInsert -> name_creator = $request -> user_name;
         $quizzInsert -> type = 'normal';
         $quizzInsert -> save();
+        $quizz_id = $quizzInsert -> id;
         $quizzInsert = json_decode($quizzInsert->game); 
+
+        $addNewGame = new Users_quizz();
+        $addNewGame -> user_id = $request -> id_user;
+        $addNewGame -> quizz_id = $quizz_id;
+        $addNewGame -> save();
+
         return response()->json($quizzInsert);
     }
 }
