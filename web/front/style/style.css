@@ -4,7 +4,7 @@ body {
     justify-content: center;
     padding: 30px 10px;
     font-family: Arial, Helvetica, sans-serif;
-    transition: background 0.4s ease-in;
+    transition: background 0.1s ease-in;
     background-color: #422c31;
     color: white;
 }
@@ -12,14 +12,15 @@ body {
 .card {
     padding: 50px;
     width: 900px;
-    height: 500px;
+    height: fit-content;
+    min-height: 500px;
     margin: 50px auto;
-    background-color: #5e3238;
+    background-color: #5e3238a8;
     border-radius: 20px;
 }
 
 .card:hover {
-    transition: box-shadow 0.2s ease-in;
+    transition: box-shadow 0.4s ease-in-out;
     box-shadow: 0 2px 4px 0 #ffb0f432, 0 25px 50px 0 #ffb0f432;
 }
 
@@ -38,6 +39,7 @@ button {
     margin-bottom: 1cm;
     letter-spacing: 1px;
     width: 300px;
+    max-height: max-content;
     min-height: 60px;
     height: fit-content;
     position: relative;
