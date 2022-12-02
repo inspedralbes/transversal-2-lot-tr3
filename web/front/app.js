@@ -38,6 +38,9 @@ const Questions = {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        confPlay(){
+            return userStore().configPlay;
         }
     },
     mounted() {
@@ -55,8 +58,8 @@ const Questions = {
                 });
             console.log('fetch');
 
-        } else if (this.$route.params.type == 'daily') {
-
+        } else if (userStore().configPlay.type == 'daily') {
+            
             //fetch a diaria
             fetch(`../back/public/daily`)
                 .then((response) => response.json())
@@ -284,6 +287,11 @@ const userStore = Pinia.defineStore('usuario', {
                 success: true,
                 name: 'alessia',
                 idUser: 1
+            },
+            configPlay:{
+                category:'',
+                difficulty:'',
+                type:''
             }
         }
     },
@@ -337,7 +345,7 @@ function alertPartida() {
     Swal.fire({
         title: 'Are you sure?',
         html: `
-        <div class="category">
+            <div class="category">
                 <div class="selectCat">
                     <select name="select" id="selectCategory">
                         <option value="arts_and_literature">Arts & Literature</option>
@@ -362,13 +370,12 @@ function alertPartida() {
                         <option value="hard">Hard</option>
                     </select>
                 </div>
-            </div>
-            <RouterLink class="routerPlay" :to="{ path: '/ruta', params: {}"><button class="play">Play</button></RouterLink>`,
+            </div>`,
         // icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Play',
         backdrop: `
             rgba(0,0,123,0.4)
             url("/images/nyan-cat.gif")
@@ -382,7 +389,37 @@ function alertPartida() {
             let selectDif = document.getElementById("selectDif");
             let dif = selectDif.options[selectDif.selectedIndex].value;
             // console.log(category+" "+dif);
-            router.push({ name: `quizz`, params: { category: category, difficulty: dif, type: 'new' } })
+            userStore().configPlay.category=category;
+            userStore().configPlay.difficulty=dif;
+            userStore().configPlay.type='new';
+
+            router.push('/questions');
         }
     })
+}
+
+function gameType(){
+    Swal.fire({
+        title: 'Type of game',
+        // html: ``,
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'New',
+        denyButtonText: `Daily`,
+        denyButtonColor:'#b18597',
+        cancelButtonColor: '#d33',
+        backdrop: `
+        rgba(0,0,123,0.4)
+        url("nyan-cat.gif")
+        left top
+        no-repeat`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            alertPartida();
+        } else if (result.isDenied) {
+            userStore().configPlay.type='daily';
+            router.push('/questions');
+        }
+      })
 }
