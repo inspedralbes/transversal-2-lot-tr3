@@ -152,7 +152,8 @@ Vue.component('question', {
     props: ['question_info'],
     data: function() {
         return {
-            answers: []
+            answers: [],
+            answered:false
         }
     },
     methods: {
@@ -164,19 +165,26 @@ Vue.component('question', {
             } while (currentDate - date < milliseconds);
         },
         validate(i) {
-            console.log(this.answers[i].answer);
-            answer = this.answers[i];
-            let ok = false;
-            if (answer.answer == this.question_info.correctAnswer) {
-                answer.correct = true;
-                console.log('correcto');
-                ok = true;
-            } else {
-                answer.incorrect = true;
-                console.log('incorrecto');
+            if(!this.answered){
+                this.answered=true;
+                console.log(this.answers[i].answer);
+                answer = this.answers[i];
+                let ok = false;
+                if (answer.answer == this.question_info.correctAnswer) {
+                    answer.correct = true;
+                    console.log('correcto');
+                    ok = true;
+                } else {
+                    answer.incorrect = true;
+                    console.log('incorrecto');
+                }
+                setTimeout(() => {
+                    this.$emit('answered', ok);
+                }, "1000");
+
             }
-            //this.sleep(5000)
-            this.$emit('answered', ok);
+            // this.sleep(5000)
+            // this.$emit('answered', ok);
         }
     },
     sendInfo: function(ok) {
@@ -238,7 +246,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: true,
+            logged: false,
             loginInfo: {
                 success: true,
                 name: 'alessia',
