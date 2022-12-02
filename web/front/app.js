@@ -124,8 +124,8 @@ const Index = {
     },
     mounted() {},
     template: `
-        <div>
-            <div>
+        <div class="index">
+            <div class="wrapper__index wrapper">
                 <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
                     <RouterLink class="wrapperIndex__routerLogin" to="/"><button class="wrapperIndex__login">Log in</button></RouterLink>
@@ -145,7 +145,6 @@ const Index = {
                     <div class="center__grid2"><button class="center__play" id="play" onclick="alertPartida()">Play</button></div>
                 </div>
             </div>
-        
         </div>
     `
 
