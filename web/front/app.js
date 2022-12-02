@@ -27,11 +27,13 @@ const Questions = {
                     method:'POST',
                     body:score
                 })    
-                .then((response) => response.json())
-                .then((data) => {
-                    this.quizz = data;
-                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                .then ((response)=>response.json())
+                .then((data)=>{
+                    console.log(data)
+                }).catch((error) => {
+                    console.error('Error:', error);
                 });
+                console.log('fetch');
             }
         }
     },

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Quizz;
 use App\Models\Users_quizz;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class QuizzsController extends Controller
 {
@@ -47,6 +49,8 @@ class QuizzsController extends Controller
         $quizzInsert -> game = $response;
         $quizzInsert -> date_creation = date('Y-m-d');
         $quizzInsert -> name_creator = $request -> user_name;
+        $quizzInsert -> difficulty = $request -> difficulty;
+        $quizzInsert -> category = $request -> category;
         $quizzInsert -> type = 'normal';
         $quizzInsert -> save();
         $quizz_id = $quizzInsert -> id;
@@ -56,10 +60,23 @@ class QuizzsController extends Controller
         $addNewGame -> user_id = $request -> id_user;
         $addNewGame -> quizz_id = $quizz_id;
         $addNewGame -> save();
+
+        Session::put('quizz_id', $quizz_id);
+        Session::put('user_id', $request -> id_user);
         return response()->json($quizzInsert);
     }
 
     public function recordGame(Request $request) {
-        //
+        $quizz_id = Session::get('quizz_id');
+        $user_id = Session::get('user_id');
+ 
+        $updateGame = Users_quizz::where('user_id', $user_id)
+        ->where('quizz_id', $quizz_id)->first();
+
+        $updateGame -> score = $request -> score;
+        $updateGame -> time_resolution = $request -> time_resolution;
+        $updateGame -> save();
+
+        return response()->json($updateGame);
     }
 }
