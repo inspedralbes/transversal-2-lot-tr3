@@ -15,15 +15,6 @@ class Kernel extends ConsoleKernel
      * @return void
      */
 
-    public function insertDaily($quizz) {
-        $quizzInsert = new Quizz;
-        $quizzInsert -> game = $quizz;
-        $quizzInsert -> date_creation = date('Y-m-d');
-        $quizzInsert -> name_creator = 'SYSTEM';
-        $quizzInsert -> type = 'daily';
-        $quizzInsert -> save();
-    }
-
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
@@ -42,7 +33,13 @@ class Kernel extends ConsoleKernel
             $response = curl_exec($curl);
             $err = curl_error($curl);
             curl_close($curl);
-            $this->insertDaily($response);
+
+            $quizzInsert = new Quizz;
+            $quizzInsert -> game = $response;
+            $quizzInsert -> date_creation = date('Y-m-d');
+            $quizzInsert -> name_creator = 'SYSTEM';
+            $quizzInsert -> type = 'daily';
+            $quizzInsert -> save();
         })->daily();
     }
 
