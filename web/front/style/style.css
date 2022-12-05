@@ -4,8 +4,9 @@ body {
     padding: 30px 10px;
     font-family: Arial, Helvetica, sans-serif;
     transition: background 0.1s ease-in;
-    background-image: url(../img/color-interrogation-symbols.jpg);
+    background-image: url(../img/bg-image.svg);
     background-size: cover;
+    margin: 0;
     color: white;
 }
 
@@ -179,7 +180,7 @@ h1 {
     padding: 40px;
     width: fit-content;
     height: fit-content;
-    background-color: #31313157;
+    background-color: #58585842;
     backdrop-filter: blur(5px);
     border-radius: 20px;
     box-shadow: 0 2px 4px 0 #ffb0f432, 0 25px 50px 0 #ffb0f432;
@@ -244,8 +245,10 @@ h1 {
 }
 
 .wrapper__index {
+    margin: 0;
     display: flex;
     width: 100%;
+    background-color: greenyellow;
 }
 
 .wrapperIndex__ranking {
@@ -255,10 +258,13 @@ h1 {
 .wrapperIndex__login {
     align-items: right;
     float: right;
+    clear: left;
 }
 
 .wrapperIndex__profile {
     float: right;
+    clear: left;
+    margin-left: 65vw;
 }
 
 .center__play {
