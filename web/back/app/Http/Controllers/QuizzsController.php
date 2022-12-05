@@ -79,12 +79,7 @@ class QuizzsController extends Controller
         $updateGame -> save();
 
         $updateElo = User::find($user_id);
-        error_log($updateElo);
-        $currentElo = $updateElo -> elo;
-        error_log($currentElo);
-        $newElo = $currentElo + $request -> score;
-        error_log($newElo);
-        $updateElo -> elo = $newElo;
+        $updateElo -> elo += $request -> score;
         $updateElo -> save();
 
         return response()->json($updateGame);
