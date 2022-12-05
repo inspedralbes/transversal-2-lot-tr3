@@ -19,8 +19,14 @@ const Questions = {
             this.actualQ++;
             if (this.nQuestion < this.actualQ && userStore().logged) {
                 console.log('final');
+                let finalScore=this.correct;
+                if(userStore().configPlay.difficulty=='medium'){
+                    finalScore*=2;
+                }else if(userStore().configPlay.difficulty=='hard'){
+                    finalScore*=5;
+                }
                 var score = new FormData();
-                score.append('score', this.correct);
+                score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
                 fetch(`../back/public/recordGame`,{
