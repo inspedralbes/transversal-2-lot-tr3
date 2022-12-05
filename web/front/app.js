@@ -1,4 +1,19 @@
 //Componentes
+const Template = {
+    params: true,
+    data: function() {
+        return {
+        }
+    },
+    mounted() {
+    },
+    methods:{
+    
+    },
+    template: ``
+
+}
+
 const Questions = {
     params: true,
     props: ['category', 'difficulty', 'type'],
@@ -198,6 +213,7 @@ const Index = {
     `
 
 }
+
 const Prueva = {
     params: true,
     data: function() {
@@ -225,7 +241,8 @@ const Login = {
             email:'',
             password:'',
             logMail:'',
-            logPass:''
+            logPass:'',
+            error:null
 
             // img:''
         }
@@ -251,8 +268,9 @@ const Login = {
                     userStore().logged=true;
                     userStore().loginInfo.name=this.name;
                     userStore().loginInfo.idUser=data;
+                    router.push('/');
                 }
-                router.push('/');
+                this.error="Can't create the user";
             });
 
         },
@@ -271,8 +289,9 @@ const Login = {
                     userStore().logged=true;
                     userStore().loginInfo.name=data.name;
                     userStore().loginInfo.idUser=data.id;
+                    router.push('/');
                 }
-                router.push('/');
+                this.error="Can't log in the user";
             });
         }
     },
@@ -310,10 +329,28 @@ const Login = {
                     </li>
                     <button @click="newUser">Register</button>
                 </ul>
+                <div v-show="error">
+                    <p>{{error}}<p>
+                </div>
         </div>
     `
 
 }
+
+const Porfile = {
+    data: function() {
+        return {
+        }
+    },
+    mounted() {
+    },
+    methods:{
+    
+    },
+    template: ``
+
+}
+
 
 Vue.component('question', {
     props: ['question_info'],
@@ -406,6 +443,10 @@ const routes = [{
     {
         path: '/login',
         component: Login,
+    },
+    {
+        path: '/porfile',
+        component: Porfile,
     },
 ]
 
