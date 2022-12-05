@@ -19,19 +19,27 @@ const Questions = {
             this.actualQ++;
             if (this.nQuestion < this.actualQ && userStore().logged) {
                 console.log('final');
+                let finalScore=this.correct;
+                if(userStore().configPlay.difficulty=='medium'){
+                    finalScore*=2;
+                }else if(userStore().configPlay.difficulty=='hard'){
+                    finalScore*=5;
+                }
                 var score = new FormData();
-                score.append('score', this.correct);
+                score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
-                fetch(`../back/public/recordGame`, {
-                        method: 'POST',
-                        body: score
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.quizz = data;
-                        this.nQuestion = Object.keys(this.quizz).length - 1;
-                    });
+                fetch(`../back/public/recordGame`,{
+                    method:'POST',
+                    body:score
+                })    
+                .then ((response)=>response.json())
+                .then((data)=>{
+                    console.log(data)
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+                console.log('fetch');
             }
         }
     },
@@ -76,9 +84,9 @@ const Questions = {
             var question = new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
             question.append('user_name', userStore().loginInfo.name);
-            question.append('difficulty', this.$route.params.difficulty);
-            question.append('category', this.$route.params.category);
-            // fetch(`https://the-trivia-api.com/api/questions?categories=${this.$route.params.category}&limit=10&difficulty=${this.$route.params.difficulty}`)
+            question.append('difficulty', userStore().configPlay.difficulty);
+            question.append('category', userStore().configPlay.category);
+            // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
             fetch(`../back/public/newGame`, {
                     method: 'POST',
                     body: question
@@ -145,7 +153,7 @@ const Index = {
                 </div>
                 <div v-else>
                     <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
-                    <div class="center__grid2"><button class="center__play" id="play" onclick="alertPartida()">Play</button></div>
+                    <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
             </div>
         </div>
@@ -378,7 +386,7 @@ function alertPartida() {
         confirmButtonText: 'Play',
         backdrop: `
             rgba(0,0,123,0.4)
-            url("/images/nyan-cat.gif")
+            url("/img/nyan-cat.gif")
             left top
             no-repeat`
     }).then((result) => {
@@ -410,7 +418,7 @@ function gameType(){
         cancelButtonColor: '#d33',
         backdrop: `
         rgba(0,0,123,0.4)
-        url("nyan-cat.gif")
+        url("/img/nyan-cat.gif")
         left top
         no-repeat`
     }).then((result) => {
