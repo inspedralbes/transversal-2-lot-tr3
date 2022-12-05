@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Quizz;
 use App\Models\Users_quizz;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
@@ -76,6 +77,10 @@ class QuizzsController extends Controller
         $updateGame -> score = $request -> score;
         $updateGame -> time_resolution = $request -> time_resolution;
         $updateGame -> save();
+
+        $updateElo = User::find($user_id);
+        $updateElo -> elo += $request -> score;
+        $updateElo -> save();
 
         return response()->json($updateGame);
     }
