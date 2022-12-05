@@ -2,13 +2,12 @@
 const Template = {
     params: true,
     data: function() {
-        return {
-        }
+        return {}
     },
-    mounted() {
-    },
-    methods:{
-    
+    mounted() {},
+    computed:{},
+    methods: {
+
     },
     template: ``
 
@@ -24,13 +23,13 @@ const Questions = {
             time: 0,
             nQuestion: 0,
             actualQ: 0,
-            timer:false,
-            questionTime:0
+            timer: false,
+            questionTime: 0
         }
     },
     methods: {
         goNext: function(correct) {
-            this.questionTime=0;
+            this.questionTime = 0;
             if (correct == true) {
                 this.correct++
             }
@@ -39,17 +38,17 @@ const Questions = {
                 this.recordGame();
             }
         },
-        countTimer () {
+        countTimer() {
             // console.log('timer');
             if (this.time < 150 && this.timer == true) {
                 // console.log('sum');
                 setTimeout(() => {
                     this.time++;
                     this.questionTime++;
-                    if(this.questionTime==15){
+                    if (this.questionTime == 15) {
                         console.log('next q');
                         this.actualQ++;
-                        this.questionTime=0;
+                        this.questionTime = 0;
                         if (this.nQuestion < this.actualQ) {
                             this.recordGame();
                         }
@@ -58,9 +57,9 @@ const Questions = {
                 }, 1000)
             }
         },
-        recordGame(){
-            this.timer=false;
-            if(userStore().logged){
+        recordGame() {
+            this.timer = false;
+            if (userStore().logged) {
                 console.log('final');
                 let finalScore = this.correct;
                 if (userStore().configPlay.difficulty == 'medium') {
@@ -72,16 +71,16 @@ const Questions = {
                 score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
-                fetch(`../back/public/recordGame`,{
-                    method:'POST',
-                    body:score
-                })    
-                .then ((response)=>response.json())
-                .then((data)=>{
-                    console.log(data)
-                }).catch((error) => {
-                    console.error('Error:', error);
-                });
+                fetch(`../back/public/recordGame`, {
+                        method: 'POST',
+                        body: score
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data)
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
                 // console.log('fetch');
             }
         }
@@ -104,7 +103,7 @@ const Questions = {
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 }).catch((error) => {
                     console.error('Error:', error);
@@ -119,7 +118,7 @@ const Questions = {
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 }).catch((error) => {
                     console.error('Error:', error);
@@ -133,16 +132,16 @@ const Questions = {
             question.append('user_name', userStore().loginInfo.name);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
-            //fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
-            fetch(`../back/public/newGame`, {
-                    method: 'POST',
-                    body: question
-                })
+            fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
+                // fetch(`../back/public/newGame`, {
+                //         method: 'POST',
+                //         body: question
+                //     })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 });
         }
@@ -182,9 +181,9 @@ const Index = {
         isLogged() {
             return userStore().logged;
         },
-        user(){
+        user() {
             return userStore().loginInfo;
-        }
+        } 
     },
     mounted() {},
     template: `
@@ -195,7 +194,7 @@ const Index = {
                     <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
-                    <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerProfile" to="/profile"><button class="wrapperIndex__profile">Profile</button></RouterLink>
                 </div>
             </div>
 
@@ -236,13 +235,13 @@ const Login = {
     params: true,
     data: function() {
         return {
-            name:'',
-            surname:'',
-            email:'',
-            password:'',
-            logMail:'',
-            logPass:'',
-            error:null
+            name: '',
+            surname: '',
+            email: '',
+            password: '',
+            logMail: '',
+            logPass: '',
+            error: null
 
             // img:''
         }
@@ -250,8 +249,8 @@ const Login = {
     mounted() {
         // console.log(this.$route.params.category);
     },
-    methods:{
-        newUser(){            
+    methods: {
+        newUser() {
             var user = new FormData();
             user.append('name', this.name);
             user.append('surname', this.surname);
@@ -262,37 +261,37 @@ const Login = {
                     method: 'POST',
                     body: user
                 })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data!=-1){
-                    userStore().logged=true;
-                    userStore().loginInfo.name=this.name;
-                    userStore().loginInfo.idUser=data;
-                    router.push('/');
-                }
-                this.error="Can't create the user";
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data != -1) {
+                        userStore().logged = true;
+                        userStore().loginInfo.name = this.name;
+                        userStore().loginInfo.idUser = data;
+                        router.push('/');
+                    }
+                    this.error = "Can't create the user";
+                });
 
         },
-        logUser(){
+        logUser() {
             var user = new FormData();
             user.append('email', this.logMail);
             user.append('password', this.logPass);
 
             fetch(`../back/public/login`, {
-                method: 'POST',
-                body: user
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data != "null"){
-                    userStore().logged=true;
-                    userStore().loginInfo.name=data.name;
-                    userStore().loginInfo.idUser=data.id;
-                    router.push('/');
-                }
-                this.error="Can't log in the user";
-            });
+                    method: 'POST',
+                    body: user
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data != "null") {
+                        userStore().logged = true;
+                        userStore().loginInfo.name = data.name;
+                        userStore().loginInfo.idUser = data.id;
+                        router.push('/');
+                    }
+                    this.error = "Can't log in the user";
+                });
         }
     },
     template: `
@@ -337,17 +336,112 @@ const Login = {
 
 }
 
-const Porfile = {
+const Profile = {
     data: function() {
         return {
+            showStates:false,
+            showAccount:false,
+            showFriends:false,
+            showPrivaci:false,
+            friends:null,
+            pendentFriends:null
         }
     },
-    mounted() {
+    mounted() {},
+    computed:{
+        infoPlayer() {
+            return userStore().loginInfo;
+        }
     },
-    methods:{
-    
+    methods: {
+        changeView(view){
+            // this.showStates=false;
+            // this.showAccount=false;
+            // this.showFriends=false;
+            // this.showPrivaci=false;
+            if(view =='states'){
+                this.showStates=!this.showStates;
+
+                this.showAccount=false;
+                this.showFriends=false;
+                this.showPrivaci=false;
+            }else if(view =='account'){
+                this.showAccount = (!this.showAccount);
+
+                this.showStates=false;
+                this.showFriends=false;
+                this.showPrivaci=false;
+            }else if(view =='friends'){
+                this.showFriends=!this.showFriends;
+
+                this.showStates=false;
+                this.showAccount=false;
+                this.showPrivaci=false;
+            }else if(view =='privaci'){
+                this.showPrivaci=!this.showPrivaci;
+
+                this.showStates=false;
+                this.showAccount=false;
+                this.showFriends=false;
+            }
+        }
     },
-    template: ``
+    template: ` 
+    <div>
+        <!-- div xikito -->
+        <div class="name">
+            <h1>{{infoPlayer.name}}</h1>
+        </div>
+        <div class="lista">
+            <ul>
+                <li @click="changeView('states')">Estadísticas</li>
+                <li @click="changeView('account')">Mi cuenta</li>
+                <li @click="changeView('friends')">Amigos</li>
+                <li @click="changeView('privaci')">Terminos de privacidad</li>
+            </ul>
+        </div>
+
+        <!-- div grande -->
+
+        <div class="info">
+            <div class="info__status" v-show="showStates">
+                <div class="info__tittle">
+                    <h1>States</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí van las estadísticas</p>
+                </div>
+            </div>
+
+            <div class="info__account" v-show="showAccount">
+                <div class="info__tittle">
+                    <h1>Account</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí va la info de mi cuenta</p>
+                </div>
+            </div>
+
+            <div class="info__friends" v-show="showFriends">
+                <div class="info__tittle">
+                    <h1>Friends</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí va la lista de amigos</p>
+                </div>
+            </div>
+
+            <div class="privacy" v-show="showPrivaci">
+                <div class="info__tittle">
+                    <h1>Privacy</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí van las politicas de privacidad</p>
+                </div>
+            </div>
+        </div>
+    </div>
+`
 
 }
 
@@ -445,8 +539,8 @@ const routes = [{
         component: Login,
     },
     {
-        path: '/porfile',
-        component: Porfile,
+        path: '/profile',
+        component: Profile,
     },
 ]
 
@@ -458,7 +552,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
                 success: true,
                 name: 'alessia',
