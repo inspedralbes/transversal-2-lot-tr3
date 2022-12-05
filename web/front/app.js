@@ -9,13 +9,13 @@ const Questions = {
             time: 0,
             nQuestion: 0,
             actualQ: 0,
-            timer:false,
-            questionTime:0
+            timer: false,
+            questionTime: 0
         }
     },
     methods: {
         goNext: function(correct) {
-            this.questionTime=0;
+            this.questionTime = 0;
             if (correct == true) {
                 this.correct++
             }
@@ -24,17 +24,17 @@ const Questions = {
                 this.recordGame();
             }
         },
-        countTimer () {
+        countTimer() {
             // console.log('timer');
             if (this.time < 150 && this.timer == true) {
                 // console.log('sum');
                 setTimeout(() => {
                     this.time++;
                     this.questionTime++;
-                    if(this.questionTime==15){
+                    if (this.questionTime == 15) {
                         console.log('next q');
                         this.actualQ++;
-                        this.questionTime=0;
+                        this.questionTime = 0;
                         if (this.nQuestion < this.actualQ) {
                             this.recordGame();
                         }
@@ -43,9 +43,9 @@ const Questions = {
                 }, 1000)
             }
         },
-        recordGame(){
-            this.timer=false;
-            if(userStore().logged){
+        recordGame() {
+            this.timer = false;
+            if (userStore().logged) {
                 console.log('final');
                 let finalScore = this.correct;
                 if (userStore().configPlay.difficulty == 'medium') {
@@ -57,7 +57,6 @@ const Questions = {
                 score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
-<<<<<<< HEAD
                 fetch(`../back/public/recordGame`, {
                         method: 'POST',
                         body: score
@@ -68,20 +67,7 @@ const Questions = {
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
-                console.log('fetch');
-=======
-                fetch(`../back/public/recordGame`,{
-                    method:'POST',
-                    body:score
-                })    
-                .then ((response)=>response.json())
-                .then((data)=>{
-                    console.log(data)
-                }).catch((error) => {
-                    console.error('Error:', error);
-                });
                 // console.log('fetch');
->>>>>>> 2737db91ceea6a39421d88a94a592107f1438e6d
             }
         }
     },
@@ -103,7 +89,7 @@ const Questions = {
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 }).catch((error) => {
                     console.error('Error:', error);
@@ -118,7 +104,7 @@ const Questions = {
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 }).catch((error) => {
                     console.error('Error:', error);
@@ -133,15 +119,15 @@ const Questions = {
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
             fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
-            // fetch(`../back/public/newGame`, {
-            //         method: 'POST',
-            //         body: question
-            //     })
+                // fetch(`../back/public/newGame`, {
+                //         method: 'POST',
+                //         body: question
+                //     })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
                     this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer=true;
+                    this.timer = true;
                     this.countTimer();
                 });
         }
@@ -200,9 +186,12 @@ const Index = {
                     <input type="text" placeholder="Introduce nickname" class="center__input">
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
-                <div v-else>
-                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
-                    <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
+            
+                <div v-else class="center__grid">
+                    <div class="center__grid">
+                        <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                        <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
+                    </div>
                 </div>
             </div>
         </div>
