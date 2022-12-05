@@ -166,6 +166,9 @@ const Index = {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        user(){
+            return userStore(). loginInfo;
         }
     },
     mounted() {},
@@ -187,7 +190,7 @@ const Index = {
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid1"><p>{{user.name}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
             </div>
@@ -202,6 +205,70 @@ const Prueva = {
     },
     mounted() {
         console.log(this.$route.params.category);
+    },
+    template: `
+        <div>
+            <h1>{{$route.params.category}}</h1>
+            <h1>{{$route.params.difficulty}}</h1>
+            <h1>{{$route.params.type}}</h1>
+        </div>
+    `
+
+}
+
+const Login = {
+    params: true,
+    data: function() {
+        return {
+            name:'',
+            surname:'',
+            email:'',
+            password:'',
+            // img:''
+        }
+    },
+    mounted() {
+        // console.log(this.$route.params.category);
+    },
+    methods:{
+        newUser(){            
+            var user = new FormData();
+            user.append('name', this.name);
+            user.append('surname', this.surname);
+            user.append('email', this.email);
+            user.append('password', this.password);
+
+            fetch(`../back/public/register`, {
+                    method: 'POST',
+                    body: user
+                })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data!=-1){
+                    userStore().logged=true;
+                    userStore().loginInfo.name=this.name;
+                    userStore().loginInfo.idUser=data;
+
+                }
+                router.push('/');
+            });
+
+        },
+        logUser(){
+            var user = new FormData();
+            user.append('email', this.email);
+            user.append('password', this.password);
+
+            fetch(`../back/public/login`, {
+                method: 'POST',
+                body: user
+            })
+            .then((response) => response.json())
+            .then((data) => {
+
+                router.push('/');
+            });
+        }
     },
     template: `
         <div>
@@ -302,19 +369,9 @@ const routes = [{
         component: Questions,
     },
     {
-        path: `/prueva/:info/:info2`,
-        component: Prueva,
-        params: true,
-        props: true,
-        name: 'try'
+        path: '/login',
+        component: Login,
     },
-    {
-        path: `/question/:category/:difficulty/:type`,
-        component: Questions,
-        params: true,
-        props: true,
-        name: 'quizz'
-    }
 ]
 
 const router = new VueRouter({
