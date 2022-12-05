@@ -37,18 +37,24 @@ class ProfileController extends Controller
     }
 
     public function login(Request $request) {
-        $userInfo = User::where('email', $request -> email)
+        $checkUser = User::where('email', $request -> email)
         ->where('password', password_hash($request -> password, PASSWORD_DEFAULT))
-        ->get();
-        error_log($userInfo);
-        $returnUser = new User();
-        $returnUser -> id = $userInfo -> id;
-        $userId = $returnUser -> id;
-        $returnUser -> name = $userInfo -> name;
-        $returnUser -> surname = $userInfo -> surname;
-        $returnUser -> email = $userInfo -> email;
+        ->count();
 
-        Session::put('user_id', $userId);
+        $returnUser = "null";
+        if ($checkUser == 1) {
+            $userInfo = User::where('email', $request -> email)
+            ->where('password', password_hash($request -> password, PASSWORD_DEFAULT))
+            ->get();
+            $returnUser = new User();
+            $returnUser -> id = $userInfo -> id;
+            $userId = $returnUser -> id;
+            $returnUser -> name = $userInfo -> name;
+            $returnUser -> surname = $userInfo -> surname;
+            $returnUser -> email = $userInfo -> email;
+            Session::put('user_id', $userId);
+        }
+
         return response()->json($returnUser);
     }
 

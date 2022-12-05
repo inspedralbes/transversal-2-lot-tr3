@@ -251,7 +251,6 @@ const Login = {
                     userStore().logged=true;
                     userStore().loginInfo.name=this.name;
                     userStore().loginInfo.idUser=data;
-
                 }
                 router.push('/');
             });
@@ -268,7 +267,11 @@ const Login = {
             })
             .then((response) => response.json())
             .then((data) => {
-
+                if(data != "null"){
+                    userStore().logged=true;
+                    userStore().loginInfo.name=data.name;
+                    userStore().loginInfo.idUser=data.id;
+                }
                 router.push('/');
             });
         }
@@ -276,21 +279,18 @@ const Login = {
     template: `
         <div>
             <!-- inicio sesion -->
-            <form action="/uwu" method="post">
                 <ul>
                     <li>
-                        <label for="name">e-mail:</label>
-                        <input type="email" id="name" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
+                        <label for="email">e-mail:</label>
+                        <input type="email" id="email" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
                     </li>
                     <li>
-                        <label for="mail">Password:</label>
-                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
                     </li>
                 </ul>
                 <button @click="logUser">Log in</button>
-            </form>
             <!-- registre -->
-            <form action="/uwu" method="post">
                 <ul>
                     <li>
                         <label for="name">Name:</label>
@@ -310,7 +310,6 @@ const Login = {
                     </li>
                     <button @click="newUser">Register</button>
                 </ul>
-            </form>
         </div>
     `
 
@@ -418,7 +417,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: true,
+            logged: false,
             loginInfo: {
                 success: true,
                 name: 'alessia',
