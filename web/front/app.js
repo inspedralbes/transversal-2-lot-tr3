@@ -47,16 +47,29 @@ const Questions = {
             this.timer=false;
             if(userStore().logged){
                 console.log('final');
-                let finalScore=this.correct;
-                if(userStore().configPlay.difficulty=='medium'){
-                    finalScore*=2;
-                }else if(userStore().configPlay.difficulty=='hard'){
-                    finalScore*=5;
+                let finalScore = this.correct;
+                if (userStore().configPlay.difficulty == 'medium') {
+                    finalScore *= 2;
+                } else if (userStore().configPlay.difficulty == 'hard') {
+                    finalScore *= 5;
                 }
                 var score = new FormData();
                 score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
+<<<<<<< HEAD
+                fetch(`../back/public/recordGame`, {
+                        method: 'POST',
+                        body: score
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data)
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
+                console.log('fetch');
+=======
                 fetch(`../back/public/recordGame`,{
                     method:'POST',
                     body:score
@@ -68,6 +81,7 @@ const Questions = {
                     console.error('Error:', error);
                 });
                 // console.log('fetch');
+>>>>>>> 2737db91ceea6a39421d88a94a592107f1438e6d
             }
         }
     },
@@ -75,7 +89,7 @@ const Questions = {
         isLogged() {
             return userStore().logged;
         },
-        confPlay(){
+        confPlay() {
             return userStore().configPlay;
         }
     },
@@ -97,7 +111,7 @@ const Questions = {
             console.log('fetch');
 
         } else if (userStore().configPlay.type == 'daily') {
-            
+
             //fetch a diaria
             fetch(`../back/public/daily`)
                 .then((response) => response.json())
@@ -173,7 +187,7 @@ const Index = {
     },
     mounted() {},
     template: `
-        <div class="index">
+        <div>
             <div class="wrapper__index wrapper">
                 <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
@@ -388,10 +402,10 @@ const userStore = Pinia.defineStore('usuario', {
                 name: 'alessia',
                 idUser: 1
             },
-            configPlay:{
-                category:'',
-                difficulty:'',
-                type:''
+            configPlay: {
+                category: '',
+                difficulty: '',
+                type: ''
             }
         }
     },
@@ -489,16 +503,16 @@ function alertPartida() {
             let selectDif = document.getElementById("selectDif");
             let dif = selectDif.options[selectDif.selectedIndex].value;
             // console.log(category+" "+dif);
-            userStore().configPlay.category=category;
-            userStore().configPlay.difficulty=dif;
-            userStore().configPlay.type='new';
+            userStore().configPlay.category = category;
+            userStore().configPlay.difficulty = dif;
+            userStore().configPlay.type = 'new';
 
             router.push('/questions');
         }
     })
 }
 
-function gameType(){
+function gameType() {
     Swal.fire({
         title: 'Type of game',
         // html: ``,
@@ -506,7 +520,7 @@ function gameType(){
         showCancelButton: true,
         confirmButtonText: 'New',
         denyButtonText: `Daily`,
-        denyButtonColor:'#b18597',
+        denyButtonColor: '#b18597',
         cancelButtonColor: '#d33',
         backdrop: `
         rgba(0,0,123,0.4)
@@ -518,8 +532,8 @@ function gameType(){
         if (result.isConfirmed) {
             alertPartida();
         } else if (result.isDenied) {
-            userStore().configPlay.type='daily';
+            userStore().configPlay.type = 'daily';
             router.push('/questions');
         }
-      })
+    })
 }
