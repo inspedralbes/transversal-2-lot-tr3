@@ -1,5 +1,6 @@
 <?php
-
+//$2y$10$DiU94UZhbAuDxKRUdOqF2unURSM1C5KymTE975L8K9Ar6TuR7UDFS
+//$2y$10$Y1nKEqtMYNU6ZIQXYtvklOx6nEdRTbKsdC6GBbFlVLw63.pVeyGYG
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -27,7 +29,7 @@ class ProfileController extends Controller
             $createUser -> name = $request -> name;
             $createUser -> surname = $request -> surname;
             $createUser -> email = $request -> email;
-            $createUser -> password = password_hash($request -> password, PASSWORD_DEFAULT);
+            $createUser -> password = Hash::make($request->password);
             $createUser -> save();
             $idUserCreated = $createUser -> id;
             Session::put('user_id', $idUserCreated);
@@ -37,22 +39,21 @@ class ProfileController extends Controller
     }
 
     public function login(Request $request) {
-        $checkUser = User::where('email', $request -> email)
-        ->where('password', password_hash($request -> password, PASSWORD_DEFAULT))
-        ->count();
-
         $returnUser = "null";
+        $checkUser = User::where('email', $request -> email) -> count();
+
         if ($checkUser == 1) {
-            $userInfo = User::where('email', $request -> email)
-            ->where('password', password_hash($request -> password, PASSWORD_DEFAULT))
-            ->get();
-            $returnUser = new User();
-            $returnUser -> id = $userInfo -> id;
-            $userId = $returnUser -> id;
-            $returnUser -> name = $userInfo -> name;
-            $returnUser -> surname = $userInfo -> surname;
-            $returnUser -> email = $userInfo -> email;
-            Session::put('user_id', $userId);
+            $userInfo = User::where('email', $request -> email) -> first();
+            $dbPassword = $userInfo -> password;
+            if (Hash::check($request -> password, $dbPassword)) {
+                $returnUser = new User();
+                $returnUser -> id = $userInfo -> id;
+                $userId = $returnUser -> id;
+                $returnUser -> name = $userInfo -> name;
+                $returnUser -> surname = $userInfo -> surname;
+                $returnUser -> email = $userInfo -> email;
+                Session::put('user_id', $userId);        
+            }
         }
 
         return response()->json($returnUser);
