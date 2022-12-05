@@ -5,6 +5,7 @@ const Template = {
         return {}
     },
     mounted() {},
+    computed:{},
     methods: {
 
     },
@@ -182,7 +183,7 @@ const Index = {
         },
         user() {
             return userStore().loginInfo;
-        }
+        } 
     },
     mounted() {},
     template: `
@@ -193,7 +194,7 @@ const Index = {
                     <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
-                    <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerProfile" to="/profile"><button class="wrapperIndex__profile">Profile</button></RouterLink>
                 </div>
             </div>
 
@@ -202,18 +203,9 @@ const Index = {
                     <input type="text" placeholder="Introduce nickname" class="center__input">
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
-<<<<<<< HEAD
-            
-                <div v-else class="center__grid">
-                    <div class="center__grid">
-                        <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
-                        <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
-                    </div>
-=======
                 <div v-else>
                     <div class="center__grid1"><p>{{user.name}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
->>>>>>> cd3fc633599714dd01a8503127b8656fe05c38a6
                 </div>
             </div>
         </div>
@@ -344,15 +336,112 @@ const Login = {
 
 }
 
-const Porfile = {
+const Profile = {
     data: function() {
-        return {}
+        return {
+            showStates:false,
+            showAccount:false,
+            showFriends:false,
+            showPrivaci:false,
+            friends:null,
+            pendentFriends:null
+        }
     },
     mounted() {},
-    methods: {
-
+    computed:{
+        infoPlayer() {
+            return userStore().loginInfo;
+        }
     },
-    template: ``
+    methods: {
+        changeView(view){
+            // this.showStates=false;
+            // this.showAccount=false;
+            // this.showFriends=false;
+            // this.showPrivaci=false;
+            if(view =='states'){
+                this.showStates=!this.showStates;
+
+                this.showAccount=false;
+                this.showFriends=false;
+                this.showPrivaci=false;
+            }else if(view =='account'){
+                this.showAccount = (!this.showAccount);
+
+                this.showStates=false;
+                this.showFriends=false;
+                this.showPrivaci=false;
+            }else if(view =='friends'){
+                this.showFriends=!this.showFriends;
+
+                this.showStates=false;
+                this.showAccount=false;
+                this.showPrivaci=false;
+            }else if(view =='privaci'){
+                this.showPrivaci=!this.showPrivaci;
+
+                this.showStates=false;
+                this.showAccount=false;
+                this.showFriends=false;
+            }
+        }
+    },
+    template: ` 
+    <div>
+        <!-- div xikito -->
+        <div class="name">
+            <h1>{{infoPlayer.name}}</h1>
+        </div>
+        <div class="lista">
+            <ul>
+                <li @click="changeView('states')">Estadísticas</li>
+                <li @click="changeView('account')">Mi cuenta</li>
+                <li @click="changeView('friends')">Amigos</li>
+                <li @click="changeView('privaci')">Terminos de privacidad</li>
+            </ul>
+        </div>
+
+        <!-- div grande -->
+
+        <div class="info">
+            <div class="info__status" v-show="showStates">
+                <div class="info__tittle">
+                    <h1>States</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí van las estadísticas</p>
+                </div>
+            </div>
+
+            <div class="info__account" v-show="showAccount">
+                <div class="info__tittle">
+                    <h1>Account</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí va la info de mi cuenta</p>
+                </div>
+            </div>
+
+            <div class="info__friends" v-show="showFriends">
+                <div class="info__tittle">
+                    <h1>Friends</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí va la lista de amigos</p>
+                </div>
+            </div>
+
+            <div class="privacy" v-show="showPrivaci">
+                <div class="info__tittle">
+                    <h1>Privacy</h1>
+                </div>
+                <div class="info__content">
+                    <p>Aquí van las politicas de privacidad</p>
+                </div>
+            </div>
+        </div>
+    </div>
+`
 
 }
 
@@ -450,8 +539,8 @@ const routes = [{
         component: Login,
     },
     {
-        path: '/porfile',
-        component: Porfile,
+        path: '/profile',
+        component: Profile,
     },
 ]
 
@@ -463,7 +552,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
                 success: true,
                 name: 'alessia',
