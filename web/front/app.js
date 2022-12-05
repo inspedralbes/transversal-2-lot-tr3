@@ -57,19 +57,6 @@ const Questions = {
                 score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
-<<<<<<< HEAD
-                fetch(`../back/public/recordGame`, {
-                        method: 'POST',
-                        body: score
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        console.log(data)
-                    }).catch((error) => {
-                        console.error('Error:', error);
-                    });
-                console.log('fetch');
-=======
                 fetch(`../back/public/recordGame`,{
                     method:'POST',
                     body:score
@@ -81,7 +68,6 @@ const Questions = {
                     console.error('Error:', error);
                 });
                 // console.log('fetch');
->>>>>>> 2737db91ceea6a39421d88a94a592107f1438e6d
             }
         }
     },
@@ -182,7 +168,7 @@ const Index = {
             return userStore().logged;
         },
         user(){
-            return userStore(). loginInfo;
+            return userStore().loginInfo;
         }
     },
     mounted() {},
@@ -191,7 +177,7 @@ const Index = {
             <div class="wrapper__index wrapper">
                 <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
-                    <RouterLink class="wrapperIndex__routerLogin" to="/"><button class="wrapperIndex__login">Log in</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
                     <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
@@ -238,6 +224,9 @@ const Login = {
             surname:'',
             email:'',
             password:'',
+            logMail:'',
+            logPass:''
+
             // img:''
         }
     },
@@ -270,8 +259,8 @@ const Login = {
         },
         logUser(){
             var user = new FormData();
-            user.append('email', this.email);
-            user.append('password', this.password);
+            user.append('email', this.logMail);
+            user.append('password', this.logPass);
 
             fetch(`../back/public/login`, {
                 method: 'POST',
@@ -286,9 +275,42 @@ const Login = {
     },
     template: `
         <div>
-            <h1>{{$route.params.category}}</h1>
-            <h1>{{$route.params.difficulty}}</h1>
-            <h1>{{$route.params.type}}</h1>
+            <!-- inicio sesion -->
+            <form action="/uwu" method="post">
+                <ul>
+                    <li>
+                        <label for="name">e-mail:</label>
+                        <input type="email" id="name" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
+                    </li>
+                    <li>
+                        <label for="mail">Password:</label>
+                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
+                    </li>
+                </ul>
+                <button @click="logUser">Log in</button>
+            </form>
+            <!-- registre -->
+            <form action="/uwu" method="post">
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="user_name" required placeholder="Introduce name" v-model="name">
+                    </li>
+                    <li>
+                        <label for="mail">Surname:</label>
+                        <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
+                    </li>
+                    <li>
+                        <label for="mail">e-mail:</label>
+                        <input type="email" id="mail" name="user_mail" required placeholder="Introduce e-mail" v-model="email">
+                    </li>
+                    <li>
+                        <label for="mail">Password:</label>
+                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="password">
+                    </li>
+                    <button @click="newUser">Register</button>
+                </ul>
+            </form>
         </div>
     `
 
