@@ -47,11 +47,11 @@ const Questions = {
             this.timer=false;
             if(userStore().logged){
                 console.log('final');
-                let finalScore=this.correct;
-                if(userStore().configPlay.difficulty=='medium'){
-                    finalScore*=2;
-                }else if(userStore().configPlay.difficulty=='hard'){
-                    finalScore*=5;
+                let finalScore = this.correct;
+                if (userStore().configPlay.difficulty == 'medium') {
+                    finalScore *= 2;
+                } else if (userStore().configPlay.difficulty == 'hard') {
+                    finalScore *= 5;
                 }
                 var score = new FormData();
                 score.append('score', finalScore);
@@ -75,7 +75,7 @@ const Questions = {
         isLogged() {
             return userStore().logged;
         },
-        confPlay(){
+        confPlay() {
             return userStore().configPlay;
         }
     },
@@ -97,7 +97,7 @@ const Questions = {
             console.log('fetch');
 
         } else if (userStore().configPlay.type == 'daily') {
-            
+
             //fetch a diaria
             fetch(`../back/public/daily`)
                 .then((response) => response.json())
@@ -166,15 +166,18 @@ const Index = {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        user(){
+            return userStore().loginInfo;
         }
     },
     mounted() {},
     template: `
-        <div class="index">
+        <div>
             <div class="wrapper__index wrapper">
                 <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
-                    <RouterLink class="wrapperIndex__routerLogin" to="/"><button class="wrapperIndex__login">Log in</button></RouterLink>
+                    <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
                 <div v-show='isLogged'>
                     <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="wrapperIndex__profile">Profile</button></RouterLink>
@@ -187,7 +190,7 @@ const Index = {
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid1"><p>{{user.name}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
             </div>
@@ -208,6 +211,106 @@ const Prueva = {
             <h1>{{$route.params.category}}</h1>
             <h1>{{$route.params.difficulty}}</h1>
             <h1>{{$route.params.type}}</h1>
+        </div>
+    `
+
+}
+
+const Login = {
+    params: true,
+    data: function() {
+        return {
+            name:'',
+            surname:'',
+            email:'',
+            password:'',
+            logMail:'',
+            logPass:''
+
+            // img:''
+        }
+    },
+    mounted() {
+        // console.log(this.$route.params.category);
+    },
+    methods:{
+        newUser(){            
+            var user = new FormData();
+            user.append('name', this.name);
+            user.append('surname', this.surname);
+            user.append('email', this.email);
+            user.append('password', this.password);
+
+            fetch(`../back/public/register`, {
+                    method: 'POST',
+                    body: user
+                })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data!=-1){
+                    userStore().logged=true;
+                    userStore().loginInfo.name=this.name;
+                    userStore().loginInfo.idUser=data;
+
+                }
+                router.push('/');
+            });
+
+        },
+        logUser(){
+            var user = new FormData();
+            user.append('email', this.logMail);
+            user.append('password', this.logPass);
+
+            fetch(`../back/public/login`, {
+                method: 'POST',
+                body: user
+            })
+            .then((response) => response.json())
+            .then((data) => {
+
+                router.push('/');
+            });
+        }
+    },
+    template: `
+        <div>
+            <!-- inicio sesion -->
+            <form action="/uwu" method="post">
+                <ul>
+                    <li>
+                        <label for="name">e-mail:</label>
+                        <input type="email" id="name" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
+                    </li>
+                    <li>
+                        <label for="mail">Password:</label>
+                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
+                    </li>
+                </ul>
+                <button @click="logUser">Log in</button>
+            </form>
+            <!-- registre -->
+            <form action="/uwu" method="post">
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="user_name" required placeholder="Introduce name" v-model="name">
+                    </li>
+                    <li>
+                        <label for="mail">Surname:</label>
+                        <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
+                    </li>
+                    <li>
+                        <label for="mail">e-mail:</label>
+                        <input type="email" id="mail" name="user_mail" required placeholder="Introduce e-mail" v-model="email">
+                    </li>
+                    <li>
+                        <label for="mail">Password:</label>
+                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="password">
+                    </li>
+                    <button @click="newUser">Register</button>
+                </ul>
+            </form>
         </div>
     `
 
@@ -302,19 +405,9 @@ const routes = [{
         component: Questions,
     },
     {
-        path: `/prueva/:info/:info2`,
-        component: Prueva,
-        params: true,
-        props: true,
-        name: 'try'
+        path: '/login',
+        component: Login,
     },
-    {
-        path: `/question/:category/:difficulty/:type`,
-        component: Questions,
-        params: true,
-        props: true,
-        name: 'quizz'
-    }
 ]
 
 const router = new VueRouter({
@@ -331,10 +424,10 @@ const userStore = Pinia.defineStore('usuario', {
                 name: 'alessia',
                 idUser: 1
             },
-            configPlay:{
-                category:'',
-                difficulty:'',
-                type:''
+            configPlay: {
+                category: '',
+                difficulty: '',
+                type: ''
             }
         }
     },
@@ -432,16 +525,16 @@ function alertPartida() {
             let selectDif = document.getElementById("selectDif");
             let dif = selectDif.options[selectDif.selectedIndex].value;
             // console.log(category+" "+dif);
-            userStore().configPlay.category=category;
-            userStore().configPlay.difficulty=dif;
-            userStore().configPlay.type='new';
+            userStore().configPlay.category = category;
+            userStore().configPlay.difficulty = dif;
+            userStore().configPlay.type = 'new';
 
             router.push('/questions');
         }
     })
 }
 
-function gameType(){
+function gameType() {
     Swal.fire({
         title: 'Type of game',
         // html: ``,
@@ -449,7 +542,7 @@ function gameType(){
         showCancelButton: true,
         confirmButtonText: 'New',
         denyButtonText: `Daily`,
-        denyButtonColor:'#b18597',
+        denyButtonColor: '#b18597',
         cancelButtonColor: '#d33',
         backdrop: `
         rgba(0,0,123,0.4)
@@ -461,8 +554,8 @@ function gameType(){
         if (result.isConfirmed) {
             alertPartida();
         } else if (result.isDenied) {
-            userStore().configPlay.type='daily';
+            userStore().configPlay.type = 'daily';
             router.push('/questions');
         }
-      })
+    })
 }
