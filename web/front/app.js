@@ -118,11 +118,11 @@ const Questions = {
             question.append('user_name', userStore().loginInfo.name);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
-            fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
-            // fetch(`../back/public/newGame`, {
-            //         method: 'POST',
-            //         body: question
-            //     })
+            //fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
+            fetch(`../back/public/newGame`, {
+                    method: 'POST',
+                    body: question
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -325,7 +325,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
                 success: true,
                 name: 'alessia',

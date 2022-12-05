@@ -26,6 +26,9 @@ return new class extends Migration
             $table->foreign('challenged')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('winner')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quizz_id')->references('id')->on('quizzs')->onDelete('cascade');
+
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 

@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizzsController;
-use App\Http\Controllers\Users_quizzsController;
+use App\Http\Controllers\FriendsController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,3 +38,9 @@ Route::get('daily', [QuizzsController::class , 'getDaily']);
 Route::get('curl', [QuizzsController::class , 'curl']);
 Route::post('newGame', [QuizzsController::class , 'newGame']);
 Route::post('recordGame', [QuizzsController::class , 'recordGame']);
+
+Route::post('register', [ProfileController::class , 'register']);
+Route::post('login', [ProfileController::class , 'login']);
+
+Route::get('friends', [FriendsController::class , 'getFriends']);
+Route::get('friendRequests', [FriendsController::class , 'getFriendRequests']);
