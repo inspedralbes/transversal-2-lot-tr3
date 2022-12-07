@@ -71,7 +71,7 @@ const Questions = {
                 score.append('score', finalScore);
                 score.append('time_resolution', this.time);
 
-                fetch(`../back/public/recordGame`, {
+                fetch(`../back/public/index.php/recordGame`, {
                         method: 'POST',
                         body: score
                     })
@@ -98,7 +98,7 @@ const Questions = {
 
             // fetch a demo
             // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
-            fetch(`../back/public/demo`)
+            fetch(`../back/public/index.php/demo`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -113,7 +113,7 @@ const Questions = {
         } else if (userStore().configPlay.type == 'daily') {
 
             //fetch a diaria
-            fetch(`../back/public/daily`)
+            fetch(`../back/public/index.php/daily`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -132,11 +132,11 @@ const Questions = {
             question.append('user_name', userStore().loginInfo.name);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
-            fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
-                // fetch(`../back/public/newGame`, {
-                //         method: 'POST',
-                //         body: question
-                //     })
+            // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
+                fetch(`../back/public/index.php/newGame`, {
+                        method: 'POST',
+                        body: question
+                    })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -258,7 +258,7 @@ const Login = {
             user.append('email', this.email);
             user.append('password', this.password);
 
-            fetch(`../back/public/register`, {
+            fetch(`../back/public/index.php/register`, {
                     method: 'POST',
                     body: user
                 })
@@ -279,7 +279,7 @@ const Login = {
             user.append('email', this.logMail);
             user.append('password', this.logPass);
 
-            fetch(`../back/public/login`, {
+            fetch(`../back/public/index.php/login`, {
                     method: 'POST',
                     body: user
                 })
@@ -330,7 +330,7 @@ const Login = {
                     <button @click="newUser">Register</button>
                 </ul>
                 <div v-show="error">
-                    <p>{{error}}<p>
+                    <p>{{error}}</p>
                 </div>
         </div>
     `
@@ -396,77 +396,58 @@ const Profile = {
         },
         acceptFriend(id){
 
-            // var friendReq = new FormData();
-            // friendReq.append('id', id);
+            var friendReq = new FormData();
+            friendReq.append('id', id);
 
-            // fetch(`../back/public/acceptFriend`, {
-            //     method: 'POST',
-            //     body: friendReq
-            // })
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     this.getPendingRequests();
-            //     this.getFriends();
-            // });
+            fetch(`../back/public/index.php/acceptFriend`, {
+                method: 'POST',
+                body: friendReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.getPendingRequests();
+                this.getFriends();
+            });
 
-            console.log('accept '+id);
+            // console.log('accept '+id);
 
         },
         getPendingRequests(){
 
-            // fetch(`../back/public/friendRequests`)
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     this.pendentFriends=data;
-            // });
-            this.pendentFriends=[
-                {
-                    id:3,
-                    name:"name3"
-                },
-                {
-                    id:4,
-                    name:"name4"
-                }
-            ];
+            fetch(`../back/public/index.php/friendRequests`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.pendentFriends=data;
+            });
 
         },
         getFriends(){
 
-            // fetch(`../back/public/friends`)
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     this.friends=data;
-            // });
+            fetch(`../back/public/index.php/friends`)
+            .then((response) => response.json())
+            .then((data) => {
+                // console.log(data);
+                this.friends=data;
+            });
 
-            this.friends=[
-                {
-                    id:1,
-                    name:"name1"
-                },
-                {
-                    id:2,
-                    name:"name2"
-                }
-            ];
 
         },
         declineFriend(id){
 
-            // var friendReq = new FormData();
-            // friendReq.append('id', id);
+            var friendReq = new FormData();
+            friendReq.append('id', id);
 
-            // fetch(`../back/public/declineFriend`, {
-            //     method: 'POST',
-            //     body: friendReq
-            // })
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     this.getPendingRequests();
-            //     this.getFriends();
-            // });
+            fetch(`../back/public/index.php/declineFriend`, {
+                method: 'POST',
+                body: friendReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.getPendingRequests();
+                this.getFriends();
+            });
 
-            console.log('decline '+id);
+            // console.log('decline '+id);
         }
     },
     template: ` 
@@ -665,7 +646,7 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: true,
+            logged: false,
             loginInfo: {
                 success: true,
                 name: 'alessia',
