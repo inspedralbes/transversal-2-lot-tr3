@@ -157,7 +157,8 @@ const Questions = {
                 </div>
             </div>
             <div v-show="nQuestion<actualQ">
-            <h1>Correctas: {{this.correct}}/{{this.nQuestion+1}}</h1>
+                <h1>Correctas: {{this.correct}}/{{this.nQuestion+1}}</h1>
+                <RouterLink class="wrapperIndex__routerProfile" to="/"><button>Home</button></RouterLink>
             </div>
         </div>
     </b-container>`
@@ -344,10 +345,18 @@ const Profile = {
             showFriends:false,
             showPrivaci:false,
             friends:null,
-            pendentFriends:null
+            pendentFriends:null,
+            // seeRequests:false
         }
     },
-    mounted() {},
+    mounted() {
+        
+        
+        this.getFriends();
+        this.getPendingRequests();
+       
+
+    },
     computed:{
         infoPlayer() {
             return userStore().loginInfo;
@@ -384,6 +393,80 @@ const Profile = {
                 this.showAccount=false;
                 this.showFriends=false;
             }
+        },
+        acceptFriend(id){
+
+            // var friendReq = new FormData();
+            // friendReq.append('id', id);
+
+            // fetch(`../back/public/acceptFriend`, {
+            //     method: 'POST',
+            //     body: friendReq
+            // })
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     this.getPendingRequests();
+            //     this.getFriends();
+            // });
+
+            console.log('accept '+id);
+
+        },
+        getPendingRequests(){
+
+            // fetch(`../back/public/friendRequests`)
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     this.pendentFriends=data;
+            // });
+            this.pendentFriends=[
+                {
+                    id:3,
+                    name:"name3"
+                },
+                {
+                    id:4,
+                    name:"name4"
+                }
+            ];
+
+        },
+        getFriends(){
+
+            // fetch(`../back/public/friends`)
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     this.friends=data;
+            // });
+
+            this.friends=[
+                {
+                    id:1,
+                    name:"name1"
+                },
+                {
+                    id:2,
+                    name:"name2"
+                }
+            ];
+
+        },
+        declineFriend(id){
+
+            // var friendReq = new FormData();
+            // friendReq.append('id', id);
+
+            // fetch(`../back/public/declineFriend`, {
+            //     method: 'POST',
+            //     body: friendReq
+            // })
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     this.getPendingRequests();
+            //     this.getFriends();
+            // });
+
+            console.log('decline '+id);
         }
     },
     template: ` 
@@ -423,11 +506,36 @@ const Profile = {
             </div>
 
             <div class="info__friends" v-show="showFriends">
-                <div class="info__tittle">
-                    <h1>Friends</h1>
-                </div>
-                <div class="info__content">
-                    <p>Aquí va la lista de amigos</p>
+                <div>
+                    <b-card no-body>
+                        <b-tabs card>
+                            <b-tab title="Friends" active>
+                                <b-card-text>
+                                    <div class="info__tittle">
+                                        <h1>Friends</h1>
+                                    </div>
+                                    <div class="info__content">
+                                        <div v-for="(friend, index) in this.friends">
+                                            <p>{{friend.name}}</p>
+                                        </div>
+                                    </div>
+                                </b-card-text>
+                            </b-tab>
+                            
+                            <b-tab title="Friend Requests">
+                                <b-card-text>
+                                    <div class="info__tittle">
+                                        <h1>Friends Request</h1>
+                                    </div>
+                                    <div class="info__content">
+                                    <div v-for="(friend, index) in this.pendentFriends">
+                                        <p>{{friend.name}} <i class="fa fa-check-circle" @click="acceptFriend(friend.id)"></i> <i class="fa fa-times-circle" @click="declineFriend(friend.id)"></i></p>
+                                    </div>
+                                    </div>
+                                </b-card-text>
+                            </b-tab>
+                        </b-tabs>
+                    </b-card>
                 </div>
             </div>
 
@@ -475,6 +583,7 @@ Vue.component('question', {
                 } else {
                     answer.incorrect = true;
                     console.log('incorrecto');
+                    this.findCorrect();
                 }
                 setTimeout(() => {
                     this.$emit('answered', ok);
@@ -483,10 +592,14 @@ Vue.component('question', {
             }
             // this.sleep(5000)
             // this.$emit('answered', ok);
+        },
+        findCorrect(){
+            this.answers.forEach(answer => {
+                if(answer.answer==this.question_info.correctAnswer){
+                    answer.correct=true;
+                }
+            });
         }
-    },
-    sendInfo: function(ok) {
-        //this.$emit('answered',ok);
     },
     mounted() {
         this.question_info.incorrectAnswers.forEach(element => {
