@@ -63,6 +63,22 @@ class FriendsController extends Controller
         return response()->json($list);
     }
 
+    public function addFriend(Request $request){    
+        $friendsList = Friend::where('user_sent', $request -> id) -> where('user_received', $request -> id)
+        ->orwhere('user_sent', $request -> id) -> where('user_received', $request -> id)
+        ->count();
+
+        $response = 'ERROR';
+        if ($friendsList == 0) {
+            $friend = new Friend;
+            $friend -> user_sent = Session::get('user_id');
+            $friend -> user_received = $request -> id;
+            $friend -> save();  
+            $response = 'OK';
+        }
+        return response()->json($response);
+    }
+
     public function acceptFriend(Request $request){
         $friend = Friend::find($request->id);
         $friend->status='accepted';
