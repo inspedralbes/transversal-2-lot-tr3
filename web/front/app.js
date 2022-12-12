@@ -205,7 +205,7 @@ const Index = {
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <div class="center__grid1"><p>{{user.name}}</p></div>
+                    <div class="center__grid1"><p>{{user.nickname}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
             </div>
@@ -238,6 +238,7 @@ const Login = {
         return {
             name: '',
             surname: '',
+            nickname: '',
             email: '',
             password: '',
             logMail: '',
@@ -255,6 +256,7 @@ const Login = {
             var user = new FormData();
             user.append('name', this.name);
             user.append('surname', this.surname);
+            user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
 
@@ -266,7 +268,7 @@ const Login = {
                 .then((data) => {
                     if (data != -1) {
                         userStore().logged = true;
-                        userStore().loginInfo.name = this.name;
+                        userStore().loginInfo.nickname = this.nickname;
                         userStore().loginInfo.idUser = data;
                         router.push('/');
                     }
@@ -287,7 +289,7 @@ const Login = {
                 .then((data) => {
                     if (data != "null") {
                         userStore().logged = true;
-                        userStore().loginInfo.name = data.name;
+                        userStore().loginInfo.nickname = data.nickname;
                         userStore().loginInfo.idUser = data.id;
                         router.push('/');
                     }
@@ -318,6 +320,10 @@ const Login = {
                     <li>
                         <label for="mail">Surname:</label>
                         <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
+                    </li>
+                    <li>
+                        <label for="nickname">Nickname:</label>
+                        <input type="text" id="nickname" name="user_nickname" required placeholder="Introduce nickname" v-model="nickname">
                     </li>
                     <li>
                         <label for="mail">e-mail:</label>
@@ -688,9 +694,8 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                success: true,
-                name: 'alessia',
-                idUser: 1
+                nickname: '',
+                idUser: -1
             },
             configPlay: {
                 category: '',
