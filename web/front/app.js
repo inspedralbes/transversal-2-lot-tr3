@@ -296,8 +296,11 @@ const Login = {
                     this.error = "Can't create the user";
                 });
 
+            // console.log('new');
+
         },
         logUser() {
+            // console.log('login');
             var user = new FormData();
             user.append('email', this.logMail);
             user.append('password', this.logPass);
@@ -322,25 +325,27 @@ const Login = {
         <div>
         <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="#">
+
                 <h1>Create Account</h1>
                 <br>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="text" placeholder="Name" v-model="name"/>
+                <input type="text" placeholder="Surname" v-model="surname"/>
+                <input type="text" placeholder="Nickname" v-model="nickname"/>
+                <input type="email" placeholder="Email" v-model="email"/>
+                <input type="password" placeholder="Password" v-model="password"/>
                 <br>
                 <button class="login" @click="newUser">Sign Up</button>
-            </form>
+
         </div>
         <div class="form-container sign-in-container" v-show="signIn">
-            <form action="#">
+
                 <h1>Sign in</h1>
                 <br>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="email" placeholder="Email" v-model="logMail"/>
+                <input type="password" placeholder="Password" v-model="logPass"/>
                 <br>
                 <button class="login" @click="logUser">Sign In</button>
-            </form>
+
         </div>
         <div class="overlay-container">
             <div class="overlay">
