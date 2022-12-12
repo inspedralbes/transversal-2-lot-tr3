@@ -340,10 +340,10 @@ const Login = {
 const Profile = {
     data: function() {
         return {
-            showStates:false,
+            showStats:false,
             showAccount:false,
             showFriends:false,
-            showPrivaci:false,
+            showPrivacy:false,
             friends:null,
             pendentFriends:null,
             // seeRequests:false
@@ -364,32 +364,32 @@ const Profile = {
     },
     methods: {
         changeView(view){
-            // this.showStates=false;
+            // this.showStats=false;
             // this.showAccount=false;
             // this.showFriends=false;
-            // this.showPrivaci=false;
-            if(view =='states'){
-                this.showStates=!this.showStates;
+            // this.showPrivacy=false;
+            if(view =='stats'){
+                this.showStats=!this.showStats;
 
                 this.showAccount=false;
                 this.showFriends=false;
-                this.showPrivaci=false;
+                this.showPrivacy=false;
             }else if(view =='account'){
                 this.showAccount = (!this.showAccount);
 
-                this.showStates=false;
+                this.showStats=false;
                 this.showFriends=false;
-                this.showPrivaci=false;
+                this.showPrivacy=false;
             }else if(view =='friends'){
                 this.showFriends=!this.showFriends;
 
-                this.showStates=false;
+                this.showStats=false;
                 this.showAccount=false;
-                this.showPrivaci=false;
-            }else if(view =='privaci'){
-                this.showPrivaci=!this.showPrivaci;
+                this.showPrivacy=false;
+            }else if(view =='privacy'){
+                this.showPrivacy=!this.showPrivacy;
 
-                this.showStates=false;
+                this.showStats=false;
                 this.showAccount=false;
                 this.showFriends=false;
             }
@@ -452,25 +452,22 @@ const Profile = {
     },
     template: ` 
     <div>
-        <!-- div xikito -->
         <div class="name">
             <h1>{{infoPlayer.name}}</h1>
         </div>
         <div class="lista">
             <ul>
-                <li @click="changeView('states')">Estadísticas</li>
+                <li @click="changeView('stats')">Estadísticas</li>
                 <li @click="changeView('account')">Mi cuenta</li>
                 <li @click="changeView('friends')">Amigos</li>
-                <li @click="changeView('privaci')">Terminos de privacidad</li>
+                <li @click="changeView('privacy')">Terminos de privacidad</li>
             </ul>
         </div>
 
-        <!-- div grande -->
-
         <div class="info">
-            <div class="info__status" v-show="showStates">
+            <div class="info__status" v-show="showStats">
                 <div class="info__tittle">
-                    <h1>States</h1>
+                    <h1>Stats</h1>
                 </div>
                 <div class="info__content">
                     <p>Aquí van las estadísticas</p>
@@ -520,7 +517,7 @@ const Profile = {
                 </div>
             </div>
 
-            <div class="privacy" v-show="showPrivaci">
+            <div class="privacy" v-show="showPrivacy">
                 <div class="info__tittle">
                     <h1>Privacy</h1>
                 </div>
