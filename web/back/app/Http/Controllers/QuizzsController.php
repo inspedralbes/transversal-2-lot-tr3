@@ -49,7 +49,7 @@ class QuizzsController extends Controller
         $quizzInsert = new Quizz;
         $quizzInsert -> game = $response;
         $quizzInsert -> date_creation = date('Y-m-d');
-        $quizzInsert -> name_creator = $request -> user_name;
+        $quizzInsert -> name_creator = $request -> nickname;
         $quizzInsert -> difficulty = $request -> difficulty;
         $quizzInsert -> category = $request -> category;
         $quizzInsert -> type = 'normal';

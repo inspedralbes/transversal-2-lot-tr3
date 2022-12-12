@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizzsController;
 use App\Http\Controllers\FriendsController;
+use App\Http\Controllers\Users_quizzsController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -49,3 +50,5 @@ Route::post('acceptFriend', [FriendsController::class , 'acceptFriend']);
 Route::post('declineFriend', [FriendsController::class , 'declineFriend']);
 
 Route::get('getRanking', [ProfileController::class , 'getRanking']);
+
+Route::get('getUserQuizzs', [Users_quizzsController::class , 'getUserQuizzs']);
