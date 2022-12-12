@@ -43,7 +43,9 @@ Route::post('register', [ProfileController::class , 'register']);
 Route::post('login', [ProfileController::class , 'login']);
 
 Route::get('friends', [FriendsController::class , 'getFriends']);
+Route::post('addFriend', [FriendsController::class , 'addFriend']);
 Route::get('friendRequests', [FriendsController::class , 'getFriendRequests']);
 Route::post('acceptFriend', [FriendsController::class , 'acceptFriend']);
 Route::post('declineFriend', [FriendsController::class , 'declineFriend']);
 
+Route::get('getRanking', [ProfileController::class , 'getRanking']);

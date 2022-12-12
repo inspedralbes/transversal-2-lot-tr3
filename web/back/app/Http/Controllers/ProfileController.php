@@ -23,11 +23,14 @@ class ProfileController extends Controller
     public function register(Request $request) {
         $idUserCreated = -1;
 
-        $checkUser = User::where('email', $request -> email)->count();
+        $checkUser = User::where('email', $request -> email)
+        ->orwhere('nickname', $request -> nickname)
+        ->count();
         if ($checkUser != 1) {
             $createUser = new User();
             $createUser -> name = $request -> name;
             $createUser -> surname = $request -> surname;
+            $createUser -> nickname = $request -> nickname;
             $createUser -> email = strtolower($request -> email);
             $createUser -> password = Hash::make($request->password);
             $createUser -> save();
@@ -40,7 +43,7 @@ class ProfileController extends Controller
 
     public function login(Request $request) {
         $returnUser = "null";
-        $checkUser = User::where('email', $request -> email) -> count();
+        $checkUser = User::where('email', strtolower($request -> email)) -> count();
 
         if ($checkUser == 1) {
             $userInfo = User::where('email', $request -> email) -> first();
@@ -50,8 +53,9 @@ class ProfileController extends Controller
                 $returnUser -> id = $userInfo -> id;
                 $userId = $returnUser -> id;
                 $returnUser -> name = $userInfo -> name;
-                $returnUser -> surname = strtolower($userInfo -> surname);
-                $returnUser -> email = $userInfo -> email;
+                $returnUser -> surname = $userInfo -> surname;
+                $returnUser -> nickname = $userInfo -> nickname;
+                $returnUser -> email = strtolower($userInfo -> email);
                 Session::put('user_id', $userId);        
             }
         }
@@ -59,6 +63,27 @@ class ProfileController extends Controller
         return response()->json($returnUser);
     }
 
+    public function getRanking(Request $request) {
+        $allUsers = User::orderBy('elo', 'DESC')
+        ->get();
+
+        $ranking = [];
+        foreach ($allUsers as $infoUser) {
+            $user = (object) [
+                'id' => -1,
+                'name' => '',
+                'surname' => '',
+                'elo' => -1
+            ];
+            $user -> id = $infoUser -> id;
+            $user -> name = $infoUser -> name;
+            $user -> surname = $infoUser -> surname;
+            $user -> elo = $infoUser -> elo;
+            $ranking[] = $user;
+        }
+        return response()->json($ranking);
+    }
+    
     public function edit(Request $request)
     {
         return view('profile.edit', [

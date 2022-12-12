@@ -1,5 +1,5 @@
 //Componentes
-const Template = {
+const Template = { 
     params: true,
     data: function() {
         return {}
@@ -190,7 +190,7 @@ const Index = {
     template: `
         <div>
             <div class="wrapper__index wrapper">
-                <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
+                <RouterLink class="wrapperIndex__routerRanking" to="/ranking"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
                     <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
@@ -205,7 +205,7 @@ const Index = {
                     <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
                 </div>
                 <div v-else>
-                    <div class="center__grid1"><p>{{user.name}}</p></div>
+                    <div class="center__grid1"><p>{{user.nickname}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
             </div>
@@ -238,6 +238,7 @@ const Login = {
         return {
             name: '',
             surname: '',
+            nickname: '',
             email: '',
             password: '',
             logMail: '',
@@ -255,6 +256,7 @@ const Login = {
             var user = new FormData();
             user.append('name', this.name);
             user.append('surname', this.surname);
+            user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
 
@@ -266,7 +268,7 @@ const Login = {
                 .then((data) => {
                     if (data != -1) {
                         userStore().logged = true;
-                        userStore().loginInfo.name = this.name;
+                        userStore().loginInfo.nickname = this.nickname;
                         userStore().loginInfo.idUser = data;
                         router.push('/');
                     }
@@ -287,7 +289,7 @@ const Login = {
                 .then((data) => {
                     if (data != "null") {
                         userStore().logged = true;
-                        userStore().loginInfo.name = data.name;
+                        userStore().loginInfo.nickname = data.nickname;
                         userStore().loginInfo.idUser = data.id;
                         router.push('/');
                     }
@@ -297,6 +299,7 @@ const Login = {
     },
     template: `
         <div>
+<<<<<<< HEAD
         <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="#">
@@ -333,6 +336,46 @@ const Login = {
                     <h1>Register please</h1>
                     <br>
                     <button class="ghost" id="signUp">Sign Up</button>
+=======
+            <!-- inicio sesion -->
+                <ul>
+                    <li>
+                        <label for="email">e-mail:</label>
+                        <input type="email" id="email" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
+                    </li>
+                    <li>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
+                    </li>
+                </ul>
+                <button @click="logUser">Log in</button>
+            <!-- registre -->
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="user_name" required placeholder="Introduce name" v-model="name">
+                    </li>
+                    <li>
+                        <label for="mail">Surname:</label>
+                        <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
+                    </li>
+                    <li>
+                        <label for="nickname">Nickname:</label>
+                        <input type="text" id="nickname" name="user_nickname" required placeholder="Introduce nickname" v-model="nickname">
+                    </li>
+                    <li>
+                        <label for="mail">e-mail:</label>
+                        <input type="email" id="mail" name="user_mail" required placeholder="Introduce e-mail" v-model="email">
+                    </li>
+                    <li>
+                        <label for="mail">Password:</label>
+                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="password">
+                    </li>
+                    <button @click="newUser">Register</button>
+                </ul>
+                <div v-show="error">
+                    <p>{{error}}</p>
+>>>>>>> 4714b18c43d57fd7a8fb5b401033bbdc9723a196
                 </div>
             </div>
         </div>
@@ -479,7 +522,7 @@ const Profile = {
                     <h1>Stats</h1>
                 </div>
                 <div class="info__content">
-                    <p>Aquí van las estadísticas</p>
+                    <playerStats :id=infoPlayer.id></playerStats>
                 </div>
             </div>
 
@@ -539,6 +582,53 @@ const Profile = {
 `
 
 }
+
+const Ranking = { 
+    data: function() {
+        return {
+            players:[]
+        }
+    },
+    mounted() {
+        fetch(`../back/public/index.php/getRanking`)
+        .then((response) => response.json())
+        .then((data) => {
+           this.players=data;
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+        // this.players=[{
+        //     nikname:'a',
+        //     elo:6,
+        // }]
+    },
+    computed:{
+        isLogged() {
+            return userStore().logged;
+        },
+    },
+    methods: {
+        addFriend(id){
+            var friendReq = new FormData();
+            friendReq.append('id', id);
+
+            fetch(`../back/public/index.php/addFriend`, {
+                method: 'POST',
+                body: friendReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+            });
+        }
+    },
+    template: `<div>
+        <div v-for="(player, index) in this.players">
+            <div>{{index}} {{player.nikname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
+        </div>
+    </div>`
+
+}
+
 
 
 Vue.component('question', {
@@ -624,7 +714,18 @@ Vue.component('question', {
 
 });
 
+Vue.component('playerStats',{
+    props: ['id'],
+    data: function() {
+        return {}
+    },
+    mounted() {},
+    computed:{},
+    methods: {
 
+    },
+    template: ``
+});
 //Rutas
 const routes = [{
         path: '/',
@@ -642,6 +743,10 @@ const routes = [{
         path: '/profile',
         component: Profile,
     },
+    {
+        path: '/ranking',
+        component: Ranking,
+    },
 ]
 
 const router = new VueRouter({
@@ -654,9 +759,8 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                success: true,
-                name: 'alessia',
-                idUser: 1
+                nickname: '',
+                idUser: -1
             },
             configPlay: {
                 category: '',
