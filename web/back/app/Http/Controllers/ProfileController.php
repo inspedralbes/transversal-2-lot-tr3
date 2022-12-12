@@ -59,6 +59,27 @@ class ProfileController extends Controller
         return response()->json($returnUser);
     }
 
+    public function getRanking(Request $request) {
+        $allUsers = User::orderBy('elo', 'DESC')
+        ->get();
+
+        $ranking = [];
+        foreach ($allUsers as $infoUser) {
+            $user = (object) [
+                'id' => -1,
+                'name' => '',
+                'surname' => '',
+                'elo' => -1
+            ];
+            $user -> id = $infoUser -> id;
+            $user -> name = $infoUser -> name;
+            $user -> surname = $infoUser -> surname;
+            $user -> elo = $infoUser -> elo;
+            $ranking[] = $user;
+        }
+        return response()->json($ranking);
+    }
+    
     public function edit(Request $request)
     {
         return view('profile.edit', [

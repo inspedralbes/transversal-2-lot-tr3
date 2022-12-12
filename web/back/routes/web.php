@@ -47,3 +47,4 @@ Route::get('friendRequests', [FriendsController::class , 'getFriendRequests']);
 Route::post('acceptFriend', [FriendsController::class , 'acceptFriend']);
 Route::post('declineFriend', [FriendsController::class , 'declineFriend']);
 
+Route::get('getRanking', [ProfileController::class , 'getRanking']);
