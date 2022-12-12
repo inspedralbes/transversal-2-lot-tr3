@@ -129,7 +129,7 @@ const Questions = {
 
             var question = new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
-            question.append('user_name', userStore().loginInfo.name);
+            question.append('nickname', userStore().loginInfo.nickname);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
             // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
@@ -243,13 +243,34 @@ const Login = {
             password: '',
             logMail: '',
             logPass: '',
-            error: null
+            error: null,
+            signIn:true
+
 
             // img:''
         }
     },
     mounted() {
         // console.log(this.$route.params.category);
+
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+            setTimeout(() => {
+                this.signIn=false;
+            }, "500");
+            
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+            setTimeout(() => {
+                this.signIn=true;
+            }, "500");
+        });
     },
     methods: {
         newUser() {
@@ -299,7 +320,6 @@ const Login = {
     },
     template: `
         <div>
-<<<<<<< HEAD
         <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="#">
@@ -309,19 +329,17 @@ const Login = {
                 <input type="email" placeholder="Email" />
                 <input type="password" placeholder="Password" />
                 <br>
-                <button @click="newUser">Sign Up</button>
+                <button class="login" @click="newUser">Sign Up</button>
             </form>
         </div>
-        <div class="form-container sign-in-container">
+        <div class="form-container sign-in-container" v-show="signIn">
             <form action="#">
                 <h1>Sign in</h1>
-                <span>use your account</span>
                 <br>
-
                 <input type="email" placeholder="Email" />
                 <input type="password" placeholder="Password" />
                 <br>
-                <button @click="logUser">Sign In</button>
+                <button class="login" @click="logUser">Sign In</button>
             </form>
         </div>
         <div class="overlay-container">
@@ -330,52 +348,12 @@ const Login = {
                     <h1>Log in please</h1>
                     <br>
                     <br>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <button class="login ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Register please</h1>
                     <br>
-                    <button class="ghost" id="signUp">Sign Up</button>
-=======
-            <!-- inicio sesion -->
-                <ul>
-                    <li>
-                        <label for="email">e-mail:</label>
-                        <input type="email" id="email" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
-                    </li>
-                    <li>
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
-                    </li>
-                </ul>
-                <button @click="logUser">Log in</button>
-            <!-- registre -->
-                <ul>
-                    <li>
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="user_name" required placeholder="Introduce name" v-model="name">
-                    </li>
-                    <li>
-                        <label for="mail">Surname:</label>
-                        <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
-                    </li>
-                    <li>
-                        <label for="nickname">Nickname:</label>
-                        <input type="text" id="nickname" name="user_nickname" required placeholder="Introduce nickname" v-model="nickname">
-                    </li>
-                    <li>
-                        <label for="mail">e-mail:</label>
-                        <input type="email" id="mail" name="user_mail" required placeholder="Introduce e-mail" v-model="email">
-                    </li>
-                    <li>
-                        <label for="mail">Password:</label>
-                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="password">
-                    </li>
-                    <button @click="newUser">Register</button>
-                </ul>
-                <div v-show="error">
-                    <p>{{error}}</p>
->>>>>>> 4714b18c43d57fd7a8fb5b401033bbdc9723a196
+                    <button class="login ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -386,8 +364,19 @@ const Login = {
     </div>
         </div>
     `
-
 }
+        // const signUpButton = document.getElementById('signUp');
+        // const signInButton = document.getElementById('signIn');
+        // const container = document.getElementById('container');
+
+        // signUpButton.addEventListener('click', () => {
+        //     container.classList.add("right-panel-active");
+        // });
+
+        // signInButton.addEventListener('click', () => {
+        //     container.classList.remove("right-panel-active");
+        // });
+
 
 const Profile = {
     data: function() {
@@ -598,7 +587,7 @@ const Ranking = {
             console.error('Error:', error);
         });
         // this.players=[{
-        //     nikname:'a',
+        //     nickname:'a',
         //     elo:6,
         // }]
     },
@@ -618,12 +607,25 @@ const Ranking = {
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data=="ERROR"){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'this user is already your friend or already has a pending request',
+                      })
+                }else{
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Done',
+                        text: 'Request sent, wait for your friend to accept it!',
+                      })
+                }
             });
         }
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div>{{index}} {{player.nikname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
+            <div>{{index}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
         </div>
     </div>`
 
