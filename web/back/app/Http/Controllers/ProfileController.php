@@ -78,6 +78,7 @@ class ProfileController extends Controller
             $user -> id = $infoUser -> id;
             $user -> name = $infoUser -> name;
             $user -> surname = $infoUser -> surname;
+            $user -> nickname = $infoUser -> nickname;
             $user -> elo = $infoUser -> elo;
             $ranking[] = $user;
         }
