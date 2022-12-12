@@ -1,5 +1,5 @@
 //Componentes
-const Template = {
+const Template = { 
     params: true,
     data: function() {
         return {}
@@ -190,7 +190,7 @@ const Index = {
     template: `
         <div>
             <div class="wrapper__index wrapper">
-                <RouterLink class="wrapperIndex__routerRanking" to="/"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
+                <RouterLink class="wrapperIndex__routerRanking" to="/ranking"><button class="wrapperIndex__ranking">Ranking</button></RouterLink>
                 <div v-show='!isLogged'>
                     <RouterLink class="wrapperIndex__routerLogin" to="/login"><button class="wrapperIndex__login">Log in</button></RouterLink>
                 </div>
@@ -470,7 +470,7 @@ const Profile = {
                     <h1>Stats</h1>
                 </div>
                 <div class="info__content">
-                    <p>Aquí van las estadísticas</p>
+                    <playerStats :id=infoPlayer.id></playerStats>
                 </div>
             </div>
 
@@ -530,6 +530,34 @@ const Profile = {
 `
 
 }
+
+const Ranking = { 
+    data: function() {
+        return {
+            players:[]
+        }
+    },
+    mounted() {
+        fetch(`../back/public/index.php/getRanking`)
+        .then((response) => response.json())
+        .then((data) => {
+           this.players=data;
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+    },
+    computed:{},
+    methods: {
+
+    },
+    template: `<div>
+        <div v-for="(player, index) in this.players">
+            <div>{{index}} {{player.name}} {{player.surname}}  {{player.elo}}</div>
+        </div>
+    </div>`
+
+}
+
 
 
 Vue.component('question', {
@@ -615,7 +643,18 @@ Vue.component('question', {
 
 });
 
+Vue.component('playerStats',{
+    props: ['id'],
+    data: function() {
+        return {}
+    },
+    mounted() {},
+    computed:{},
+    methods: {
 
+    },
+    template: ``
+});
 //Rutas
 const routes = [{
         path: '/',
@@ -632,6 +671,10 @@ const routes = [{
     {
         path: '/profile',
         component: Profile,
+    },
+    {
+        path: '/ranking',
+        component: Ranking,
     },
 ]
 
