@@ -383,7 +383,7 @@ const Login = {
         // });
 
 
-const Profile = {
+const MyProfile = {
     data: function() {
         return {
             showStats: false,
@@ -494,6 +494,12 @@ const Profile = {
                 });
 
             // console.log('decline '+id);
+        },
+        logOut(){
+            userStore().logged=false;
+            userStore().loginInfo.nickname='';
+            userStore().loginInfo.idUser=-1;
+            router.push('/');
         }
     },
     template: ` 
@@ -508,6 +514,7 @@ const Profile = {
                 <li @click="changeView('friends')">Amigos</li>
                 <li @click="changeView('privacy')">Terminos de privacidad</li>
             </ul>
+            <button @click="logOut">Log Out</burtton>
         </div>
 
         <div class="info">
@@ -748,7 +755,7 @@ const routes = [{
     },
     {
         path: '/profile',
-        component: Profile,
+        component: MyProfile,
     },
     {
         path: '/ranking',
