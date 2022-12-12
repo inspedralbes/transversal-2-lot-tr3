@@ -551,14 +551,33 @@ const Ranking = {
         }).catch((error) => {
             console.error('Error:', error);
         });
+        // this.players=[{
+        //     nikname:'a',
+        //     elo:6,
+        // }]
     },
-    computed:{},
+    computed:{
+        isLogged() {
+            return userStore().logged;
+        },
+    },
     methods: {
+        addFriend(id){
+            var friendReq = new FormData();
+            friendReq.append('id', id);
 
+            fetch(`../back/public/index.php/addFriend`, {
+                method: 'POST',
+                body: friendReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+            });
+        }
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div>{{index}} {{player.name}} {{player.surname}}  {{player.elo}}</div>
+            <div>{{index}} {{player.nikname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
         </div>
     </div>`
 
