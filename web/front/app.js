@@ -5,7 +5,7 @@ const Template = {
         return {}
     },
     mounted() {},
-    computed:{},
+    computed: {},
     methods: {
 
     },
@@ -133,10 +133,10 @@ const Questions = {
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
             // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
-                fetch(`../back/public/index.php/newGame`, {
-                        method: 'POST',
-                        body: question
-                    })
+            fetch(`../back/public/index.php/newGame`, {
+                    method: 'POST',
+                    body: question
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -184,7 +184,7 @@ const Index = {
         },
         user() {
             return userStore().loginInfo;
-        } 
+        }
     },
     mounted() {},
     template: `
@@ -297,41 +297,50 @@ const Login = {
     },
     template: `
         <div>
-            <!-- inicio sesion -->
-                <ul>
-                    <li>
-                        <label for="email">e-mail:</label>
-                        <input type="email" id="email" name="user_e-mail" required placeholder="Introduce e-mail" v-model="logMail">
-                    </li>
-                    <li>
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="user_passwd" required placeholder="Introduce password" v-model="logPass">
-                    </li>
-                </ul>
-                <button @click="logUser">Log in</button>
-            <!-- registre -->
-                <ul>
-                    <li>
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="user_name" required placeholder="Introduce name" v-model="name">
-                    </li>
-                    <li>
-                        <label for="mail">Surname:</label>
-                        <input type="text" id="mail" name="user_surname" required placeholder="Introduce surname" v-model="surname">
-                    </li>
-                    <li>
-                        <label for="mail">e-mail:</label>
-                        <input type="email" id="mail" name="user_mail" required placeholder="Introduce e-mail" v-model="email">
-                    </li>
-                    <li>
-                        <label for="mail">Password:</label>
-                        <input type="password" id="mail" name="user_passwd" required placeholder="Introduce password" v-model="password">
-                    </li>
-                    <button @click="newUser">Register</button>
-                </ul>
-                <div v-show="error">
-                    <p>{{error}}</p>
+        <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Create Account</h1>
+                <br>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <br>
+                <button @click="newUser">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Sign in</h1>
+                <span>use your account</span>
+                <br>
+
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <br>
+                <button @click="logUser">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Log in please</h1>
+                    <br>
+                    <br>
+                    <button class="ghost" id="signIn">Sign In</button>
                 </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Register please</h1>
+                    <br>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-show="error">
+        <p>{{error}}</p>
+    </div>
         </div>
     `
 
@@ -340,112 +349,112 @@ const Login = {
 const Profile = {
     data: function() {
         return {
-            showStats:false,
-            showAccount:false,
-            showFriends:false,
-            showPrivacy:false,
-            friends:null,
-            pendentFriends:null,
+            showStats: false,
+            showAccount: false,
+            showFriends: false,
+            showPrivacy: false,
+            friends: null,
+            pendentFriends: null,
             // seeRequests:false
         }
     },
     mounted() {
-        
-        
+
+
         this.getFriends();
         this.getPendingRequests();
-       
+
 
     },
-    computed:{
+    computed: {
         infoPlayer() {
             return userStore().loginInfo;
         }
     },
     methods: {
-        changeView(view){
+        changeView(view) {
             // this.showStats=false;
             // this.showAccount=false;
             // this.showFriends=false;
             // this.showPrivacy=false;
-            if(view =='stats'){
-                this.showStats=!this.showStats;
+            if (view == 'stats') {
+                this.showStats = !this.showStats;
 
-                this.showAccount=false;
-                this.showFriends=false;
-                this.showPrivacy=false;
-            }else if(view =='account'){
+                this.showAccount = false;
+                this.showFriends = false;
+                this.showPrivacy = false;
+            } else if (view == 'account') {
                 this.showAccount = (!this.showAccount);
 
-                this.showStats=false;
-                this.showFriends=false;
-                this.showPrivacy=false;
-            }else if(view =='friends'){
-                this.showFriends=!this.showFriends;
+                this.showStats = false;
+                this.showFriends = false;
+                this.showPrivacy = false;
+            } else if (view == 'friends') {
+                this.showFriends = !this.showFriends;
 
-                this.showStats=false;
-                this.showAccount=false;
-                this.showPrivacy=false;
-            }else if(view =='privacy'){
-                this.showPrivacy=!this.showPrivacy;
+                this.showStats = false;
+                this.showAccount = false;
+                this.showPrivacy = false;
+            } else if (view == 'privacy') {
+                this.showPrivacy = !this.showPrivacy;
 
-                this.showStats=false;
-                this.showAccount=false;
-                this.showFriends=false;
+                this.showStats = false;
+                this.showAccount = false;
+                this.showFriends = false;
             }
         },
-        acceptFriend(id){
+        acceptFriend(id) {
 
             var friendReq = new FormData();
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/acceptFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                this.getPendingRequests();
-                this.getFriends();
-            });
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    this.getPendingRequests();
+                    this.getFriends();
+                });
 
             // console.log('accept '+id);
 
         },
-        getPendingRequests(){
+        getPendingRequests() {
 
             fetch(`../back/public/index.php/friendRequests`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.pendentFriends=data;
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.pendentFriends = data;
+                });
 
         },
-        getFriends(){
+        getFriends() {
 
             fetch(`../back/public/index.php/friends`)
-            .then((response) => response.json())
-            .then((data) => {
-                // console.log(data);
-                this.friends=data;
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    // console.log(data);
+                    this.friends = data;
+                });
 
 
         },
-        declineFriend(id){
+        declineFriend(id) {
 
             var friendReq = new FormData();
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/declineFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                this.getPendingRequests();
-                this.getFriends();
-            });
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    this.getPendingRequests();
+                    this.getFriends();
+                });
 
             // console.log('decline '+id);
         }
@@ -571,10 +580,10 @@ Vue.component('question', {
             // this.sleep(5000)
             // this.$emit('answered', ok);
         },
-        findCorrect(){
+        findCorrect() {
             this.answers.forEach(answer => {
-                if(answer.answer==this.question_info.correctAnswer){
-                    answer.correct=true;
+                if (answer.answer == this.question_info.correctAnswer) {
+                    answer.correct = true;
                 }
             });
         }
