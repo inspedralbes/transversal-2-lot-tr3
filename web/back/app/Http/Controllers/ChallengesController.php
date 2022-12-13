@@ -15,7 +15,7 @@ class ChallengesController extends Controller
     public function newChallenge(Request $request) {
         //Object to return the played Challenges
         $challengePlayed = (object) [
-            'id' => -1,
+            'id' => '',
             'winner' => '',
             'nicknameChallenger' => '',
             'scoreChallenger' => '',
@@ -30,13 +30,13 @@ class ChallengesController extends Controller
             ->count();
 
         //If the user has played the quizz we check if the challenge has already been played
-        if ($quizzPlayed == 1) {
-            $challengePlayed = Challenge::where('challenger', Session::get('user_id'))->where('challenged', $request->challenged_id)->where('quizz_id', $request->quizz_id)
+        if ($quizzPlayed > 0) {
+            $challengeCount = Challenge::where('challenger', Session::get('user_id'))->where('challenged', $request->challenged_id)->where('quizz_id', $request->quizz_id)
                 ->orwhere('challenger', $request->challenged_id)->where('challenged', Session::get('user_id'))->where('quizz_id', $request->quizz_id)
                 ->count();
 
             //If the challenge has already been created we return the data from the Challenge
-            if ($challengePlayed == 1) {
+            if ($challengeCount == 1) {
                 $challengeFound = Challenge::where('challenger', Session::get('user_id'))
                     ->where('challenged', $request->challenged_id)
                     ->where('quizz_id', $request->quizz_id)
@@ -45,16 +45,27 @@ class ChallengesController extends Controller
 
                 $challengePlayed->id = $challengeFound -> id;
 
-                $challengePlayed->winner = $challengeFound->winner;
-
                 $challengePlayed->nicknameChallenger = User::where('id', $challengeFound->challenger)->first()->nickname;
                 $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
 
                 $challengePlayed->nicknameChallenged = User::where('id', $challengeFound->challenged)->first()->nickname;
                 $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
 
-                $challengePlayed->status = $challengeFound->status;
+                $challengeFound -> status  = 'completed';
+                $challengePlayed -> status = $challengeFound -> status;
 
+                if ($challengeFound -> winner == '' || null) {
+                    $scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                    $scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+    
+                    if ($scoreChallenger >= $scoreChallenged) {
+                        $challengeFound -> winner = $challengeFound -> challenger;
+                    } else {
+                        $challengeFound -> winner = $challengeFound -> challenged;
+                    }
+                }
+                $challengePlayed -> winner = $challengeFound -> winner;
+                $challengeFound -> save();
                 $returnChallenge = $challengePlayed;
             } else {
                 //If the Quizz has been played but there's no Challenge created we create it.
