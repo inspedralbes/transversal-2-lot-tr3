@@ -721,7 +721,7 @@ const MyProfile = {
                                     </div>
                                     <div class="info__content">
                                         <div v-for="(friend, index) in this.friends">
-                                            <p>{{friend.name}}</p>
+                                        <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
                                         </div>
                                     </div>
                                 </b-card-text>
