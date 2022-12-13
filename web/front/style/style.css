@@ -38,7 +38,7 @@ body {
     grid-row-gap: 20px;
 }
 
-button {
+.answers__button {
     margin-left: 50px;
     margin-top: 10px;
     margin-bottom: 1cm;
@@ -63,7 +63,7 @@ button {
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-button::before {
+.answers__button::before {
     position: absolute;
     content: "";
     width: 100%;
@@ -80,23 +80,23 @@ button::before {
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-button:hover {
+.answers__button:hover {
     background: #ffe9e9;
     transform: translate(0, 0.25em);
 }
 
-button:hover::before {
+.answers__button:hover::before {
     box-shadow: 0 0 0 2px #422c31, 0 0.5em 0 0 #422c314d;
     box-shadow: 0px 20px 18px -3px #000;
     transform: translate3d(0, 0.5em, -1em);
 }
 
-button:active {
+.answers__button:active {
     background: #ffe9e9;
     transform: translate(0em, 0.75em);
 }
 
-button:active::before {
+.answers__button:active::before {
     box-shadow: 0 0 0 2px #422c314d, 0 0 #422c314d;
     box-shadow: 0px 20px 18px -3px #000;
     transform: translate3d(0, 0, -1em);
@@ -144,7 +144,7 @@ h1 {
 }
 
 
-/* -------------------INDEX-------------------- */
+/* ---------------------------------------------------------INDEX--------------------------------------------------------- */
 
 .center {
     position: relative;
@@ -156,6 +156,14 @@ h1 {
     backdrop-filter: blur(5px);
     border-radius: 20px;
     box-shadow: 0 2px 4px 0 #ffb0f432, 0 25px 50px 0 #ffb0f432;
+}
+
+.center__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 15px;
 }
 
 .center__input {
@@ -174,33 +182,25 @@ h1 {
     align-items: center;
     justify-content: center;
     transform-style: preserve-3d;
+    box-shadow: 0px 20px 18px -3px rgba(248, 185, 185, 0.568);
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-.center__input::before {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    background: #f9c4d2;
-    border-radius: inherit;
-    box-shadow: 0 0 0 2px #422c314d, 0 0.625em 0 0 #422c314d;
-    box-shadow: 0px 20px 18px -3px rgb(41, 30, 30);
-    transform: translate3d(0, 0.75em, -1em);
-    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-
 .center__input:hover {
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
     background: #ffe9e9;
 }
 
 .center__input:focus {
-    background: #fcdbdb;
-    border: none;
+    background: #fac2c2;
 }
 
-.center__play {
-    transition: 0.5s;
+.center__play,
+.wrapperIndex__login,
+.wrapperIndex__profile,
+.wrapperIndex__ranking {
+    font-weight: 700;
+    transition: all 3s;
     margin: 0;
     letter-spacing: 1px;
     width: 300px;
@@ -211,7 +211,6 @@ h1 {
     display: inline-block;
     cursor: pointer;
     outline: none;
-    border: 0;
     vertical-align: middle;
     font-weight: 600;
     color: #382b22;
@@ -224,7 +223,10 @@ h1 {
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-.center__play::before {
+.center__play::before,
+.wrapperIndex__login::before,
+.wrapperIndex__profile::before,
+.wrapperIndex__ranking::before {
     position: absolute;
     content: "";
     width: 100%;
@@ -235,39 +237,45 @@ h1 {
     bottom: 0;
     background: #f9c4d2;
     border-radius: inherit;
-    box-shadow: 0 0 0 2px #4b4b4b4d, 0 0.625em 0 0 #422c314d;
-    box-shadow: 0px 20px 18px -3px rgb(41, 30, 30);
     transform: translate3d(0, 0.75em, -1em);
-    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-.center__play:hover {
+.center__play:hover,
+.wrapperIndex__login:hover,
+.wrapperIndex__profile:hover,
+.wrapperIndex__ranking:hover {
+    transition: box-shadow 1s, letter-spacing 1s;
     background: #ffe9e9;
-    transform: translate(0, 0.25em);
+    transform: translate(0, 0.25em) border none;
+    box-shadow: inset 0 0 8px #f9f8fc;
+    letter-spacing: 5px;
 }
 
-.center__play:hover::before {
-    box-shadow: 0 0 0 2px #422c31, 0 0.5em 0 0 #422c314d;
-    box-shadow: 0px 20px 18px -3px #000;
+.center__play:hover::before,
+.wrapperIndex__login:hover::before,
+.wrapperIndex__profile:hover::before,
+.wrapperIndex__ranking:hover::before {
+    transition: box-shadow 1s;
+    box-shadow: 0px 0px 59px -9px #e08e8ead;
     transform: translate3d(0, 0.5em, -1em);
 }
 
-.center__play:active {
+.center__play:active,
+.wrapperIndex__login:active,
+.wrapperIndex__profile:active,
+.wrapperIndex__ranking:active {
     background: #ffe9e9;
     transform: translate(0em, 0.75em);
 }
 
-.center__play:active::before {
-    box-shadow: 0 0 0 2px #422c314d, 0 0 #422c314d;
-    box-shadow: 0px 20px 18px -3px #000;
+.center__play:active::before,
+.wrapperIndex__login:active::before,
+.wrapperIndex__profile:active::before,
+.wrapperIndex__ranking:active::before {
+    transition: 1s;
+    box-shadow: 0px 0px 59px -9px #e08e8ead;
     transform: translate3d(0, 0, -1em);
-}
-
-.center__play:hover {
-    border: none;
-    border-radius: 15px;
-    box-shadow: inset 0 0 8px #f9f8fc;
-    letter-spacing: 5px;
 }
 
 .wrapper__index {
@@ -278,6 +286,7 @@ h1 {
 
 .wrapperIndex__ranking {
     float: left;
+    margin-left: 20px;
 }
 
 .wrapperIndex__profile,
@@ -286,44 +295,46 @@ h1 {
     margin-left: 65vw;
 }
 
-.center__play {
+.center__play,
+.wrapperIndex__login,
+.wrapperIndex__profile,
+.wrapperIndex__ranking {
     justify-content: center;
     align-items: center;
     grid-area: 2 / 1 / 3 / 2;
 }
 
-.center__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    justify-items: center;
-}
-
 .center__grid1 {
+    height: fit-content;
+    margin: auto;
     grid-area: 1 / 1 / 2 / 2;
 }
 
 .center__grid2 {
+    height: fit-content;
+    margin: auto;
     grid-area: 2 / 1 / 3 / 2;
 }
 
 
-/* --------------------LOGIN--------------------- */
+/* ---------------------------------------------------------LOGIN--------------------------------------------------------- */
 
-h1 {
+.container {
+    margin: auto;
+}
+
+.container h1 {
     font-weight: bold;
     margin: 0;
     color: #ffffff;
 }
 
-h2 {
+.container__form h2 {
     text-align: center;
     color: #ffffff;
 }
 
-p {
+.container__form p {
     font-size: 14px;
     font-weight: 100;
     line-height: 20px;
@@ -332,14 +343,14 @@ p {
     color: #fdfdfd;
 }
 
-a {
+.container__form a {
     color: #333;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
 }
 
-button {
+.login {
     border: none;
     border-radius: 20px;
     background-color: #ffcad1;
@@ -352,20 +363,20 @@ button {
     transition: transform 80ms ease-in;
 }
 
-button:active {
+.login:active {
     transform: scale(0.95);
 }
 
-button:focus {
+.login:focus {
     outline: none;
 }
 
-button.ghost {
+.login.ghost {
     background-color: transparent;
     border-color: #ffc2c2;
 }
 
-form {
+.container__form {
     background-color: #0a0a0a86;
     display: flex;
     align-items: center;
@@ -376,7 +387,7 @@ form {
     text-align: center;
 }
 
-input {
+.container__form input {
     font-weight: 700;
     letter-spacing: 1px;
     border-radius: 5px;
@@ -398,31 +409,31 @@ input {
     min-height: 480px;
 }
 
-.form-container {
+.container__form {
     position: absolute;
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
 
-.sign-in-container {
+.signIn {
     left: 0;
     width: 50%;
     z-index: 2;
 }
 
-.container.right-panel-active .sign-in-container {
+.container.right-panel-active .signIn {
     transform: translateX(100%);
 }
 
-.sign-up-container {
+.signUp {
     left: 0;
     width: 50%;
     opacity: 0;
     z-index: 1;
 }
 
-.container.right-panel-active .sign-up-container {
+.container.right-panel-active .signUp {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
@@ -459,8 +470,8 @@ input {
 
 .overlay {
     background: #FF416C;
-    background: -webkit-linear-gradient(to right, #3923ff, #9748ff);
-    background: linear-gradient(to right, #3923ff, #9748ff);
+    background: -webkit-linear-gradient(to right, #3d395c, #351632);
+    background: linear-gradient(to right, #3d395c, #351632);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;

@@ -1,5 +1,5 @@
 //Componentes
-const Template = { 
+const Template = {
     params: true,
     data: function() {
         return {}
@@ -200,11 +200,11 @@ const Index = {
             </div>
 
             <div class="center">
-                <div v-if='!isLogged'>
-                    <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
+                <div v-if='!isLogged' class="center__grid">
+                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid2"><RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink></div>
                 </div>
-                <div v-else>
+                <div v-else class="center__grid">
                     <div class="center__grid1"><p>{{user.nickname}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
@@ -233,131 +233,125 @@ const Prueva = {
 }
 
 const Login = {
-    params: true,
-    data: function() {
-        return {
-            name: '',
-            surname: '',
-            nickname: '',
-            email: '',
-            password: '',
-            logMail: '',
-            logPass: '',
-            error: null,
-            signIn:true
+        params: true,
+        data: function() {
+            return {
+                name: '',
+                surname: '',
+                nickname: '',
+                email: '',
+                password: '',
+                logMail: '',
+                logPass: '',
+                error: null,
+                signIn: true
 
 
-            // img:''
-        }
-    },
-    mounted() {
-        // console.log(this.$route.params.category);
-
-        const signUpButton = document.getElementById('signUp');
-        const signInButton = document.getElementById('signIn');
-        const container = document.getElementById('container');
-
-        signUpButton.addEventListener('click', () => {
-            container.classList.add("right-panel-active");
-            setTimeout(() => {
-                this.signIn=false;
-            }, "500");
-            
-        });
-
-        signInButton.addEventListener('click', () => {
-            container.classList.remove("right-panel-active");
-            setTimeout(() => {
-                this.signIn=true;
-            }, "500");
-        });
-    },
-    methods: {
-        newUser() {
-            var user = new FormData();
-            user.append('name', this.name);
-            user.append('surname', this.surname);
-            user.append('nickname', this.nickname);
-            user.append('email', this.email);
-            user.append('password', this.password);
-
-            fetch(`../back/public/index.php/register`, {
-                    method: 'POST',
-                    body: user
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data != -1) {
-                        userStore().logged = true;
-                        userStore().loginInfo.nickname = this.nickname;
-                        userStore().loginInfo.idUser = data;
-                        router.push('/');
-                    }
-                    this.error = "Can't create the user";
-                });
-
-            // console.log('new');
-
+                // img:''
+            }
         },
-        logUser() {
-            // console.log('login');
-            var user = new FormData();
-            user.append('email', this.logMail);
-            user.append('password', this.logPass);
+        mounted() {
+            // console.log(this.$route.params.category);
 
-            fetch(`../back/public/index.php/login`, {
-                    method: 'POST',
-                    body: user
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data != "null") {
-                        userStore().logged = true;
-                        userStore().loginInfo.nickname = data.nickname;
-                        userStore().loginInfo.idUser = data.id;
-                        router.push('/');
-                    }
-                    this.error = "Can't log in the user";
-                });
-        }
-    },
-    template: `
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const container = document.getElementById('container');
+
+            signUpButton.addEventListener('click', () => {
+                container.classList.add("right-panel-active");
+                setTimeout(() => {
+                    this.signIn = false;
+                }, "500");
+
+            });
+
+            signInButton.addEventListener('click', () => {
+                container.classList.remove("right-panel-active");
+                setTimeout(() => {
+                    this.signIn = true;
+                }, "500");
+            });
+        },
+        methods: {
+            newUser() {
+                var user = new FormData();
+                user.append('name', this.name);
+                user.append('surname', this.surname);
+                user.append('nickname', this.nickname);
+                user.append('email', this.email);
+                user.append('password', this.password);
+
+                fetch(`../back/public/index.php/register`, {
+                        method: 'POST',
+                        body: user
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data != -1) {
+                            userStore().logged = true;
+                            userStore().loginInfo.nickname = this.nickname;
+                            userStore().loginInfo.idUser = data;
+                            router.push('/');
+                        }
+                        this.error = "Can't create the user";
+                    });
+
+                // console.log('new');
+
+            },
+            logUser() {
+                // console.log('login');
+                var user = new FormData();
+                user.append('email', this.logMail);
+                user.append('password', this.logPass);
+
+                fetch(`../back/public/index.php/login`, {
+                        method: 'POST',
+                        body: user
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data != "null") {
+                            userStore().logged = true;
+                            userStore().loginInfo.nickname = data.nickname;
+                            userStore().loginInfo.idUser = data.id;
+                            router.push('/');
+                        }
+                        this.error = "Can't log in the user";
+                    });
+            }
+        },
+        template: `
         <div>
         <div class="container" id="container">
-        <div class="form-container sign-up-container">
-
-                <h1>Create Account</h1>
-                <br>
+        <div class="container__form signUp">
+            <h1>Create Account</h1>
+            <div class="signUp__inputs">
                 <input type="text" placeholder="Name" v-model="name"/>
                 <input type="text" placeholder="Surname" v-model="surname"/>
                 <input type="text" placeholder="Nickname" v-model="nickname"/>
                 <input type="email" placeholder="Email" v-model="email"/>
                 <input type="password" placeholder="Password" v-model="password"/>
-                <br>
                 <button class="login" @click="newUser">Sign Up</button>
-
+            </div>
         </div>
-        <div class="form-container sign-in-container" v-show="signIn">
-
-                <h1>Sign in</h1>
-                <br>
+        <div class="container__form signIn" v-show="signIn">
+            <h1>Sign in</h1>
+            <div class="signIn__inputs">
                 <input type="email" placeholder="Email" v-model="logMail"/>
                 <input type="password" placeholder="Password" v-model="logPass"/>
-                <br>
-                <button class="login" @click="logUser">Sign In</button>
-
+            </div>
+            <button class="login" @click="logUser">Sign In</button>
+            
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Log in please</h1>
-                    <br>
-                    <br>
                     <button class="login ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Register please</h1>
-                    <br>
                     <button class="login ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
@@ -369,18 +363,18 @@ const Login = {
     </div>
         </div>
     `
-}
-        // const signUpButton = document.getElementById('signUp');
-        // const signInButton = document.getElementById('signIn');
-        // const container = document.getElementById('container');
+    }
+    // const signUpButton = document.getElementById('signUp');
+    // const signInButton = document.getElementById('signIn');
+    // const container = document.getElementById('container');
 
-        // signUpButton.addEventListener('click', () => {
-        //     container.classList.add("right-panel-active");
-        // });
+// signUpButton.addEventListener('click', () => {
+//     container.classList.add("right-panel-active");
+// });
 
-        // signInButton.addEventListener('click', () => {
-        //     container.classList.remove("right-panel-active");
-        // });
+// signInButton.addEventListener('click', () => {
+//     container.classList.remove("right-panel-active");
+// });
 
 
 const MyProfile = {
@@ -495,10 +489,10 @@ const MyProfile = {
 
             // console.log('decline '+id);
         },
-        logOut(){
-            userStore().logged=false;
-            userStore().loginInfo.nickname='';
-            userStore().loginInfo.idUser=-1;
+        logOut() {
+            userStore().logged = false;
+            userStore().loginInfo.nickname = '';
+            userStore().loginInfo.idUser = -1;
             router.push('/');
         }
     },
@@ -584,55 +578,55 @@ const MyProfile = {
 
 }
 
-const Ranking = { 
+const Ranking = {
     data: function() {
         return {
-            players:[]
+            players: []
         }
     },
     mounted() {
         fetch(`../back/public/index.php/getRanking`)
-        .then((response) => response.json())
-        .then((data) => {
-           this.players=data;
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                this.players = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
         // this.players=[{
         //     nickname:'a',
         //     elo:6,
         // }]
     },
-    computed:{
+    computed: {
         isLogged() {
             return userStore().logged;
         },
     },
     methods: {
-        addFriend(id){
+        addFriend(id) {
             var friendReq = new FormData();
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/addFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data=="ERROR"){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'this user is already your friend or already has a pending request',
-                      })
-                }else{
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Done',
-                        text: 'Request sent, wait for your friend to accept it!',
-                      })
-                }
-            });
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data == "ERROR") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'this user is already your friend or already has a pending request',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Done',
+                            text: 'Request sent, wait for your friend to accept it!',
+                        })
+                    }
+                });
         }
     },
     template: `<div>
@@ -728,13 +722,13 @@ Vue.component('question', {
 
 });
 
-Vue.component('playerStats',{
+Vue.component('playerStats', {
     props: ['id'],
     data: function() {
         return {}
     },
     mounted() {},
-    computed:{},
+    computed: {},
     methods: {
 
     },
