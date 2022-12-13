@@ -548,6 +548,9 @@ const MyProfile = {
             friends: null,
             pendentFriends: null,
             // seeRequests:false
+            quizzs:null,
+            showHistory: false
+
         }
     },
     mounted() {
@@ -555,6 +558,18 @@ const MyProfile = {
 
         this.getFriends();
         this.getPendingRequests();
+
+
+        var userReq = new FormData();
+        userReq.append('user_id', userStore().loginInfo.idUser);
+        fetch(`../back/public/index.php/getUserQuizzs`, {
+            method: 'POST',
+            body: userReq
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            this.quizzs = data;
+        });
 
 
     },
@@ -589,6 +604,13 @@ const MyProfile = {
                 this.showStats = false;
                 this.showAccount = false;
                 this.showFriends = false;
+            }else if (view == 'history') {
+                this.showHistory = !this.showHistory;
+
+                this.showStats = false;
+                this.showFriends = false;
+                this.showPrivacy = false;
+                this.showStats = false;
             }
         },
         acceptFriend(id) {
@@ -663,6 +685,7 @@ const MyProfile = {
                 <li @click="changeView('stats')">Estadísticas</li>
                 <li @click="changeView('account')">Mi cuenta</li>
                 <li @click="changeView('friends')">Amigos</li>
+                <li @click="changeView('history')">Historial</li>
                 <li @click="changeView('privacy')">Terminos de privacidad</li>
             </ul>
             <button @click="logOut">Log Out</burtton>
@@ -727,6 +750,15 @@ const MyProfile = {
                 </div>
                 <div class="info__content">
                     <p>Aquí van las politicas de privacidad</p>
+                </div>
+            </div>
+
+            <div class="history" v-show="showHistory">
+                <div class="info__tittle">
+                    <h1>History</h1>
+                </div>
+                <div class="info__content">
+                    <playerHistory :quizzs='quizzs' :challenge='false'  @challengeQuizz='challengeQuizz'></playerHistory>
                 </div>
             </div>
         </div>
@@ -797,8 +829,13 @@ const Ranking = {
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
-            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged && player.id!=user.idUser" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></div>
+            <div v-if="player.id!=user.idUser">
+                <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p>
+            </div>
+            <div v-else>
+            <div>
+                <RouterLink class="wrapperIndex__routerProfile" to="/profile/"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink></p>
+            </div>
         </div>
     </div>`
 
