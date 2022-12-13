@@ -318,7 +318,7 @@ const Profile = {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.status = 'pending') {
+                    if (data.status == 'pending') {
                         userStore().configPlay.type='challenge'
                         router.push('/questions');
                     } else {

@@ -7,7 +7,7 @@ use App\Models\Quizz;
 use App\Models\Users_quizz;
 use App\Models\User;
 use App\Models\Challenge;
-
+use Error;
 use Illuminate\Support\Facades\Session;
 
 class ChallengesController extends Controller
@@ -28,7 +28,6 @@ class ChallengesController extends Controller
         $quizzPlayed = Users_quizz::where('user_id', Session::get('user_id'))
             ->where('quizz_id', $request->quizz_id)
             ->count();
-
         //If the user has played the quizz we check if the challenge has already been played
         if ($quizzPlayed > 0) {
             $challengeCount = Challenge::where('challenger', Session::get('user_id'))->where('challenged', $request->challenged_id)->where('quizz_id', $request->quizz_id)
@@ -36,13 +35,14 @@ class ChallengesController extends Controller
                 ->count();
 
             //If the challenge has already been created we return the data from the Challenge
-            if ($challengeCount == 1) {
+            if ($challengeCount > 0) {
                 $challengeFound = Challenge::where('challenger', Session::get('user_id'))
                     ->where('challenged', $request->challenged_id)
                     ->where('quizz_id', $request->quizz_id)
                     ->orwhere('challenger', $request->challenged_id)->where('challenged', Session::get('user_id'))->where('quizz_id', $request->quizz_id)
                     ->first();
 
+                
                 $challengePlayed->id = $challengeFound -> id;
 
                 $challengePlayed->nicknameChallenger = User::where('id', $challengeFound->challenger)->first()->nickname;
@@ -66,7 +66,9 @@ class ChallengesController extends Controller
                 }
                 $challengePlayed -> winner = $challengeFound -> winner;
                 $challengeFound -> save();
+
                 $returnChallenge = $challengePlayed;
+                error_log(json_encode($returnChallenge));
             } else {
                 //If the Quizz has been played but there's no Challenge created we create it.
                 $newChallenge = new Challenge;
@@ -107,6 +109,7 @@ class ChallengesController extends Controller
             $newChallenge->challenger = Session::get('user_id');
             $newChallenge->challenged = $request->challenged_id;
             $newChallenge->quizz_id = $request->quizz_id;
+            $newChallenge->status = 'pending';
             $newChallenge->save();
             Session::put('challenge_id', $newChallenge->id);
 
