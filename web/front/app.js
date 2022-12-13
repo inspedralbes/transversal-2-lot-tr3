@@ -742,23 +742,31 @@ const Ranking = {
         }
     },
     mounted() {
-        fetch(`../back/public/index.php/getRanking`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.players = data;
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
-        // this.players=[{
-        //     nickname:'',
-        //     elo: -1,
-        //     id: -1
-        // }]
+        // fetch(`../back/public/index.php/getRanking`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         this.players = data;
+        //     }).catch((error) => {
+        //         console.error('Error:', error);
+        //     });
+        this.players=[{
+            nickname:'paco',
+            elo: -1,
+            id: -1
+        },
+        {
+            nickname:'vita',
+            elo: 2,
+            id: 1
+        }]
     },
     computed: {
         isLogged() {
             return userStore().logged;
         },
+        user() {
+            return userStore().loginInfo;
+        }
     },
     methods: {
         addFriend(id) {
@@ -790,12 +798,11 @@ const Ranking = {
     template: `<div>
         <div v-for="(player, index) in this.players">
             <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
-            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></div>
+            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged && player.id!=user.idUser" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></div>
         </div>
     </div>`
 
 }
-
 
 
 Vue.component('question', {
@@ -956,10 +963,10 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: false,
+            logged: true,
             loginInfo: {
-                nickname: '',
-                idUser: -1
+                nickname: 'vita',
+                idUser: 1
             },
             configPlay: {
                 category: '',
