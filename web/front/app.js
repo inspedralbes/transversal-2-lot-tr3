@@ -78,14 +78,14 @@ const Questions = {
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
-                        if(userStore().configPlay.type=='challenge'){
+                        if (userStore().configPlay.type == 'challenge') {
                             fetch(`../back/public/index.php/challengeCompleted`)
-                            .then((response) => response.json())
-                            .then((data) => {
-                                
-                            }).catch((error) => {
-                                console.error('Error:', error);
-                            });
+                                .then((response) => response.json())
+                                .then((data) => {
+
+                                }).catch((error) => {
+                                    console.error('Error:', error);
+                                });
                         }
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -133,19 +133,19 @@ const Questions = {
                     console.error('Error:', error);
                 });
 
-        }else if(userStore().configPlay.type=='challenge'){
+        } else if (userStore().configPlay.type == 'challenge') {
             fetch(`../back/public/index.php/startChallenge`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.quizz = data;
-                this.nQuestion = Object.keys(this.quizz).length - 1;
-                this.timer = true;
-                this.countTimer();
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                    this.timer = true;
+                    this.countTimer();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
 
-        }else {
+        } else {
             //fetch a la api externa 
 
             var question = new FormData();
@@ -307,19 +307,19 @@ const Profile = {
                 this.showStats = false;
             }
         },
-        challengeQuizz(quizzId){
+        challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-    
+
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.status == 'pending') {
-                        userStore().configPlay.type='challenge'
+                    if (data.status = 'pending') {
+                        userStore().configPlay.type = 'challenge'
                         router.push('/questions');
                     } else {
                         console.log('jugado');
@@ -390,7 +390,7 @@ const Login = {
             container.classList.add("right-panel-active");
             setTimeout(() => {
                 this.signIn = false;
-            }, "500");
+            }, "300");
 
         });
 
@@ -398,7 +398,7 @@ const Login = {
             container.classList.remove("right-panel-active");
             setTimeout(() => {
                 this.signIn = true;
-            }, "500");
+            }, "300");
         });
     },
     methods: {
@@ -416,7 +416,7 @@ const Login = {
                     title: 'Oops...',
                     color: 'white',
                     text: "Something went wrong :[",
-                    background: '#592e58',
+                    background: '#434c7a',
                     buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
                     showClass: {
                         popup: 'animate__animated animate__tada'
@@ -445,7 +445,7 @@ const Login = {
                                 color: 'white',
                                 text: "Something went wrong :[",
                                 buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
-                                background: '#592e58',
+                                background: '#434c7a',
                                 confirmButtonColor: 'linear-gradient(to right, #3d395c, #351632)',
                                 showClass: {
                                     popup: 'animate__animated animate__tada'
@@ -484,7 +484,7 @@ const Login = {
                             title: 'Oops...',
                             color: 'white',
                             text: 'Something went wrong :[',
-                            background: '#592e58',
+                            background: '#434c7a',
                             confirmButtonColor: '',
                             showClass: {
                                 popup: 'animate__animated animate__tada'
@@ -548,7 +548,7 @@ const MyProfile = {
             friends: null,
             pendentFriends: null,
             // seeRequests:false
-            quizzs:null,
+            quizzs: null,
             showHistory: false
 
         }
@@ -563,13 +563,13 @@ const MyProfile = {
         var userReq = new FormData();
         userReq.append('user_id', userStore().loginInfo.idUser);
         fetch(`../back/public/index.php/getUserQuizzs`, {
-            method: 'POST',
-            body: userReq
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            this.quizzs = data;
-        });
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizzs = data;
+            });
 
 
     },
@@ -604,7 +604,7 @@ const MyProfile = {
                 this.showStats = false;
                 this.showAccount = false;
                 this.showFriends = false;
-            }else if (view == 'history') {
+            } else if (view == 'history') {
                 this.showHistory = !this.showHistory;
 
                 this.showStats = false;
@@ -688,7 +688,7 @@ const MyProfile = {
                 <li @click="changeView('history')">Historial</li>
                 <li @click="changeView('privacy')">Terminos de privacidad</li>
             </ul>
-            <button @click="logOut">Log Out</burtton>
+            <button @click="logOut">Log Out</button>
         </div>
 
         <div class="info">
@@ -937,7 +937,7 @@ Vue.component('question', {
 });
 
 Vue.component('playerHistory', {
-    props: ['quizzs','challenge'],
+    props: ['quizzs', 'challenge'],
     data: function() {
         return {}
     },
@@ -950,8 +950,7 @@ Vue.component('playerHistory', {
             return userStore().configPlay;
         }
     },
-    methods: {
-    },
+    methods: {},
     // v-if='challenge && confPlay.type=="normal" && isLogged'
     template: `
     <div>

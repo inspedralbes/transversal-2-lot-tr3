@@ -18,7 +18,7 @@ body {
 
 .card {
     padding: 50px;
-    width: 1200px;
+    width: 900px;
     height: fit-content;
     min-height: 500px;
     margin: 50px auto;
@@ -401,9 +401,9 @@ h1 {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: 968px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 680px;
     margin: 100px auto;
 }
 
