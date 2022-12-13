@@ -78,14 +78,14 @@ const Questions = {
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
-                        if(userStore().configPlay.type=='challenge'){
+                        if (userStore().configPlay.type == 'challenge') {
                             fetch(`../back/public/index.php/challengeCompleted`)
-                            .then((response) => response.json())
-                            .then((data) => {
-                                
-                            }).catch((error) => {
-                                console.error('Error:', error);
-                            });
+                                .then((response) => response.json())
+                                .then((data) => {
+
+                                }).catch((error) => {
+                                    console.error('Error:', error);
+                                });
                         }
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -133,19 +133,19 @@ const Questions = {
                     console.error('Error:', error);
                 });
 
-        }else if(userStore().configPlay.type=='challenge'){
+        } else if (userStore().configPlay.type == 'challenge') {
             fetch(`../back/public/index.php/startChallenge`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.quizz = data;
-                this.nQuestion = Object.keys(this.quizz).length - 1;
-                this.timer = true;
-                this.countTimer();
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                    this.timer = true;
+                    this.countTimer();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
 
-        }else {
+        } else {
             //fetch a la api externa 
 
             var question = new FormData();
@@ -307,19 +307,19 @@ const Profile = {
                 this.showStats = false;
             }
         },
-        challengeQuizz(quizzId){
+        challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-    
+
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.status == 'pending') {
-                        userStore().configPlay.type='challenge'
+                    if (data.status = 'pending') {
+                        userStore().configPlay.type = 'challenge'
                         router.push('/questions');
                     } else {
                         console.log('jugado');
@@ -390,7 +390,7 @@ const Login = {
             container.classList.add("right-panel-active");
             setTimeout(() => {
                 this.signIn = false;
-            }, "500");
+            }, "300");
 
         });
 
@@ -398,7 +398,7 @@ const Login = {
             container.classList.remove("right-panel-active");
             setTimeout(() => {
                 this.signIn = true;
-            }, "500");
+            }, "300");
         });
     },
     methods: {
@@ -416,7 +416,7 @@ const Login = {
                     title: 'Oops...',
                     color: 'white',
                     text: "Something went wrong :[",
-                    background: '#592e58',
+                    background: '#434c7a',
                     buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
                     showClass: {
                         popup: 'animate__animated animate__tada'
@@ -445,7 +445,7 @@ const Login = {
                                 color: 'white',
                                 text: "Something went wrong :[",
                                 buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
-                                background: '#592e58',
+                                background: '#434c7a',
                                 confirmButtonColor: 'linear-gradient(to right, #3d395c, #351632)',
                                 showClass: {
                                     popup: 'animate__animated animate__tada'
@@ -484,7 +484,7 @@ const Login = {
                             title: 'Oops...',
                             color: 'white',
                             text: 'Something went wrong :[',
-                            background: '#592e58',
+                            background: '#434c7a',
                             confirmButtonColor: '',
                             showClass: {
                                 popup: 'animate__animated animate__tada'
@@ -548,6 +548,9 @@ const MyProfile = {
             friends: null,
             pendentFriends: null,
             // seeRequests:false
+            quizzs: null,
+            showHistory: false
+
         }
     },
     mounted() {
@@ -555,6 +558,18 @@ const MyProfile = {
 
         this.getFriends();
         this.getPendingRequests();
+
+
+        var userReq = new FormData();
+        userReq.append('user_id', userStore().loginInfo.idUser);
+        fetch(`../back/public/index.php/getUserQuizzs`, {
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizzs = data;
+            });
 
 
     },
@@ -589,6 +604,13 @@ const MyProfile = {
                 this.showStats = false;
                 this.showAccount = false;
                 this.showFriends = false;
+            } else if (view == 'history') {
+                this.showHistory = !this.showHistory;
+
+                this.showStats = false;
+                this.showFriends = false;
+                this.showPrivacy = false;
+                this.showStats = false;
             }
         },
         acceptFriend(id) {
@@ -663,9 +685,10 @@ const MyProfile = {
                 <li @click="changeView('stats')">Estadísticas</li>
                 <li @click="changeView('account')">Mi cuenta</li>
                 <li @click="changeView('friends')">Amigos</li>
+                <li @click="changeView('history')">Historial</li>
                 <li @click="changeView('privacy')">Terminos de privacidad</li>
             </ul>
-            <button @click="logOut">Log Out</burtton>
+            <button @click="logOut">Log Out</button>
         </div>
 
         <div class="info">
@@ -698,7 +721,7 @@ const MyProfile = {
                                     </div>
                                     <div class="info__content">
                                         <div v-for="(friend, index) in this.friends">
-                                            <p>{{friend.name}}</p>
+                                        <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
                                         </div>
                                     </div>
                                 </b-card-text>
@@ -727,6 +750,15 @@ const MyProfile = {
                 </div>
                 <div class="info__content">
                     <p>Aquí van las politicas de privacidad</p>
+                </div>
+            </div>
+
+            <div class="history" v-show="showHistory">
+                <div class="info__tittle">
+                    <h1>History</h1>
+                </div>
+                <div class="info__content">
+                    <playerHistory :quizzs='quizzs' :challenge='false'  @challengeQuizz='challengeQuizz'></playerHistory>
                 </div>
             </div>
         </div>
@@ -797,8 +829,13 @@ const Ranking = {
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
-            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged && player.id!=user.idUser" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></div>
+            <div v-if="player.id!=user.idUser">
+                <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p>
+            </div>
+            <div v-else>
+            <div>
+                <RouterLink class="wrapperIndex__routerProfile" to="/profile/"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink></p>
+            </div>
         </div>
     </div>`
 
@@ -839,6 +876,17 @@ Vue.component('question', {
                 setTimeout(() => {
                     this.$emit('answered', ok);
                 }, "1000");
+
+                //form data question_id correct(true false)
+                
+                fetch(`../back/public/index.php/addQuestion`, {
+                    method: 'POST',
+                    body: user
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                  
+                });
 
             }
             // this.sleep(5000)
@@ -889,7 +937,7 @@ Vue.component('question', {
 });
 
 Vue.component('playerHistory', {
-    props: ['quizzs','challenge'],
+    props: ['quizzs', 'challenge'],
     data: function() {
         return {}
     },
@@ -902,8 +950,7 @@ Vue.component('playerHistory', {
             return userStore().configPlay;
         }
     },
-    methods: {
-    },
+    methods: {},
     // v-if='challenge && confPlay.type=="normal" && isLogged'
     template: `
     <div>
