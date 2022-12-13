@@ -201,8 +201,8 @@ const Index = {
 
             <div class="center">
                 <div v-if='!isLogged'>
-                    <input type="text" placeholder="Introduce nickname" class="center__input">
-                    <RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink>
+                    <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
+                    <div class="center__grid2"><RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink></div>
                 </div>
                 <div v-else>
                     <div class="center__grid1"><p>{{user.nickname}}</p></div>
@@ -231,6 +231,96 @@ const Prueva = {
     `
 
 }
+
+const Profile = { 
+    params: true,
+    data: function() {
+        return {
+            user:{
+                id:-1,
+                nickname:'paco'
+            },
+            showStats: true,
+            showHistory:false,
+            quizzs:[]
+        }
+    },
+    mounted() {
+        this.user.id=this.$route.params.id
+
+        var userReq = new FormData();
+        userReq.append('user_id', this.$route.params.id);
+
+        fetch(`../back/public/index.php/getUserInfo`, {
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.user.nickname=data;
+            });
+
+            fetch(`../back/public/index.php/getUserQuizzs`, {
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizzs=data;
+            });
+        // console.log(this.$route.params.id);
+    },
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        }
+    },
+    methods: {
+        changeView(view) {
+            if (view == 'stats') {
+                this.showStats = !this.showStats;
+                this.showHistory = false;
+
+            } else if (view == 'history') {
+                this.showHistory = !this.showHistory;
+                this.showStats = false;
+            }
+        }
+    },
+    template: `<div>
+    <div class="name">
+        <h1>{{user.nickname}}</h1>
+    </div>
+    <div class="lista">
+        <ul>
+            <li @click="changeView('stats')">Estadísticas</li>
+            <li @click="changeView('history')">Historial</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <div class="info__status" v-show="showStats">
+            <div class="info__tittle">
+                <h1>Stats</h1>
+            </div>
+            <div class="info__content">
+                <playerStats :id='user.id'></playerStats>
+            </div>
+        </div>
+
+        <div class="history" v-show="showHistory">
+            <div class="info__tittle">
+                <h1>History</h1>
+            </div>
+            <div class="info__content">
+                <playerHistory :quizzs='quizzs'></playerHistory>
+            </div>
+        </div>
+    </div>
+</div>`
+
+}
+
 
 const Login = {
     params: true,
@@ -370,18 +460,6 @@ const Login = {
         </div>
     `
 }
-        // const signUpButton = document.getElementById('signUp');
-        // const signInButton = document.getElementById('signIn');
-        // const container = document.getElementById('container');
-
-        // signUpButton.addEventListener('click', () => {
-        //     container.classList.add("right-panel-active");
-        // });
-
-        // signInButton.addEventListener('click', () => {
-        //     container.classList.remove("right-panel-active");
-        // });
-
 
 const MyProfile = {
     data: function() {
@@ -410,10 +488,6 @@ const MyProfile = {
     },
     methods: {
         changeView(view) {
-            // this.showStats=false;
-            // this.showAccount=false;
-            // this.showFriends=false;
-            // this.showPrivacy=false;
             if (view == 'stats') {
                 this.showStats = !this.showStats;
 
@@ -591,17 +665,18 @@ const Ranking = {
         }
     },
     mounted() {
-        fetch(`../back/public/index.php/getRanking`)
-        .then((response) => response.json())
-        .then((data) => {
-           this.players=data;
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
-        // this.players=[{
-        //     nickname:'a',
-        //     elo:6,
-        // }]
+        // fetch(`../back/public/index.php/getRanking`)
+        // .then((response) => response.json())
+        // .then((data) => {
+        //    this.players=data;
+        // }).catch((error) => {
+        //     console.error('Error:', error);
+        // });
+        this.players=[{
+            nickname:'a',
+            elo:6,
+            id:5
+        }]
     },
     computed:{
         isLogged() {
@@ -637,7 +712,7 @@ const Ranking = {
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
+            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></RouterLink></div>
         </div>
     </div>`
 
@@ -728,6 +803,26 @@ Vue.component('question', {
 
 });
 
+Vue.component('playerHistory',{
+    props: ['quizzs'],
+    data: function() {
+        return {}
+    },
+    mounted() {},
+    computed:{},
+    methods: {
+
+    },
+    template: `
+    <div>
+        <div v-for:"(quizz, index) in this.quizzs">
+        <p>{{quizz.dificulty}} {{quizz.category}} </p>
+        <div>
+    <div>
+    `
+});
+
+
 Vue.component('playerStats',{
     props: ['id'],
     data: function() {
@@ -760,6 +855,11 @@ const routes = [{
     {
         path: '/ranking',
         component: Ranking,
+    },    
+    {
+        path: '/profile/:id',
+        component: Profile,
+        params:true
     },
 ]
 
