@@ -78,14 +78,14 @@ const Questions = {
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
-                        if(userStore().configPlay.type=='challenge'){
+                        if (userStore().configPlay.type == 'challenge') {
                             fetch(`../back/public/index.php/callengeComplited`)
-                            .then((response) => response.json())
-                            .then((data) => {
-                                
-                            }).catch((error) => {
-                                console.error('Error:', error);
-                            });
+                                .then((response) => response.json())
+                                .then((data) => {
+
+                                }).catch((error) => {
+                                    console.error('Error:', error);
+                                });
                         }
                     }).catch((error) => {
                         console.error('Error:', error);
@@ -133,19 +133,19 @@ const Questions = {
                     console.error('Error:', error);
                 });
 
-        }else if(userStore().configPlay.type=='challenge'){
+        } else if (userStore().configPlay.type == 'challenge') {
             fetch(`../back/public/index.php/startChallenge`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.quizz = data;
-                this.nQuestion = Object.keys(this.quizz).length - 1;
-                this.timer = true;
-                this.countTimer();
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                    this.timer = true;
+                    this.countTimer();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
 
-        }else {
+        } else {
             //fetch a la api externa 
 
             var question = new FormData();
@@ -307,11 +307,11 @@ const Profile = {
                 this.showStats = false;
             }
         },
-        challengeQuizz(quizzId){
+        challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-    
+
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -319,7 +319,7 @@ const Profile = {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status = 'pending') {
-                        userStore().configPlay.type='challenge'
+                        userStore().configPlay.type = 'challenge'
                         router.push('/questions');
                     } else {
                         console.log('jugado');
@@ -390,7 +390,7 @@ const Login = {
             container.classList.add("right-panel-active");
             setTimeout(() => {
                 this.signIn = false;
-            }, "500");
+            }, "300");
 
         });
 
@@ -398,7 +398,7 @@ const Login = {
             container.classList.remove("right-panel-active");
             setTimeout(() => {
                 this.signIn = true;
-            }, "500");
+            }, "300");
         });
     },
     methods: {
@@ -882,7 +882,7 @@ Vue.component('question', {
 });
 
 Vue.component('playerHistory', {
-    props: ['quizzs','challenge'],
+    props: ['quizzs', 'challenge'],
     data: function() {
         return {}
     },
@@ -895,8 +895,7 @@ Vue.component('playerHistory', {
             return userStore().configPlay;
         }
     },
-    methods: {
-    },
+    methods: {},
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
