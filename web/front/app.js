@@ -877,6 +877,17 @@ Vue.component('question', {
                     this.$emit('answered', ok);
                 }, "1000");
 
+                //form data question_id correct(true false)
+                
+                fetch(`../back/public/index.php/addQuestion`, {
+                    method: 'POST',
+                    body: user
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                  
+                });
+
             }
             // this.sleep(5000)
             // this.$emit('answered', ok);
