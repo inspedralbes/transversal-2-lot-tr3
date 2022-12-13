@@ -318,8 +318,12 @@ const Profile = {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    userStore().configPlay.type='challenge'
-                    router.push('/questions');
+                    if (data.status = 'pending') {
+                        userStore().configPlay.type='challenge'
+                        router.push('/questions');
+                    } else {
+                        console.log('jugado');
+                    }
                 });
         }
     },
