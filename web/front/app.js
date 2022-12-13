@@ -232,96 +232,186 @@ const Prueva = {
 
 }
 
-const Login = {
-        params: true,
-        data: function() {
-            return {
-                name: '',
-                surname: '',
-                nickname: '',
-                email: '',
-                password: '',
-                logMail: '',
-                logPass: '',
-                error: null,
-                signIn: true
-
-
-                // img:''
-            }
-        },
-        mounted() {
-            // console.log(this.$route.params.category);
-
-            const signUpButton = document.getElementById('signUp');
-            const signInButton = document.getElementById('signIn');
-            const container = document.getElementById('container');
-
-            signUpButton.addEventListener('click', () => {
-                container.classList.add("right-panel-active");
-                setTimeout(() => {
-                    this.signIn = false;
-                }, "500");
-
-            });
-
-            signInButton.addEventListener('click', () => {
-                container.classList.remove("right-panel-active");
-                setTimeout(() => {
-                    this.signIn = true;
-                }, "500");
-            });
-        },
-        methods: {
-            newUser() {
-                var user = new FormData();
-                user.append('name', this.name);
-                user.append('surname', this.surname);
-                user.append('nickname', this.nickname);
-                user.append('email', this.email);
-                user.append('password', this.password);
-
-                fetch(`../back/public/index.php/register`, {
-                        method: 'POST',
-                        body: user
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data != -1) {
-                            userStore().logged = true;
-                            userStore().loginInfo.nickname = this.nickname;
-                            userStore().loginInfo.idUser = data;
-                            router.push('/');
-                        }
-                        this.error = "Can't create the user";
-                    });
-
-                // console.log('new');
-
+const Profile = {
+    params: true,
+    data: function() {
+        return {
+            user: {
+                id: -1,
+                nickname: ''
             },
-            logUser() {
-                // console.log('login');
-                var user = new FormData();
-                user.append('email', this.logMail);
-                user.append('password', this.logPass);
+            showStats: true,
+            showHistory: false,
+            quizzs: []
+        }
+    },
+    mounted() {
+        this.user.id = this.$route.params.id
 
-                fetch(`../back/public/index.php/login`, {
-                        method: 'POST',
-                        body: user
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data != "null") {
-                            userStore().logged = true;
-                            userStore().loginInfo.nickname = data.nickname;
-                            userStore().loginInfo.idUser = data.id;
-                            router.push('/');
-                        }
-                        this.error = "Can't log in the user";
-                    });
+        var userReq = new FormData();
+        userReq.append('user_id', this.$route.params.id);
+
+        fetch(`../back/public/index.php/getUserInfo`, {
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.user.nickname = data;
+            });
+
+        fetch(`../back/public/index.php/getUserQuizzs`, {
+                method: 'POST',
+                body: userReq
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizzs = data;
+            });
+        // console.log(this.$route.params.id);
+    },
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        }
+    },
+    methods: {
+        changeView(view) {
+            if (view == 'stats') {
+                this.showStats = !this.showStats;
+                this.showHistory = false;
+
+            } else if (view == 'history') {
+                this.showHistory = !this.showHistory;
+                this.showStats = false;
             }
+        }
+    },
+    template: `<div>
+    <div class="name">
+        <h1>{{user.nickname}}</h1>
+    </div>
+    <div class="lista">
+        <ul>
+            <li @click="changeView('stats')">Estadísticas</li>
+            <li @click="changeView('history')">Historial</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <div class="info__status" v-show="showStats">
+            <div class="info__tittle">
+                <h1>Stats</h1>
+            </div>
+            <div class="info__content">
+                <playerStats :id='user.id'></playerStats>
+            </div>
+        </div>
+
+        <div class="history" v-show="showHistory">
+            <div class="info__tittle">
+                <h1>History</h1>
+            </div>
+            <div class="info__content">
+                <playerHistory :quizzs='quizzs'></playerHistory>
+            </div>
+        </div>
+    </div>
+</div>`
+
+}
+
+
+const Login = {
+    params: true,
+    data: function() {
+        return {
+            name: '',
+            surname: '',
+            nickname: '',
+            email: '',
+            password: '',
+            logMail: '',
+            logPass: '',
+            error: null,
+            signIn: true
+
+
+            // img:''
+        }
+    },
+    mounted() {
+        // console.log(this.$route.params.category);
+
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+            setTimeout(() => {
+                this.signIn = false;
+            }, "500");
+
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+            setTimeout(() => {
+                this.signIn = true;
+            }, "500");
+        });
+    },
+    methods: {
+        newUser() {
+            var user = new FormData();
+            user.append('name', this.name);
+            user.append('surname', this.surname);
+            user.append('nickname', this.nickname);
+            user.append('email', this.email);
+            user.append('password', this.password);
+
+            fetch(`../back/public/index.php/register`, {
+                    method: 'POST',
+                    body: user
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data != -1) {
+                        userStore().logged = true;
+                        userStore().loginInfo.nickname = this.nickname;
+                        userStore().loginInfo.idUser = data;
+                        router.push('/');
+                    }
+                    this.error = "Can't create the user";
+                });
+
+            // console.log('new');
+
         },
-        template: `
+        logUser() {
+            // console.log('login');
+            var user = new FormData();
+            user.append('email', this.logMail);
+            user.append('password', this.logPass);
+
+            fetch(`../back/public/index.php/login`, {
+                    method: 'POST',
+                    body: user
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data != "null") {
+                        userStore().logged = true;
+                        userStore().loginInfo.nickname = data.nickname;
+                        userStore().loginInfo.idUser = data.id;
+                        router.push('/');
+                    }
+                    this.error = "Can't log in the user";
+                });
+        }
+    },
+    template: `
         <div>
         <div class="container" id="container">
         <div class="container__form signUp">
@@ -363,19 +453,7 @@ const Login = {
     </div>
         </div>
     `
-    }
-    // const signUpButton = document.getElementById('signUp');
-    // const signInButton = document.getElementById('signIn');
-    // const container = document.getElementById('container');
-
-// signUpButton.addEventListener('click', () => {
-//     container.classList.add("right-panel-active");
-// });
-
-// signInButton.addEventListener('click', () => {
-//     container.classList.remove("right-panel-active");
-// });
-
+}
 
 const MyProfile = {
     data: function() {
@@ -404,10 +482,6 @@ const MyProfile = {
     },
     methods: {
         changeView(view) {
-            // this.showStats=false;
-            // this.showAccount=false;
-            // this.showFriends=false;
-            // this.showPrivacy=false;
             if (view == 'stats') {
                 this.showStats = !this.showStats;
 
@@ -593,8 +667,9 @@ const Ranking = {
                 console.error('Error:', error);
             });
         // this.players=[{
-        //     nickname:'a',
-        //     elo:6,
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
         // }]
     },
     computed: {
@@ -631,7 +706,8 @@ const Ranking = {
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></div>
+            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
+            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></RouterLink></div>
         </div>
     </div>`
 
@@ -722,6 +798,26 @@ Vue.component('question', {
 
 });
 
+Vue.component('playerHistory', {
+    props: ['quizzs'],
+    data: function() {
+        return {}
+    },
+    mounted() {},
+    computed: {},
+    methods: {
+
+    },
+    template: `
+    <div>
+        <div v-for="(quizz, index) in this.quizzs">
+        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}</p>
+    </div>
+    </div>
+    `
+});
+
+
 Vue.component('playerStats', {
     props: ['id'],
     data: function() {
@@ -754,6 +850,11 @@ const routes = [{
     {
         path: '/ranking',
         component: Ranking,
+    },
+    {
+        path: '/profile/:id',
+        component: Profile,
+        params: true
     },
 ]
 
