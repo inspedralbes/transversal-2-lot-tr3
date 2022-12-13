@@ -78,6 +78,15 @@ const Questions = {
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
+                        if(userStore().configPlay.type=='challenge'){
+                            fetch(`../back/public/index.php/callengeComplited`)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                
+                            }).catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        }
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
@@ -124,7 +133,19 @@ const Questions = {
                     console.error('Error:', error);
                 });
 
-        } else {
+        }else if(userStore().configPlay.type=='challenge'){
+            fetch(`../back/public/index.php/startChallenge`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizz = data;
+                this.nQuestion = Object.keys(this.quizz).length - 1;
+                this.timer = true;
+                this.countTimer();
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+
+        }else {
             //fetch a la api externa 
 
             var question = new FormData();
@@ -285,6 +306,25 @@ const Profile = {
                 this.showHistory = !this.showHistory;
                 this.showStats = false;
             }
+        },
+        challengeQuizz(quizzId){
+            var userReq = new FormData();
+            userReq.append('quizz_id', quizzId);
+            userReq.append('challenged_id', this.user.id);
+    
+            fetch(`../back/public/index.php/newChallenge`, {
+                    method: 'POST',
+                    body: userReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status = 'pending') {
+                        userStore().configPlay.type='challenge'
+                        router.push('/questions');
+                    } else {
+                        console.log('jugado');
+                    }
+                });
         }
     },
     template: `<div>
@@ -313,7 +353,7 @@ const Profile = {
                 <h1>History</h1>
             </div>
             <div class="info__content">
-                <playerHistory :quizzs='quizzs'></playerHistory>
+                <playerHistory :quizzs='quizzs' :challenge='true'  @challengeQuizz='challengeQuizz'></playerHistory>
             </div>
         </div>
     </div>
@@ -842,19 +882,25 @@ Vue.component('question', {
 });
 
 Vue.component('playerHistory', {
-    props: ['quizzs'],
+    props: ['quizzs','challenge'],
     data: function() {
         return {}
     },
     mounted() {},
-    computed: {},
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        },
+        confPlay() {
+            return userStore().configPlay;
+        }
+    },
     methods: {
-
     },
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
-        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}</p>
+        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<p v-if='challenge && confPlay.type=="challenge" && isLogged'><button @click='$emit('challengeQuizz',quizz.id)'>Challenge</button> </p></p>
     </div>
     </div>
     `

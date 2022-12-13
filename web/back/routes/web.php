@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizzsController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\Users_quizzsController;
+use App\Http\Controllers\ChallengesController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -53,3 +54,7 @@ Route::get('getRanking', [ProfileController::class , 'getRanking']);
 
 Route::post('getUserQuizzs', [Users_quizzsController::class , 'getUserQuizzs']);
 Route::post('getUserInfo', [ProfileController::class , 'getUserInfo']);
+
+Route::post('newChallenge', [ChallengesController::class , 'newChallenge']);
+Route::get('startChallenge', [QuizzsController::class , 'startChallenge']);
+Route::get('challengeCompleted', [ChallengesController::class , 'challengeCompleted']);

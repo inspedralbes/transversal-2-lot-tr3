@@ -8,6 +8,7 @@ use App\Models\Users_quizz;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Models\Challenge;
 
 class QuizzsController extends Controller
 {
@@ -83,5 +84,20 @@ class QuizzsController extends Controller
         $updateElo -> save();
 
         return response()->json($updateGame);
+    }
+
+    public function startChallenge(Request $request) {
+        $challenge = Challenge::find(Session::get('challenge_id'));
+
+        $quizz = Quizz::find($challenge -> quizz_id);
+        $game = json_decode($quizz -> game);  
+        Session::put('quizz_id', $quizz -> id);
+
+        $addNewGame = new Users_quizz();
+        $addNewGame -> user_id = Session::get('user_id');
+        $addNewGame -> quizz_id = $challenge -> quizz_id;
+        $addNewGame -> save();
+
+        return response()->json($game);
     }
 }
