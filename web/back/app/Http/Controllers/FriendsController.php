@@ -64,12 +64,15 @@ class FriendsController extends Controller
     }
 
     public function addFriend(Request $request){    
-        $friendsList = Friend::where('user_sent', $request -> id) -> where('user_received', $request -> id)
-        ->orwhere('user_sent', $request -> id) -> where('user_received', $request -> id)
-        ->count();
+        //Check if the user sending the Friend Request has a pending Friend Request with the user.
+        $duplicatedRequest = Friend::where('user_sent', Session::get('user_id')) -> where('user_received', $request -> id)
+        ->orwhere('user_sent', $request -> id) -> where('user_received', Session::get('user_id'))->count();
 
+        //Check if the user is trying to add himself
+        $addMyself = Friend::where('user_sent', Session::get('user_id')) -> where('user_received', Session::get('user_id'))->count(); 
+        
         $response = 'ERROR';
-        if ($friendsList == 0) {
+        if ($duplicatedRequest == 0 && $addMyself == 0) {
             $friend = new Friend;
             $friend -> user_sent = Session::get('user_id');
             $friend -> user_received = $request -> id;
