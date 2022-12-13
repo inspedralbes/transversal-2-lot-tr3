@@ -373,7 +373,6 @@ const Login = {
             password: '',
             logMail: '',
             logPass: '',
-            error: null,
             signIn: true
 
 
@@ -410,24 +409,57 @@ const Login = {
             user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
-
-            fetch(`../back/public/index.php/register`, {
-                    method: 'POST',
-                    body: user
+            //alert de cuando se registren con campos vacíos
+            if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    color: 'white',
+                    text: "Something went wrong :[",
+                    background: '#592e58',
+                    buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
+                    showClass: {
+                        popup: 'animate__animated animate__tada'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutDownBig'
+                    },
                 })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data != -1) {
-                        userStore().logged = true;
-                        userStore().loginInfo.nickname = this.nickname;
-                        userStore().loginInfo.idUser = data;
-                        router.push('/');
-                    }
-                    this.error = "Can't create the user";
-                });
+            } else {
 
-            // console.log('new');
+                fetch(`../back/public/index.php/register`, {
+                        method: 'POST',
+                        body: user
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data != -1) {
+                            userStore().logged = true;
+                            userStore().loginInfo.nickname = this.nickname;
+                            userStore().loginInfo.idUser = data;
+                            router.push('/');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                color: 'white',
+                                text: "Something went wrong :[",
+                                buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
+                                background: '#592e58',
+                                confirmButtonColor: 'linear-gradient(to right, #3d395c, #351632)',
+                                showClass: {
+                                    popup: 'animate__animated animate__tada'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutDownBig'
+                                }
+                            })
+                        }
+                    });
 
+
+                // console.log('new');
+            }
         },
         logUser() {
             // console.log('login');
@@ -446,52 +478,63 @@ const Login = {
                         userStore().loginInfo.nickname = data.nickname;
                         userStore().loginInfo.idUser = data.id;
                         router.push('/');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            color: 'white',
+                            text: 'Something went wrong :[',
+                            background: '#592e58',
+                            confirmButtonColor: '',
+                            showClass: {
+                                popup: 'animate__animated animate__tada'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutDownBig'
+                            }
+                        })
                     }
-                    this.error = "Can't log in the user";
                 });
         }
     },
     template: `
         <div>
-        <div class="container" id="container">
-        <div class="container__form signUp">
-            <h1>Create Account</h1>
-            <div class="signUp__inputs">
-                <input type="text" placeholder="Name" v-model="name"/>
-                <input type="text" placeholder="Surname" v-model="surname"/>
-                <input type="text" placeholder="Nickname" v-model="nickname"/>
-                <input type="email" placeholder="Email" v-model="email"/>
-                <input type="password" placeholder="Password" v-model="password"/>
+            <div class="containerLogin" id="container">
+            <div class="container__form signUp">
+            <div class="signUp__title"><h1>Create Account</h1></div>
+                <div class="signUp__inputs">
+                    <input type="text" placeholder="Name" v-model="name" required/>
+                    <input type="text" placeholder="Surname" v-model="surname" required/>
+                    <input type="text" placeholder="Nickname" v-model="nickname" required/>
+                    <input type="email" placeholder="Email" v-model="email" required/>
+                    <input type="password" placeholder="Password" v-model="password" required/>
+                </div>
                 <button class="login" @click="newUser">Sign Up</button>
+                
             </div>
-        </div>
-        <div class="container__form signIn" v-show="signIn">
-            <h1>Sign in</h1>
-            <div class="signIn__inputs">
-                <input type="email" placeholder="Email" v-model="logMail"/>
-                <input type="password" placeholder="Password" v-model="logPass"/>
-            </div>
-            <button class="login" @click="logUser">Sign In</button>
-            
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Log in please</h1>
-                    <button class="login ghost" id="signIn">Sign In</button>
+            <div class="container__form signIn" v-show="signIn">
+                <div class="signIn__title"><h1>Sign in</h1></div>
+                <div class="signIn__inputs">
+                    <input type="email" placeholder="Email" v-model="logMail"/>
+                    <input type="password" placeholder="Password" v-model="logPass"/>
                 </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Register please</h1>
-                    <button class="login ghost" id="signUp">Sign Up</button>
+                <button class="login" @click="logUser">Sign In</button>
+                
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Log in please</h1>
+                        <button class="login ghost" id="signIn">Sign In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1>Register please</h1>
+                        <button class="login ghost" id="signUp">Sign Up</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div v-show="error">
-        <p>{{error}}</p>
-    </div>
-        </div>
     `
 }
 
