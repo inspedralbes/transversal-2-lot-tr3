@@ -774,23 +774,23 @@ const Ranking = {
         }
     },
     mounted() {
-        // fetch(`../back/public/index.php/getRanking`)
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         this.players = data;
-        //     }).catch((error) => {
-        //         console.error('Error:', error);
-        //     });
-        this.players=[{
-            nickname:'paco',
-            elo: -1,
-            id: -1
-        },
-        {
-            nickname:'vita',
-            elo: 2,
-            id: 1
-        }]
+        fetch(`../back/public/index.php/getRanking`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.players = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        // this.players=[{
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
+        // },
+        // {
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
+        // }]
     },
     computed: {
         isLogged() {
@@ -1000,10 +1000,10 @@ const router = new VueRouter({
 const userStore = Pinia.defineStore('usuario', {
     state() {
         return {
-            logged: true,
+            logged: false,
             loginInfo: {
-                nickname: 'vita',
-                idUser: 1
+                nickname: '',
+                idUser: -1
             },
             configPlay: {
                 category: '',
