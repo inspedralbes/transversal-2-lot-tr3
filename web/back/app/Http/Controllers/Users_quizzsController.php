@@ -17,9 +17,9 @@ class Users_quizzsController extends Controller
             $gameInfo = (object) [
                 'quizz_id' => -1,
                 'score' => -1,
-                'time_resolution' => '',
+                'time_resolution' => -1,
                 'game' => '',
-                'date_creation' => -1,
+                'date_creation' => '',
                 'name_creator' => '',
                 'difficulty' => '',
                 'category' => '',
