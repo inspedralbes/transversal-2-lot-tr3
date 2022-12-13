@@ -1,5 +1,5 @@
 //Componentes
-const Template = { 
+const Template = {
     params: true,
     data: function() {
         return {}
@@ -78,6 +78,15 @@ const Questions = {
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
+                        if(userStore().configPlay.type=='challenge'){
+                            fetch(`../back/public/index.php/callengeComplited`)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                
+                            }).catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        }
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
@@ -124,7 +133,19 @@ const Questions = {
                     console.error('Error:', error);
                 });
 
-        } else {
+        }else if(userStore().configPlay.type=='challenge'){
+            fetch(`../back/public/index.php/startChallenge`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.quizz = data;
+                this.nQuestion = Object.keys(this.quizz).length - 1;
+                this.timer = true;
+                this.countTimer();
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+
+        }else {
             //fetch a la api externa 
 
             var question = new FormData();
@@ -200,11 +221,11 @@ const Index = {
             </div>
 
             <div class="center">
-                <div v-if='!isLogged'>
+                <div v-if='!isLogged' class="center__grid">
                     <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
                     <div class="center__grid2"><RouterLink class="center__routerPlay" to="/questions"><button class="center__play">Play</button></RouterLink></div>
                 </div>
-                <div v-else>
+                <div v-else class="center__grid">
                     <div class="center__grid1"><p>{{user.nickname}}</p></div>
                     <div class="center__grid2"><button class="center__play" id="play" onclick="gameType()">Play</button></div>
                 </div>
@@ -232,21 +253,21 @@ const Prueva = {
 
 }
 
-const Profile = { 
+const Profile = {
     params: true,
     data: function() {
         return {
-            user:{
+            user: {
                 id: -1,
                 nickname: ''
             },
             showStats: true,
             showHistory: false,
-            quizzs:[]
+            quizzs: []
         }
     },
     mounted() {
-        this.user.id=this.$route.params.id
+        this.user.id = this.$route.params.id
 
         var userReq = new FormData();
         userReq.append('user_id', this.$route.params.id);
@@ -257,16 +278,16 @@ const Profile = {
             })
             .then((response) => response.json())
             .then((data) => {
-                this.user.nickname=data;
+                this.user.nickname = data;
             });
 
-            fetch(`../back/public/index.php/getUserQuizzs`, {
+        fetch(`../back/public/index.php/getUserQuizzs`, {
                 method: 'POST',
                 body: userReq
             })
             .then((response) => response.json())
             .then((data) => {
-                this.quizzs=data;
+                this.quizzs = data;
             });
         // console.log(this.$route.params.id);
     },
@@ -285,6 +306,21 @@ const Profile = {
                 this.showHistory = !this.showHistory;
                 this.showStats = false;
             }
+        },
+        challengeQuizz(quizzId){
+            var userReq = new FormData();
+            userReq.append('quizz_id', quizzId);
+            userReq.append('challenged_id', this.user.id);
+    
+            fetch(`../back/public/index.php/newChallenge`, {
+                    method: 'POST',
+                    body: userReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    userStore().configPlay.type='challenge'
+                    router.push('/questions');
+                });
         }
     },
     template: `<div>
@@ -313,7 +349,7 @@ const Profile = {
                 <h1>History</h1>
             </div>
             <div class="info__content">
-                <playerHistory :quizzs='quizzs'></playerHistory>
+                <playerHistory :quizzs='quizzs' :challenge='true'  @challengeQuizz='challengeQuizz'></playerHistory>
             </div>
         </div>
     </div>
@@ -334,7 +370,7 @@ const Login = {
             logMail: '',
             logPass: '',
             error: null,
-            signIn:true
+            signIn: true
 
 
             // img:''
@@ -350,15 +386,15 @@ const Login = {
         signUpButton.addEventListener('click', () => {
             container.classList.add("right-panel-active");
             setTimeout(() => {
-                this.signIn=false;
+                this.signIn = false;
             }, "500");
-            
+
         });
 
         signInButton.addEventListener('click', () => {
             container.classList.remove("right-panel-active");
             setTimeout(() => {
-                this.signIn=true;
+                this.signIn = true;
             }, "500");
         });
     },
@@ -414,40 +450,34 @@ const Login = {
     template: `
         <div>
         <div class="container" id="container">
-        <div class="form-container sign-up-container">
-
-                <h1>Create Account</h1>
-                <br>
+        <div class="container__form signUp">
+            <h1>Create Account</h1>
+            <div class="signUp__inputs">
                 <input type="text" placeholder="Name" v-model="name"/>
                 <input type="text" placeholder="Surname" v-model="surname"/>
                 <input type="text" placeholder="Nickname" v-model="nickname"/>
                 <input type="email" placeholder="Email" v-model="email"/>
                 <input type="password" placeholder="Password" v-model="password"/>
-                <br>
                 <button class="login" @click="newUser">Sign Up</button>
-
+            </div>
         </div>
-        <div class="form-container sign-in-container" v-show="signIn">
-
-                <h1>Sign in</h1>
-                <br>
+        <div class="container__form signIn" v-show="signIn">
+            <h1>Sign in</h1>
+            <div class="signIn__inputs">
                 <input type="email" placeholder="Email" v-model="logMail"/>
                 <input type="password" placeholder="Password" v-model="logPass"/>
-                <br>
-                <button class="login" @click="logUser">Sign In</button>
-
+            </div>
+            <button class="login" @click="logUser">Sign In</button>
+            
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Log in please</h1>
-                    <br>
-                    <br>
                     <button class="login ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Register please</h1>
-                    <br>
                     <button class="login ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
@@ -569,10 +599,10 @@ const MyProfile = {
 
             // console.log('decline '+id);
         },
-        logOut(){
-            userStore().logged=false;
-            userStore().loginInfo.nickname='';
-            userStore().loginInfo.idUser=-1;
+        logOut() {
+            userStore().logged = false;
+            userStore().loginInfo.nickname = '';
+            userStore().loginInfo.idUser = -1;
             router.push('/');
         }
     },
@@ -658,56 +688,56 @@ const MyProfile = {
 
 }
 
-const Ranking = { 
+const Ranking = {
     data: function() {
         return {
-            players:[]
+            players: []
         }
     },
     mounted() {
         fetch(`../back/public/index.php/getRanking`)
-        .then((response) => response.json())
-        .then((data) => {
-           this.players=data;
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                this.players = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
         // this.players=[{
         //     nickname:'',
         //     elo: -1,
         //     id: -1
         // }]
     },
-    computed:{
+    computed: {
         isLogged() {
             return userStore().logged;
         },
     },
     methods: {
-        addFriend(id){
+        addFriend(id) {
             var friendReq = new FormData();
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/addFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data=="ERROR"){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'this user is already your friend or already has a pending request',
-                      })
-                }else{
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Done',
-                        text: 'Request sent, wait for your friend to accept it!',
-                      })
-                }
-            });
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data == "ERROR") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'this user is already your friend or already has a pending request',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Done',
+                            text: 'Request sent, wait for your friend to accept it!',
+                        })
+                    }
+                });
         }
     },
     template: `<div>
@@ -804,33 +834,39 @@ Vue.component('question', {
 
 });
 
-Vue.component('playerHistory',{
-    props: ['quizzs'],
+Vue.component('playerHistory', {
+    props: ['quizzs','challenge'],
     data: function() {
         return {}
     },
     mounted() {},
-    computed:{},
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        },
+        confPlay() {
+            return userStore().configPlay;
+        }
+    },
     methods: {
-
     },
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
-        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}</p>
+        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<p v-if='challenge && confPlay.type=="challenge" && isLogged'><button @click='$emit('challengeQuizz',quizz.id)'>Challenge</button> </p></p>
     </div>
     </div>
     `
 });
 
 
-Vue.component('playerStats',{
+Vue.component('playerStats', {
     props: ['id'],
     data: function() {
         return {}
     },
     mounted() {},
-    computed:{},
+    computed: {},
     methods: {
 
     },
@@ -856,11 +892,11 @@ const routes = [{
     {
         path: '/ranking',
         component: Ranking,
-    },    
+    },
     {
         path: '/profile/:id',
         component: Profile,
-        params:true
+        params: true
     },
 ]
 
