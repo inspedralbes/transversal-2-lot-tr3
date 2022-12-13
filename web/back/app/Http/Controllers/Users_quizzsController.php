@@ -43,6 +43,6 @@ class Users_quizzsController extends Controller
             $allGames[] = $gameInfo;
         }
 
-        return response()->json($userQuizzs);
+        return response()->json($allGames);
     }
 }
