@@ -79,7 +79,7 @@ const Questions = {
                     .then((data) => {
                         console.log(data)
                         if(userStore().configPlay.type=='challenge'){
-                            fetch(`../back/public/index.php/callengeComplited`)
+                            fetch(`../back/public/index.php/challengeCompleted`)
                             .then((response) => response.json())
                             .then((data) => {
                                 
@@ -747,7 +747,7 @@ const Ranking = {
     template: `<div>
         <div v-for="(player, index) in this.players">
             <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
-            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></RouterLink></div>
+            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></div>
         </div>
     </div>`
 
@@ -854,10 +854,11 @@ Vue.component('playerHistory', {
     },
     methods: {
     },
+    // v-if='challenge && confPlay.type=="normal" && isLogged'
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
-        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<p v-if='challenge && confPlay.type=="challenge" && isLogged'><button @click='$emit('challengeQuizz',quizz.id)'>Challenge</button> </p></p>
+        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<p><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </p></p>
     </div>
     </div>
     `
