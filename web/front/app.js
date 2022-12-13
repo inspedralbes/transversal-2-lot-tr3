@@ -237,11 +237,11 @@ const Profile = {
     data: function() {
         return {
             user:{
-                id:-1,
-                nickname:'paco'
+                id: -1,
+                nickname: ''
             },
             showStats: true,
-            showHistory:false,
+            showHistory: false,
             quizzs:[]
         }
     },
@@ -665,18 +665,18 @@ const Ranking = {
         }
     },
     mounted() {
-        // fetch(`../back/public/index.php/getRanking`)
-        // .then((response) => response.json())
-        // .then((data) => {
-        //    this.players=data;
-        // }).catch((error) => {
-        //     console.error('Error:', error);
-        // });
-        this.players=[{
-            nickname:'a',
-            elo:6,
-            id:5
-        }]
+        fetch(`../back/public/index.php/getRanking`)
+        .then((response) => response.json())
+        .then((data) => {
+           this.players=data;
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+        // this.players=[{
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
+        // }]
     },
     computed:{
         isLogged() {
@@ -712,7 +712,8 @@ const Ranking = {
     },
     template: `<div>
         <div v-for="(player, index) in this.players">
-            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></RouterLink></div>
+            <div><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+
+            player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></RouterLink></div>
         </div>
     </div>`
 
@@ -815,10 +816,10 @@ Vue.component('playerHistory',{
     },
     template: `
     <div>
-        <div v-for:"(quizz, index) in this.quizzs">
-        <p>{{quizz.dificulty}} {{quizz.category}} </p>
-        <div>
-    <div>
+        <div v-for="(quizz, index) in this.quizzs">
+        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}</p>
+    </div>
+    </div>
     `
 });
 
