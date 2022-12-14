@@ -52,6 +52,7 @@ Route::post('acceptFriend', [FriendsController::class , 'acceptFriend']);
 Route::post('declineFriend', [FriendsController::class , 'declineFriend']);
 
 Route::get('getRanking', [ProfileController::class , 'getRanking']);
+Route::get('getDailyRanking', [ProfileController::class , 'getDailyRanking']);
 
 Route::post('getUserQuizzs', [Users_quizzsController::class , 'getUserQuizzs']);
 Route::post('getUserInfo', [ProfileController::class , 'getUserInfo']);

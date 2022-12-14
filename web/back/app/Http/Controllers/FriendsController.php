@@ -25,14 +25,17 @@ class FriendsController extends Controller
                 'id' => -1,
                 'name' => '',
             ];
-            $friend->id=$infoFriend->id;
-            if($infoFriend->user_sent ==$user_id){
-                $user=User::find($infoFriend->user_received);
-                $friend->name=$user->name;
-            }else{
-                $user=User::find($infoFriend->user_sent);
-                $friend->name=$user->name;
+
+            if ($infoFriend -> user_received == Session::get('user_id')) {
+                $friend -> id = $infoFriend -> user_sent;
+                $user = User::find($infoFriend -> user_sent);
+                $friend -> name = $user -> nickname;
+            } else { 
+                $friend -> id = $infoFriend -> user_received;
+                $user = User::find($infoFriend -> user_received);
+                $friend -> name = $user -> nickname;
             }
+
             $list[]=$friend;
         }
         // return response()->json($friendsList);

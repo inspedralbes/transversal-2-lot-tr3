@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
+use App\Models\Users_quizz;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -85,6 +87,39 @@ class ProfileController extends Controller
         return response()->json($ranking);
     }
     
+    public function getDailyRanking(Request $request) {
+        $allDaily = Users_quizz::where('type', 'daily')
+        ->where('date_creation', date('Y-m-d'))
+        ->all();
+
+        $results = DB::table('users_quizzs')
+                     ->distinct()
+                     ->innerJoin('bookings', function($join)
+                         {
+                             $join->on('rooms.id', '=', 'bookings.room_type_id');
+                             $join->on('arrival','>=',DB::raw("'2012-05-01'"));
+                             $join->on('arrival','<=',DB::raw("'2012-05-10'"));
+                             $join->on('departure','>=',DB::raw("'2012-05-01'"));
+                             $join->on('departure','<=',DB::raw("'2012-05-10'"));
+                         })
+                     ->where('bookings.type', '=', 'daily')
+                     ->where('users_quizzs.date_creation', date('Y-m-d'))
+                     ->get();
+        $ranking = [];
+        foreach ($allDaily as $gameInfo) {
+            $user = (object) [
+                'quizz_id' => -1,
+                'user_id' => -1,
+                'score' => -1,
+                'time_resolution' => -1,
+            ];
+            $user -> score = $gameInfo -> score;
+            $user -> time_resolution = $gameInfo -> time_resolution;
+            $ranking[] = $user;
+        }
+        return response()->json($ranking);
+    }
+
     public function edit(Request $request)
     {
         return view('profile.edit', [
