@@ -5,6 +5,7 @@ use App\Http\Controllers\QuizzsController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\Users_quizzsController;
 use App\Http\Controllers\ChallengesController;
+use App\Http\Controllers\QuestionsController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -62,3 +63,5 @@ Route::get('challengeCompleted', [ChallengesController::class , 'challengeComple
 
 Route::get('getPendingChallenges', [ChallengesController::class , 'getPendingChallenges']);
 Route::get('getCompletedChallenges', [ChallengesController::class , 'getCompletedChallenges']);
+
+Route::post('addQuestion', [QuestionsController::class , 'addQuestion']);
