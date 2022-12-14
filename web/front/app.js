@@ -333,7 +333,6 @@ const Profile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-            userReq.append('challengeFromProfile', false);
             
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -593,7 +592,8 @@ const MyProfile = {
 
         this.getFriends();
         this.getPendingRequests();
-
+        this.getPendingChallenges();
+        this.getCompletedChallenges();
 
         var userReq = new FormData();
         userReq.append('user_id', userStore().loginInfo.idUser);
@@ -745,7 +745,6 @@ const MyProfile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
-            userReq.append('challengeFromProfile', false);
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -768,13 +767,13 @@ const MyProfile = {
                 });
         },
         playChallenge(challengeId){
+            userStore().configPlay.type='challenge';
             router.push({ path: '/questions', props: { idChallenge: challengeId } })
         },
         seeChallenge(quizzId, userId){
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
-            userReq.append('challengeFromProfile', false);
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -782,10 +781,10 @@ const MyProfile = {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.status = 'pending') {
+                    if (data.status == 'pending') {
                         Swal.fire({
                             title: 'Error',
-                            text:"Challenge There's an error with this match"
+                            text:"There's an error with this match"
                           })
                     } else {
 
@@ -812,9 +811,8 @@ const MyProfile = {
         challengeFriends(idFriend){
             var userReq = new FormData();
             userReq.append('quizz_id', this.quizzReq);
-            userReq.append('challenged_id', idFriend);
-            userReq.append('challengeFromProfile', true);
-            
+            userReq.append('challenged_id', idFriend);  
+
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -948,7 +946,7 @@ const MyProfile = {
                                     </div>
                                     <div class="info__content">
                                     <div v-for="(challenge, index) in this.completedChallenges">
-                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.id,challenge.challenged)">See</button></p>
+                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
                                     </div>
                                     </div>
                                 </b-card-text>
