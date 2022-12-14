@@ -7,16 +7,16 @@ body {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    padding: 30px 10px;
     font-family: Arial, Helvetica, sans-serif;
     transition: background 0.1s ease-in;
     background-image: url(../img/bg-image.svg);
     background-size: cover;
     margin: 0;
+    max-height: 100vh;
     color: white;
 }
 
-.card {
+.cardQ {
     padding: 50px;
     width: 900px;
     height: fit-content;
@@ -29,7 +29,7 @@ body {
     box-shadow: 0 2px 4px 0 #ffb0f432, 0 25px 50px 0 #ffb0f432;
 }
 
-.card__answers {
+.cardQ__answers {
     margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -529,4 +529,137 @@ h1 {
 .signUp__inputs,
 .signIn__inputs {
     padding: 10px;
+}
+
+
+/* -------------------------------PROFILE------------------------ */
+
+.profile {
+    padding: 0;
+    display: flex;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+.profile__left {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: flexbox;
+    align-items: center;
+    float: left;
+    width: 30%;
+}
+
+.profile__nickname,
+.profile__list,
+.info {
+    padding: 25px;
+    width: fit-content;
+    min-width: 300px;
+    min-height: 100px;
+    background-color: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(121, 39, 136, 1) 100%);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    color: wheat;
+    margin: 30px;
+    -webkit-box-shadow: 3px 5px 38px -9px #1b1b1b;
+    -moz-box-shadow: 3px 5px 38px -9px #1b1b1b;
+    box-shadow: 3px 5px 38px -9px #1b1b1b;
+}
+
+.info {
+    margin: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flexbox;
+    align-items: center;
+    float: left;
+    width: 70%;
+    margin-bottom: 10px;
+    padding: 50px;
+}
+
+.profile__img img {
+    border-radius: 50%;
+    width: 80%;
+    height: 80%;
+}
+
+.profile__img {
+    align-self: center;
+    background-color: #22222236;
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 50%;
+    height: 250px;
+    width: 250px;
+    margin: auto;
+    -webkit-box-shadow: 3px 5px 38px -9px #1b1b1b;
+    -moz-box-shadow: 3px 5px 38px -9px #1b1b1b;
+    box-shadow: 3px 5px 38px -9px #1b1b1b;
+}
+
+.profile__nickname {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flexbox;
+    font-size: 10px;
+    width: 80%;
+}
+
+.profile__list {
+    text-transform: uppercase;
+    font-size: 20px;
+    width: 80%;
+    height: fit-content;
+}
+
+.profile__listUl {
+    list-style: none;
+    line-height: 60px;
+}
+
+.info__buttons {
+    display: flex;
+}
+
+.profile__logOut,
+.profile__home,
+.home {
+    top: 80%;
+    border-radius: 30px;
+    background: linear-gradient(to right, #3d395c, #351632);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    margin-top: 20px;
+    border-color: #ffffff;
+    float: right;
+    height: 50px;
+    margin-right: 50px;
+    margin-bottom: 20px;
+}
+
+#__BVID__6___BV_tab_button__,
+#__BVID__8___BV_tab_button__ {
+    color: white;
+}
+
+.card {
+    border-radius: 20px;
+    border: none;
+    background-color: #3f1d3fee;
+}
+
+.card-header:first-child {
+    border-radius: 20px 20px 0px 0px;
+    background-color: #3f1d3fee;
 }
