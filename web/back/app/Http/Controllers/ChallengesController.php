@@ -17,8 +17,10 @@ class ChallengesController extends Controller
         $challengePlayed = (object) [
             'id' => '',
             'winner' => '',
+            'idChallenger' => '',
             'nicknameChallenger' => '',
             'scoreChallenger' => '',
+            'idChallenged' => '',
             'nicknameChallenged' => '',
             'scoreChallenged' => '',
             'status' => ''
@@ -45,9 +47,11 @@ class ChallengesController extends Controller
                 
                 $challengePlayed->id = $challengeFound -> id;
 
+                $challengePlayed->idChallenger = $challengeFound->challenger;
                 $challengePlayed->nicknameChallenger = User::where('id', $challengeFound->challenger)->first()->nickname;
                 $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
 
+                $challengePlayed->idChallenged = $challengeFound->challenged;
                 $challengePlayed->nicknameChallenged = User::where('id', $challengeFound->challenged)->first()->nickname;
                 $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
 
@@ -92,9 +96,11 @@ class ChallengesController extends Controller
                 $challengePlayed->id = Session::get('challenge_id');
                 $challengePlayed->winner = $newChallenge->winner;
 
+                $challengePlayed->idChallenger = $newChallenge->challenger;
                 $challengePlayed->nicknameChallenger = User::where('id', $newChallenge->challenger)->first()->nickname;
                 $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $newChallenge->challenger)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
 
+                $challengePlayed->idChallenged = $newChallenge->challenged;
                 $challengePlayed->nicknameChallenged = User::where('id', $newChallenge->challenged)->first()->nickname;
                 $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
 
@@ -116,9 +122,11 @@ class ChallengesController extends Controller
             $challengePlayed->id = Session::get('challenge_id');
             $challengePlayed->winner = '';
 
+            $challengePlayed->idChallenger = $newChallenge->challenger;
             $challengePlayed->nicknameChallenger = User::where('id', $newChallenge->challenger)->first()->nickname;
             $challengePlayed->scoreChallenger = -1;
 
+            $challengePlayed->idChallenged = $newChallenge->challenged;
             $challengePlayed->nicknameChallenged = User::where('id', $newChallenge->challenged)->first()->nickname;
             $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
 
