@@ -87,8 +87,12 @@ class QuizzsController extends Controller
     }
 
     public function startChallenge(Request $request) {
-        $challenge = Challenge::find(Session::get('challenge_id'));
-
+        if ($request->isMethod('post')) {
+            $challenge = Challenge::find($request -> challenge_id);
+        } else {
+            $challenge = Challenge::find(Session::get('challenge_id'));
+        }
+        
         $quizz = Quizz::find($challenge -> quizz_id);
         $game = json_decode($quizz -> game);  
         Session::put('quizz_id', $quizz -> id);
