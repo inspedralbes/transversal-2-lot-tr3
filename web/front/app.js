@@ -576,12 +576,14 @@ const MyProfile = {
             showPrivacy: false,
             showHistory: false,
             showChallenges:false,
+            showChooseFriend:false,
             friends: null,
             pendentFriends: null,
             // seeRequests:false
             quizzs: null,
             pendingChallenges:[],
-            completedChallenges:[]
+            completedChallenges:[],
+            quizzReq:-1
 
         }
     },
@@ -612,6 +614,7 @@ const MyProfile = {
     },
     methods: {
         changeView(view) {
+            this.showChooseFriend=false;
             if (view == 'stats') {
                 this.showStats = !this.showStats;
 
@@ -754,12 +757,12 @@ const MyProfile = {
                             text:'Challenge send'
                           })
                     } else {
-
                         Swal.fire({
                             title: 'Result',
                             text: 'This friend already has played this match'
                           })
                     }
+                    changeView('history');
                 });
         },
         playChallenge(challengeId){
@@ -793,42 +796,40 @@ const MyProfile = {
                     }
                 });
         },
-        challengeFriends(quizzId){
-            friendId=-1;
-            Swal.fire({
-                title: 'Choose a Friend',
-                 html: `
-                 <div v-for="(friend, index) in this.friends">
-                 <button v-on:click="friendId= firend.id">{{friend.name}}</RouterLink>
-                 </div>`,
-                showCancelButton: true,
-                confirmButtonText: 'Challenge',
-                cancelButtonColor: '#d33',
-            }).then((result) => {
-                var userReq = new FormData();
-                userReq.append('quizz_id', quizzId);
-                userReq.append('challenged_id', friendId);
-    
-                fetch(`../back/public/index.php/newChallenge`, {
-                        method: 'POST',
-                        body: userReq
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.status = 'pending') {
-                            Swal.fire({
-                                title: 'Result',
-                                text:'Challenge send'
-                              })
-                        } else {
-    
-                            Swal.fire({
-                                title: 'Result',
-                                text: 'This friend already has played this match'
-                              })
-                        }
-                    });
-            })
+        seeFriends(quizzId){
+            this.quizzReq=quizzId;
+            this.showChooseFriend=true;
+            this.showStats= false;
+            this.showAccount= false;
+            this.showFriends= false;
+            this.showPrivacy= false;
+            this.showHistory= false;
+            this.showChallenges=false;  
+        },
+        challengeFriends(idFriend){
+            var userReq = new FormData();
+            userReq.append('quizz_id', this.quizzReq);
+            userReq.append('challenged_id', idFriend);
+
+            fetch(`../back/public/index.php/newChallenge`, {
+                    method: 'POST',
+                    body: userReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status = 'pending') {
+                        Swal.fire({
+                            title: 'Result',
+                            text:'Challenge send'
+                          })
+                    } else {
+
+                        Swal.fire({
+                            title: 'Result',
+                            text: 'This friend already has played this match'
+                          })
+                    }
+                });
         }
     },
     template: ` 
@@ -843,6 +844,7 @@ const MyProfile = {
                 <li @click="changeView('friends')">Amigos</li>
                 <li @click="changeView('history')">Historial</li>
                 <li @click="changeView('privacy')">Terminos de privacidad</li>
+                <li @click="changeView('challenges')">challenges</li>
             </ul>
             <button @click="logOut">Log Out</button>
         </div>
@@ -947,10 +949,23 @@ const MyProfile = {
                                     </div>
                                 </b-card-text>
                             </b-tab>
+
                         </b-tabs>
                     </b-card>
                 </div>
             </div>
+
+            <div class="history" v-show="showChooseFriend">
+                <div class="info__tittle">
+                    <h1>Choose a friend</h1>
+                </div>
+                <div class="info__content">
+                <div v-for="(friend, index) in this.friends">
+                    <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                </div>
+                </div>
+            </div>
+                            
         </div>
     </div>
 `
