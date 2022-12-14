@@ -799,7 +799,7 @@ const MyProfile = {
                 title: 'Choose a Friend',
                  html: `
                  <div v-for="(friend, index) in this.friends">
-                 <button v-on:click="friendId= firend.id">{{friend.name}}</RouterLink>
+                 <button v-on:click="friendId= friend.id">{{friend.name}}</RouterLink>
                  </div>`,
                 showCancelButton: true,
                 confirmButtonText: 'Challenge',
