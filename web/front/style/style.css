@@ -80,7 +80,8 @@ body {
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
-.answers__button:hover {
+.answers__button:hover,
+.answers__button:focus {
     background: #ffe9e9;
     transform: translate(0, 0.25em);
 }
@@ -123,12 +124,14 @@ h1 {
     color: white;
 }
 
-.resposta__correcte:hover {
+.resposta__correcte:hover,
+.resposta__correcte:focus {
     background-color: #7fcc67;
     color: white;
 }
 
-.resposta__incorrecte:hover {
+.resposta__incorrecte:hover,
+.resposta__incorrecte:focus {
     background-color: #d35b5b;
     color: white;
 }

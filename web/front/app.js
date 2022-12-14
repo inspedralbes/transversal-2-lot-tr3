@@ -197,8 +197,8 @@ const Questions = {
                 </div>
             </div>
             <div v-show="nQuestion<actualQ">
-                <h1>Correctas: {{this.correct}}/{{this.nQuestion+1}}</h1>
-                <RouterLink class="wrapperIndex__routerProfile" to="/"><button>Home</button></RouterLink>
+                <h1>Correct answers: {{this.correct}}/{{this.nQuestion+1}}</h1>
+                <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="home">Home</button></RouterLink>
             </div>
         </div>
     </b-container>`
