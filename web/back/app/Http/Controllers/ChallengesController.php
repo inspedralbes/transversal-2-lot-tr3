@@ -28,9 +28,16 @@ class ChallengesController extends Controller
         ];
 
         //Check if user has played that quizz already
-        $quizzPlayed = Users_quizz::where('user_id', Session::get('user_id'))
+        if ($request -> challengeFromProfile) {
+            $quizzPlayed = Users_quizz::where('user_id', $request->challenged_id)
             ->where('quizz_id', $request->quizz_id)
             ->count();
+        } else {
+            $quizzPlayed = Users_quizz::where('user_id', Session::get('user_id'))
+            ->where('quizz_id', $request->quizz_id)
+            ->count();
+        }
+
         //If the user has played the quizz we check if the challenge has already been played
         if ($quizzPlayed > 0) {
             $challengeCount = Challenge::where('challenger', Session::get('user_id'))->where('challenged', $request->challenged_id)->where('quizz_id', $request->quizz_id)

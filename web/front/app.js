@@ -333,7 +333,8 @@ const Profile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-
+            userReq.append('challengeFromProfile', false);
+            
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -744,6 +745,7 @@ const MyProfile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
+            userReq.append('challengeFromProfile', false);
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -772,6 +774,7 @@ const MyProfile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
+            userReq.append('challengeFromProfile', false);
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -810,7 +813,8 @@ const MyProfile = {
             var userReq = new FormData();
             userReq.append('quizz_id', this.quizzReq);
             userReq.append('challenged_id', idFriend);
-
+            userReq.append('challengeFromProfile', true);
+            
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
