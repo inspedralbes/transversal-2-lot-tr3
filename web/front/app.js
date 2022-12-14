@@ -15,7 +15,7 @@ const Template = {
 
 const Questions = {
     params: true,
-    props: ['category', 'difficulty', 'type'],
+    props: ['idChallenge'],
     data: function() {
         return {
             quizz: null,
@@ -134,16 +134,35 @@ const Questions = {
                 });
 
         } else if (userStore().configPlay.type == 'challenge') {
-            fetch(`../back/public/index.php/startChallenge`)
-                .then((response) => response.json())
-                .then((data) => {
-                    this.quizz = data;
-                    this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer = true;
-                    this.countTimer();
-                }).catch((error) => {
-                    console.error('Error:', error);
-                });
+            //challenge_id
+            if(this.idChallenge!=null){
+                var challengeInfo = new FormData();
+                challengeInfo.append('challenge_id', idChallenge);
+                
+                fetch(`../back/public/index.php/startChallenge`, {
+                        method: 'POST',
+                        body: challengeInfo
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.quizz = data;
+                        this.nQuestion = Object.keys(this.quizz).length - 1;
+                        this.timer = true;
+                        this.countTimer();
+                    });
+            }else{
+
+                fetch(`../back/public/index.php/startChallenge`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.quizz = data;
+                        this.nQuestion = Object.keys(this.quizz).length - 1;
+                        this.timer = true;
+                        this.countTimer();
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
 
         } else {
             //fetch a la api externa 
@@ -254,6 +273,7 @@ const Prueva = {
 }
 
 const Profile = {
+    //router.push({ name: 'user', params: { username } })
     params: true,
     data: function() {
         return {
@@ -307,6 +327,8 @@ const Profile = {
                 this.showStats = false;
             }
         },
+        //getPendingChallenges
+        //getComplitedChallenges
         challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
@@ -322,7 +344,14 @@ const Profile = {
                         userStore().configPlay.type = 'challenge'
                         router.push('/questions');
                     } else {
-                        console.log('jugado');
+
+                        Swal.fire({
+                            title: 'Result',
+                            html:`<div>
+                                <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
+                                <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
+                            </div>`,
+                          })
                     }
                 });
         }
@@ -545,11 +574,14 @@ const MyProfile = {
             showAccount: false,
             showFriends: false,
             showPrivacy: false,
+            showHistory: false,
+            showChallenges:false,
             friends: null,
             pendentFriends: null,
             // seeRequests:false
             quizzs: null,
-            showHistory: false
+            pendingChallenges:[],
+            completedChallenges:[]
 
         }
     },
@@ -586,31 +618,48 @@ const MyProfile = {
                 this.showAccount = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
+                this.showHistory =false;
+                this.showChallenges=false;
             } else if (view == 'account') {
                 this.showAccount = (!this.showAccount);
 
                 this.showStats = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
+                this.showHistory =false;
+                this.showChallenges=false;
             } else if (view == 'friends') {
                 this.showFriends = !this.showFriends;
 
                 this.showStats = false;
                 this.showAccount = false;
                 this.showPrivacy = false;
+                this.showHistory =false;
+                this.showChallenges=false;
             } else if (view == 'privacy') {
                 this.showPrivacy = !this.showPrivacy;
 
                 this.showStats = false;
                 this.showAccount = false;
                 this.showFriends = false;
+                this.showHistory =false;
+                this.showChallenges=false;
             } else if (view == 'history') {
                 this.showHistory = !this.showHistory;
 
-                this.showStats = false;
+                this.showAccount = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
                 this.showStats = false;
+                this.showChallenges=false;
+            }else if(view == 'challenges'){
+                this.showChallenges=!this.showChallenges;
+
+                this.showAccount = false;
+                this.showStats = false;
+                this.showFriends = false;
+                this.showPrivacy = false;
+                this.showHistory =false;
             }
         },
         acceptFriend(id) {
@@ -673,6 +722,113 @@ const MyProfile = {
             userStore().loginInfo.nickname = '';
             userStore().loginInfo.idUser = -1;
             router.push('/');
+        },
+        getPendingChallenges(){
+            fetch(`../back/public/index.php/getPendingChallenges`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.pendingChallenges = data;
+            });
+        },
+        getCompletedChallenges(){
+            fetch(`../back/public/index.php/getCompletedChallenges`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.completedChallenges = data;
+            });
+        },
+        newChallenge(quizzId,userId){
+            var userReq = new FormData();
+            userReq.append('quizz_id', quizzId);
+            userReq.append('challenged_id', userId);
+
+            fetch(`../back/public/index.php/newChallenge`, {
+                    method: 'POST',
+                    body: userReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status = 'pending') {
+                        Swal.fire({
+                            title: 'Result',
+                            text:'Challenge send'
+                          })
+                    } else {
+
+                        Swal.fire({
+                            title: 'Result',
+                            text: 'This friend already has played this match'
+                          })
+                    }
+                });
+        },
+        playChallenge(challengeId){
+            router.push({ path: '/questions', props: { idChallenge: challengeId } })
+        },
+        seeChallenge(quizzId, userId){
+            var userReq = new FormData();
+            userReq.append('quizz_id', quizzId);
+            userReq.append('challenged_id', userId);
+
+            fetch(`../back/public/index.php/newChallenge`, {
+                    method: 'POST',
+                    body: userReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status = 'pending') {
+                        Swal.fire({
+                            title: 'Error',
+                            text:"Challenge There's an error with this match"
+                          })
+                    } else {
+
+                        Swal.fire({
+                            title: 'Result',
+                            html:`<div>
+                            <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
+                            <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
+                        </div>`,
+                          })
+                    }
+                });
+        },
+        challengeFriends(quizzId){
+            friendId=-1;
+            Swal.fire({
+                title: 'Choose a Friend',
+                 html: `
+                 <div v-for="(friend, index) in this.friends">
+                 <button v-on:click="friendId= firend.id">{{friend.name}}</RouterLink>
+                 </div>`,
+                showCancelButton: true,
+                confirmButtonText: 'Challenge',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                var userReq = new FormData();
+                userReq.append('quizz_id', quizzId);
+                userReq.append('challenged_id', friendId);
+    
+                fetch(`../back/public/index.php/newChallenge`, {
+                        method: 'POST',
+                        body: userReq
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.status = 'pending') {
+                            Swal.fire({
+                                title: 'Result',
+                                text:'Challenge send'
+                              })
+                        } else {
+    
+                            Swal.fire({
+                                title: 'Result',
+                                text: 'This friend already has played this match'
+                              })
+                        }
+                    });
+            })
         }
     },
     template: ` 
@@ -758,7 +914,41 @@ const MyProfile = {
                     <h1>History</h1>
                 </div>
                 <div class="info__content">
-                    <playerHistory :quizzs='quizzs' :challenge='false'  @challengeQuizz='challengeQuizz'></playerHistory>
+                    <playerHistory :quizzs='quizzs' :challenge='false' @challengeQuizz='challengeFriends'></playerHistory>
+                </div>
+            </div>
+
+            <div class="info__challenges" v-show="showChallenges">
+                <div>
+                    <b-card no-body>
+                        <b-tabs card>
+                            <b-tab title="Pending" active>
+                                <b-card-text>
+                                    <div class="info__tittle">
+                                        <h1>Pending Challenges</h1>
+                                    </div>
+                                    <div class="info__content">
+                                        <div v-for="(challenge, index) in this.pendingChallenges">
+                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id)">Play</button> <button>Decline</button></p>
+                                        </div>
+                                    </div>
+                                </b-card-text>
+                            </b-tab>
+                            
+                            <b-tab title="Complited">
+                                <b-card-text>
+                                    <div class="info__tittle">
+                                        <h1>Complited Challenges</h1>
+                                    </div>
+                                    <div class="info__content">
+                                    <div v-for="(challenge, index) in this.completedChallenges">
+                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.id,challenge.challenged)">See</button></p>
+                                    </div>
+                                    </div>
+                                </b-card-text>
+                            </b-tab>
+                        </b-tabs>
+                    </b-card>
                 </div>
             </div>
         </div>
@@ -955,8 +1145,8 @@ Vue.component('playerHistory', {
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
-        <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<p><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </p></p>
-    </div>
+                <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<div v-if="isLogged"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
+        </div>
     </div>
     `
 });
