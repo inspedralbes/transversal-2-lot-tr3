@@ -135,10 +135,10 @@ const Questions = {
 
         } else if (userStore().configPlay.type == 'challenge') {
             //challenge_id
-            if(this.idChallenge!=null){
+            if (this.idChallenge != null) {
                 var challengeInfo = new FormData();
                 challengeInfo.append('challenge_id', idChallenge);
-                
+
                 fetch(`../back/public/index.php/startChallenge`, {
                         method: 'POST',
                         body: challengeInfo
@@ -150,7 +150,7 @@ const Questions = {
                         this.timer = true;
                         this.countTimer();
                     });
-            }else{
+            } else {
 
                 fetch(`../back/public/index.php/startChallenge`)
                     .then((response) => response.json())
@@ -333,7 +333,12 @@ const Profile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
+<<<<<<< HEAD
             
+=======
+            userReq.append('challengeFromProfile', false);
+
+>>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -347,11 +352,11 @@ const Profile = {
 
                         Swal.fire({
                             title: 'Result',
-                            html:`<div>
+                            html: `<div>
                                 <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
                                 <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
                             </div>`,
-                          })
+                        })
                     }
                 });
         }
@@ -575,15 +580,15 @@ const MyProfile = {
             showFriends: false,
             showPrivacy: false,
             showHistory: false,
-            showChallenges:false,
-            showChooseFriend:false,
+            showChallenges: false,
+            showChooseFriend: false,
             friends: null,
             pendentFriends: null,
             // seeRequests:false
             quizzs: null,
-            pendingChallenges:[],
-            completedChallenges:[],
-            quizzReq:-1
+            pendingChallenges: [],
+            completedChallenges: [],
+            quizzReq: -1
 
         }
     },
@@ -615,39 +620,39 @@ const MyProfile = {
     },
     methods: {
         changeView(view) {
-            this.showChooseFriend=false;
+            this.showChooseFriend = false;
             if (view == 'stats') {
                 this.showStats = !this.showStats;
 
                 this.showAccount = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
-                this.showHistory =false;
-                this.showChallenges=false;
+                this.showHistory = false;
+                this.showChallenges = false;
             } else if (view == 'account') {
                 this.showAccount = (!this.showAccount);
 
                 this.showStats = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
-                this.showHistory =false;
-                this.showChallenges=false;
+                this.showHistory = false;
+                this.showChallenges = false;
             } else if (view == 'friends') {
                 this.showFriends = !this.showFriends;
 
                 this.showStats = false;
                 this.showAccount = false;
                 this.showPrivacy = false;
-                this.showHistory =false;
-                this.showChallenges=false;
+                this.showHistory = false;
+                this.showChallenges = false;
             } else if (view == 'privacy') {
                 this.showPrivacy = !this.showPrivacy;
 
                 this.showStats = false;
                 this.showAccount = false;
                 this.showFriends = false;
-                this.showHistory =false;
-                this.showChallenges=false;
+                this.showHistory = false;
+                this.showChallenges = false;
             } else if (view == 'history') {
                 this.showHistory = !this.showHistory;
 
@@ -655,15 +660,15 @@ const MyProfile = {
                 this.showFriends = false;
                 this.showPrivacy = false;
                 this.showStats = false;
-                this.showChallenges=false;
-            }else if(view == 'challenges'){
-                this.showChallenges=!this.showChallenges;
+                this.showChallenges = false;
+            } else if (view == 'challenges') {
+                this.showChallenges = !this.showChallenges;
 
                 this.showAccount = false;
                 this.showStats = false;
                 this.showFriends = false;
                 this.showPrivacy = false;
-                this.showHistory =false;
+                this.showHistory = false;
             }
         },
         acceptFriend(id) {
@@ -727,21 +732,21 @@ const MyProfile = {
             userStore().loginInfo.idUser = -1;
             router.push('/');
         },
-        getPendingChallenges(){
+        getPendingChallenges() {
             fetch(`../back/public/index.php/getPendingChallenges`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.pendingChallenges = data;
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.pendingChallenges = data;
+                });
         },
-        getCompletedChallenges(){
+        getCompletedChallenges() {
             fetch(`../back/public/index.php/getCompletedChallenges`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.completedChallenges = data;
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    this.completedChallenges = data;
+                });
         },
-        newChallenge(quizzId,userId){
+        newChallenge(quizzId, userId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
@@ -755,22 +760,26 @@ const MyProfile = {
                     if (data.status = 'pending') {
                         Swal.fire({
                             title: 'Result',
-                            text:'Challenge send'
-                          })
+                            text: 'Challenge send'
+                        })
                     } else {
                         Swal.fire({
                             title: 'Result',
                             text: 'This friend already has played this match'
-                          })
+                        })
                     }
                     changeView('history');
                 });
         },
+<<<<<<< HEAD
         playChallenge(challengeId){
             userStore().configPlay.type='challenge';
+=======
+        playChallenge(challengeId) {
+>>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
             router.push({ path: '/questions', props: { idChallenge: challengeId } })
         },
-        seeChallenge(quizzId, userId){
+        seeChallenge(quizzId, userId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', userId);
@@ -784,34 +793,44 @@ const MyProfile = {
                     if (data.status == 'pending') {
                         Swal.fire({
                             title: 'Error',
+<<<<<<< HEAD
                             text:"There's an error with this match"
                           })
+=======
+                            text: "Challenge There's an error with this match"
+                        })
+>>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
                     } else {
 
                         Swal.fire({
                             title: 'Result',
-                            html:`<div>
+                            html: `<div>
                             <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
                             <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
                         </div>`,
-                          })
+                        })
                     }
                 });
         },
-        seeFriends(quizzId){
-            this.quizzReq=quizzId;
-            this.showChooseFriend=true;
-            this.showStats= false;
-            this.showAccount= false;
-            this.showFriends= false;
-            this.showPrivacy= false;
-            this.showHistory= false;
-            this.showChallenges=false;  
+        seeFriends(quizzId) {
+            this.quizzReq = quizzId;
+            this.showChooseFriend = true;
+            this.showStats = false;
+            this.showAccount = false;
+            this.showFriends = false;
+            this.showPrivacy = false;
+            this.showHistory = false;
+            this.showChallenges = false;
         },
-        challengeFriends(idFriend){
+        challengeFriends(idFriend) {
             var userReq = new FormData();
             userReq.append('quizz_id', this.quizzReq);
+<<<<<<< HEAD
             userReq.append('challenged_id', idFriend);  
+=======
+            userReq.append('challenged_id', idFriend);
+            userReq.append('challengeFromProfile', true);
+>>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -822,119 +841,124 @@ const MyProfile = {
                     if (data.status = 'pending') {
                         Swal.fire({
                             title: 'Result',
-                            text:'Challenge send'
-                          })
+                            text: 'Challenge send'
+                        })
                     } else {
 
                         Swal.fire({
                             title: 'Result',
                             text: 'This friend already has played this match'
-                          })
+                        })
                     }
                 });
         }
     },
     template: ` 
     <div>
-        <div class="name">
-            <h1>{{infoPlayer.name}}</h1>
-        </div>
-        <div class="lista">
-            <ul>
-                <li @click="changeView('stats')">Estadísticas</li>
-                <li @click="changeView('account')">Mi cuenta</li>
-                <li @click="changeView('friends')">Amigos</li>
-                <li @click="changeView('history')">Historial</li>
-                <li @click="changeView('privacy')">Terminos de privacidad</li>
-                <li @click="changeView('challenges')">challenges</li>
-            </ul>
-            <button @click="logOut">Log Out</button>
-        </div>
-
-        <div class="info">
-            <div class="info__status" v-show="showStats">
-                <div class="info__tittle">
-                    <h1>Stats</h1>
+        <div class="profile">
+            <div class="profile__left">
+                <div class="profile__img">
+                    <img src="IMG/cute_otter.jpg" alt="">
                 </div>
-                <div class="info__content">
-                    <playerStats :id=infoPlayer.id></playerStats>
+                <div class="profile__nickname">
+                    <h1>{{infoPlayer.nickname}}</h1>
                 </div>
-            </div>
-
-            <div class="info__account" v-show="showAccount">
-                <div class="info__tittle">
-                    <h1>Account</h1>
+                <div class="profile__list">
+                    <ul class="profile__listUl">
+                        <li @click="changeView('stats')">Estadísticas</li>
+                        <li @click="changeView('account')">Mi cuenta</li>
+                        <li @click="changeView('friends')">Amigos</li>
+                        <li @click="changeView('history')">Historial</li>
+                        <li @click="changeView('privacy')">Terminos de privacidad</li>
+                        <li @click="changeView('challenges')">challenges</li>
+                    </ul>
+                    <div class="info__buttons">
+                    <button class="profile__home home" @click="router.push('/')">Go home</button>
+                    <button class="profile__logOut" @click="logOut">Log Out</button>
                 </div>
-                <div class="info__content">
-                    <p>Aquí va la info de mi cuenta</p>
                 </div>
             </div>
+            <div class="profile__info info">
+                <div class="info__status" v-show="showStats">
+                    <div class="info__tittle">
+                        <h1>Stats</h1>
+                    </div>
+                    <div class="info__content">
+                        <playerStats :id=infoPlayer.id></playerStats>
+                    </div>
+                </div>
 
-            <div class="info__friends" v-show="showFriends">
-                <div>
-                    <b-card no-body>
-                        <b-tabs card>
-                            <b-tab title="Friends" active>
-                                <b-card-text>
-                                    <div class="info__tittle">
-                                        <h1>Friends</h1>
-                                    </div>
-                                    <div class="info__content">
-                                        <div v-for="(friend, index) in this.friends">
-                                        <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
+                <div class="info__account" v-show="showAccount">
+                    <div class="info__tittle">
+                        <h1>Account</h1>
+                    </div>
+                    <div class="info__content">
+                        <p>Aquí va la info de mi cuenta</p>
+                    </div>
+                </div>
+
+                <div class="info__friends" v-show="showFriends">
+                    <div>
+                        <b-card no-body>
+                            <b-tabs bg-variant="dark" pills card>
+                                <b-tab title="Friends" active>
+                                    <b-card-text>
+                                        <div class="info__tittle">
+                                            <h1>Friends</h1>
                                         </div>
-                                    </div>
-                                </b-card-text>
-                            </b-tab>
-                            
-                            <b-tab title="Friend Requests">
-                                <b-card-text>
-                                    <div class="info__tittle">
-                                        <h1>Friends Request</h1>
-                                    </div>
-                                    <div class="info__content">
-                                    <div v-for="(friend, index) in this.pendentFriends">
-                                        <p>{{friend.name}} <i class="fa fa-check-circle" @click="acceptFriend(friend.id)"></i> <i class="fa fa-times-circle" @click="declineFriend(friend.id)"></i></p>
-                                    </div>
-                                    </div>
-                                </b-card-text>
-                            </b-tab>
-                        </b-tabs>
-                    </b-card>
-                </div>
-            </div>
-
-            <div class="privacy" v-show="showPrivacy">
-                <div class="info__tittle">
-                    <h1>Privacy</h1>
-                </div>
-                <div class="info__content">
-                    <p>Aquí van las politicas de privacidad</p>
-                </div>
-            </div>
-
-            <div class="history" v-show="showHistory">
-                <div class="info__tittle">
-                    <h1>History</h1>
-                </div>
-                <div class="info__content">
-                    <playerHistory :quizzs='quizzs' :challenge='false' @challengeQuizz='seeFriends'></playerHistory>
-                </div>
-            </div>
-
-            <div class="info__challenges" v-show="showChallenges">
-                <div>
-                    <b-card no-body>
-                        <b-tabs card>
-                            <b-tab title="Pending" active>
-                                <b-card-text>
-                                    <div class="info__tittle">
-                                        <h1>Pending Challenges</h1>
-                                    </div>
-                                    <div class="info__content">
-                                        <div v-for="(challenge, index) in this.pendingChallenges">
-                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id)">Play</button> <button>Decline</button></p>
+                                        <div class="info__content">
+                                            <div v-for="(friend, index) in this.friends">
+                                                <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
+                                            </div>
                                         </div>
+                                    </b-card-text>
+                                </b-tab>
+
+                                <b-tab title="Friend Requests">
+                                    <b-card-text>
+                                        <div class="info__tittle">
+                                            <h1>Friends Request</h1>
+                                        </div>
+                                        <div class="info__content">
+                                            <div v-for="(friend, index) in this.pendentFriends">
+                                                <p>{{friend.name}} <i class="fa fa-check-circle" @click="acceptFriend(friend.id)"></i> <i class="fa fa-times-circle" @click="declineFriend(friend.id)"></i></p>
+                                            </div>
+                                        </div>
+                                    </b-card-text>
+                                </b-tab>
+                            </b-tabs>
+                        </b-card>
+                    </div>
+                </div>
+
+                <div class="privacy" v-show="showPrivacy">
+                    <div class="info__tittle">
+                        <h1>Privacy</h1>
+                    </div>
+                    <div class="info__content">
+                        <p>Aquí van las politicas de privacidad</p>
+                    </div>
+                </div>
+
+                <div class="history" v-show="showHistory">
+                    <div class="info__tittle">
+                        <h1>History</h1>
+                    </div>
+                    <div class="info__content">
+                        <playerHistory :quizzs='quizzs' :challenge='false' @challengeQuizz='challengeFriends'></playerHistory>
+                    </div>
+                </div>
+
+                <div class="info__challenges" v-show="showChallenges">
+                    <div>
+                        <b-card no-body>
+                            <b-tabs card>
+                                <b-tab title="Pending" active>
+                                    <b-card-text>
+                                        <div class="info__tittle">
+                                            <h1>Pending Challenges</h1>
+                                        </div>
+<<<<<<< HEAD
                                     </div>
                                 </b-card-text>
                             </b-tab>
@@ -956,18 +980,55 @@ const MyProfile = {
                     </b-card>
                 </div>
             </div>
+=======
+                                        <div class="info__content">
+                                            <div v-for="(challenge, index) in this.pendingChallenges">
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id)">Play</button> <button>Decline</button></p>
+                                            </div>
+                                        </div>
+                                    </b-card-text>
+                                </b-tab>
+>>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
 
-            <div class="history" v-show="showChooseFriend">
-                <div class="info__tittle">
-                    <h1>Choose a friend</h1>
+                                <b-tab title="Completed">
+                                    <b-card-text>
+                                        <div class="info__tittle">
+                                            <h1>Completed Challenges</h1>
+                                        </div>
+                                        <div class="info__content">
+                                            <div v-for="(challenge, index) in this.completedChallenges">
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.id,challenge.challenged)">See</button></p>
+                                            </div>
+                                        </div>
+                                    </b-card-text>
+                                </b-tab>
+
+                            </b-tabs>
+                        </b-card>
+                    </div>
                 </div>
-                <div class="info__content">
-                <div v-for="(friend, index) in this.friends">
-                    <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+
+                <div class="history" v-show="showChooseFriend">
+                    <div class="info__tittle">
+                        <h1>Choose a friend</h1>
+                    </div>
+                    <div class="info__content">
+                        <div v-for="(friend, index) in this.friends">
+                            <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                        </div>
+                    </div>
                 </div>
+                <div class="history" v-show="showChooseFriend">
+                    <div class="info__tittle">
+                        <h1>Choose a friend</h1>
+                    </div>
+                    <div class="info__content">
+                        <div v-for="(friend, index) in this.friends">
+                            <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-                            
         </div>
     </div>
 `
@@ -1085,15 +1146,15 @@ Vue.component('question', {
                 }, "1000");
 
                 //form data question_id correct(true false)
-                
+
                 fetch(`../back/public/index.php/addQuestion`, {
-                    method: 'POST',
-                    body: user
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                  
-                });
+                        method: 'POST',
+                        body: user
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+
+                    });
 
             }
             // this.sleep(5000)
@@ -1129,11 +1190,11 @@ Vue.component('question', {
 
     },
     template: `
-    <div class="card">
-        <div class="card__question">
+    <div class="cardQ">
+        <div class="cardQ__question">
             <h1>{{this.question_info.question}}</h1>
         </div>
-        <div class="card__answers answers">
+        <div class="cardQ__answers answers">
             <div class="answers__answer" v-for="(answer,index) in this.answers">
                 <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
@@ -1179,7 +1240,7 @@ Vue.component('playerStats', {
     methods: {
 
     },
-    template: ``
+    template: `<div></div>`
 });
 //Rutas
 const routes = [{
