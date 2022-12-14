@@ -124,12 +124,14 @@ h1 {
     color: white;
 }
 
-.resposta__correcte:hover {
+.resposta__correcte:hover,
+.resposta__correcte:focus {
     background-color: #7fcc67;
     color: white;
 }
 
-.resposta__incorrecte:hover {
+.resposta__incorrecte:hover,
+.resposta__incorrecte:focus {
     background-color: #d35b5b;
     color: white;
 }
