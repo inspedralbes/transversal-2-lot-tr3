@@ -1196,7 +1196,6 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
-Vue.use(VueSweetalert2);
 //Pinia
 const userStore = Pinia.defineStore('usuario', {
     state() {
