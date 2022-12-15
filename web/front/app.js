@@ -324,7 +324,7 @@ const Profile = {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.status = 'pending') {
+                    if (data.status == 'pending') {
                         if(data.challengerId==userStore().loginInfo.idUser && data.challengerScore!=null){
                             Swal.fire({
                                 title: 'Result',
@@ -335,14 +335,7 @@ const Profile = {
                             router.push('/questions');
                         }
                     } else {
-
-                        Swal.fire({
-                            title: 'Result',
-                            html: `<div>
-                                <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
-                                <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
-                            </div>`,
-                        })
+                        showResult(data);
                     }
                 });
         }
@@ -793,14 +786,7 @@ const MyProfile = {
                             text:"There's an error with this match"
                           })
                     } else {
-
-                        Swal.fire({
-                            title: 'Result',
-                            html: `<div>
-                            <div><div v-if="data.idChallenger==data.winner">WINNER</div>{{data.nicknameChallenger}} {{data.scoreChallenger}}</div>
-                            <div><div v-if="data.idChallenged==data.winner">WINNER</div>{{data.nicknameChallenged}} {{data.scoreChallenged}}</div>
-                        </div>`,
-                        })
+                        showResult(data);
                     }
                 });
         },
@@ -1382,5 +1368,43 @@ function gameType() {
             userStore().configPlay.type = 'daily';
             router.push('/questions');
         }
+    })
+}
+
+function showResult(data){
+    console.log(data);
+    let htmlString=`<div>`;
+
+    if(data.idChallenger==data.winner){
+        htmlString += `
+            <div>
+                <div>WINNER</div>
+                <div>${data.nicknameChallenger} -> ${data.scoreChallenger}</div>
+            </div>
+
+            <div>
+                <div>Nice try</div>
+                <div>${data.nicknameChallenged} -> ${data.scoreChallenged}</div>
+            </div>
+        `;
+    }else{
+        htmlString += `
+            <div>
+                <div>Nice try</div>
+                <div>${data.nicknameChallenger} -> ${data.scoreChallenger}</div>
+            </div>
+
+            <div>
+                <div>WINNER</div>
+                <div>${data.nicknameChallenged} -> ${data.scoreChallenged}</div>
+            </div>
+        `;
+    }
+
+    htmlString += `</div>`;
+
+    Swal.fire({
+        title: 'Result',
+        html: htmlString
     })
 }
