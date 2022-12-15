@@ -79,6 +79,7 @@ const Questions = {
                     .then((data) => {
                         console.log(data)
                         if (userStore().configPlay.type == 'challenge') {
+                            echo.log('actualizar challenge');
                             fetch(`../back/public/index.php/challengeCompleted`)
                                 .then((response) => response.json())
                                 .then((data) => {
@@ -750,7 +751,7 @@ const MyProfile = {
                     changeView('history');
                 });
         },
-        playChallenge(challengeId,accepted){
+        playChallenge(quizzId,accepted){
             userStore().configPlay.type='challenge';
 
             var challengeInfo = new FormData();
@@ -1067,7 +1068,12 @@ Vue.component('question', {
     data: function() {
         return {
             answers: [],
-            answered: false
+            answered: false,
+            showInfoPregunta:false,
+            infoPregunta:{
+                percentage:0,
+                yourAnswer:false
+            }
         }
     },
     methods: {
@@ -1093,20 +1099,29 @@ Vue.component('question', {
                     console.log('incorrecto');
                     this.findCorrect();
                 }
+
                 setTimeout(() => {
                     this.$emit('answered', ok);
                 }, "1000");
+                
 
                 //form data question_id correct(true false)
 
-                fetch(`../back/public/index.php/addQuestion`, {
-                        method: 'POST',
-                        body: user
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
+                // fetch(`../back/public/index.php/addQuestion`, {
+                //         method: 'POST',
+                //         body: user
+                //     })
+                //     .then((response) => response.json())
+                //     .then((data) => {
+                //         setTimeout(()=>{
 
-                    });
+                //         },5000);
+
+                //         setTimeout(() => {
+                //             this.$emit('answered', ok);
+                //         }, "1000");
+
+                //     });
 
             }
             // this.sleep(5000)
@@ -1142,13 +1157,18 @@ Vue.component('question', {
 
     },
     template: `
-    <div class="cardQ">
-        <div class="cardQ__question">
-            <h1>{{this.question_info.question}}</h1>
+    <div>
+        <div v-if="showInfoPregunta">
+            <p>You answered <p v-if="infoPregunta.yourAnswer">right</p><p v-else>wrong</p><br/> the {{infoPregunta.percentage}}% of the people answered rigth</p>
         </div>
-        <div class="cardQ__answers answers">
-            <div class="answers__answer" v-for="(answer,index) in this.answers">
-                <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+        <div class="cardQ" v-else>
+            <div class="cardQ__question">
+                <h1>{{this.question_info.question}}</h1>
+            </div>
+            <div class="cardQ__answers answers">
+                <div class="answers__answer" v-for="(answer,index) in this.answers">
+                    <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+                </div>
             </div>
         </div>
     </div>`
