@@ -27,19 +27,6 @@ class ChallengesController extends Controller
             'status' => ''
         ];
 
-        //Mirar si usuario 1 ha jugado el Quizz
-        //Mirar si usuario 2 ha jugado el Quizz
-
-        //Si los 2 usuarios han jugado el quizz mirar si hay un Challenge creado.
-            //Si hay un Challenge creado pending lo actualizamos y lo enviamos.
-            //Si hay un Challenge creado completado lo enviamos.
-            
-            //Si no hay un Challenge creado lo creamos lo completamos y lo enviamos.
-        
-        //
-
-
-
         //Check if user has played that quizz already
         $quizzPlayed = Users_quizz::where('user_id', Session::get('user_id'))
         ->where('quizz_id', $request->quizz_id)
@@ -64,20 +51,17 @@ class ChallengesController extends Controller
                 $challengePlayed->idChallenged = $challengeFound->challenged;
                 $challengePlayed->nicknameChallenged = User::where('id', $challengeFound->challenged)->first()->nickname;
 
-
-                if ($challengeFound->status  == 'pending') {
-                    $scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
-                    $scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
-                    if ($scoreChallenger != null) {
-                        $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
-                    }
-                    if ($scoreChallenged  != null) {
-                        $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
-                    }
-                    if ($scoreChallenger != null && $scoreChallenged != null) {
-                        $challengeFound->status  = 'completed';
-                    }
-                }   
+                $scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                $scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                if ($scoreChallenger != null) {
+                    $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                }
+                if ($scoreChallenged  != null) {
+                    $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                }
+                if ($scoreChallenger != null && $scoreChallenged != null) {
+                    $challengeFound->status  = 'completed';
+                }
 
                 $challengePlayed->status = $challengeFound->status;
 
@@ -104,17 +88,27 @@ class ChallengesController extends Controller
                 $newChallenge->quizz_id = $request->quizz_id;
 
                 $scoreChallenger = Users_quizz::where('user_id', $newChallenge->challenger)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
-                $scoreChallenged = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
+                
+                $challengedFound = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->count();
+                
+                if ($scoreChallenger != null) {
+                    $challengePlayed->scoreChallenger = $scoreChallenger;
+                }
 
-                if ($scoreChallenged != null) {
+                if ($challengedFound > 0) {
+                    $scoreChallenged = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
+                    $challengePlayed->scoreChallenged = $scoreChallenged;
+                }
+
+                if ($scoreChallenger != null && $challengedFound > 0) {
+                    $newChallenge->status = 'completed';
                     if ($scoreChallenger >= $scoreChallenged) {
                         $newChallenge->winner = $newChallenge->challenger;
                     } else {
                         $newChallenge->winner = $newChallenge->challenged;
                     }
-                    $newChallenge->status = 'completed';
-                } 
-                
+                }
+
                 $newChallenge->save();
                 Session::put('challenge_id', $newChallenge->id);
 
@@ -124,11 +118,9 @@ class ChallengesController extends Controller
 
                 $challengePlayed->idChallenger = $newChallenge->challenger;
                 $challengePlayed->nicknameChallenger = User::where('id', $newChallenge->challenger)->first()->nickname;
-                $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $newChallenge->challenger)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
 
                 $challengePlayed->idChallenged = $newChallenge->challenged;
                 $challengePlayed->nicknameChallenged = User::where('id', $newChallenge->challenged)->first()->nickname;
-                $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $newChallenge->challenged)->where('quizz_id', $newChallenge->quizz_id)->first()->score;
 
                 $challengePlayed->status = $newChallenge->status;
 
@@ -140,16 +132,6 @@ class ChallengesController extends Controller
             $challengeCount = Challenge::where('challenger', Session::get('user_id'))->where('challenged', $request->challenged_id)->where('quizz_id', $request->quizz_id)
             ->orwhere('challenger', $request->challenged_id)->where('challenged', Session::get('user_id'))->where('quizz_id', $request->quizz_id)
             ->count();
-     
-                // 'id' => '',
-                // 'winner' => '',
-                // 'idChallenger' => '',
-                // 'nicknameChallenger' => '',
-                // 'scoreChallenger' => '',
-                // 'idChallenged' => '',
-                // 'nicknameChallenged' => '',
-                // 'scoreChallenged' => '',
-                // 'status' => ''
 
             if ($challengeCount > 0) {
                 //Challenge exists because the other player has created it.
@@ -164,7 +146,8 @@ class ChallengesController extends Controller
                 $challengePlayed -> idChallenged = Session::get('user_id');
                 $challengePlayed -> nicknameChallenged = User::where('id', Session::get('user_id'))->first()->nickname;
                 $challengePlayed -> scoreChallenged = -1;
-                $challengePlayed -> status = 'pending';
+                $challengePlayed -> status = 'pending';     
+                $returnChallenge = $challengePlayed;
             } else {
                 $newChallenge = new Challenge;
                 $newChallenge->challenger = Session::get('user_id');
