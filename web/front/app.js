@@ -15,7 +15,7 @@ const Template = {
 
 const Questions = {
     params: true,
-    props: ['idChallenge'],
+    props: [],
     data: function() {
         return {
             quizz: null,
@@ -134,35 +134,19 @@ const Questions = {
                 });
 
         } else if (userStore().configPlay.type == 'challenge') {
-            //challenge_id
-            if (this.idChallenge != null) {
-                var challengeInfo = new FormData();
-                challengeInfo.append('challenge_id', idChallenge);
+            
 
-                fetch(`../back/public/index.php/startChallenge`, {
-                        method: 'POST',
-                        body: challengeInfo
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.quizz = data;
-                        this.nQuestion = Object.keys(this.quizz).length - 1;
-                        this.timer = true;
-                        this.countTimer();
-                    });
-            } else {
-
-                fetch(`../back/public/index.php/startChallenge`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.quizz = data;
-                        this.nQuestion = Object.keys(this.quizz).length - 1;
-                        this.timer = true;
-                        this.countTimer();
-                    }).catch((error) => {
-                        console.error('Error:', error);
-                    });
-            }
+            fetch(`../back/public/index.php/startChallenge`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.quizz = data;
+                    this.nQuestion = Object.keys(this.quizz).length - 1;
+                    this.timer = true;
+                    this.countTimer();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+            
 
         } else {
             //fetch a la api externa 
@@ -333,12 +317,7 @@ const Profile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-<<<<<<< HEAD
             
-=======
-            userReq.append('challengeFromProfile', false);
-
->>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -346,8 +325,15 @@ const Profile = {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status = 'pending') {
-                        userStore().configPlay.type = 'challenge'
-                        router.push('/questions');
+                        if(data.challengerId==userStore().loginInfo.idUser && data.challengerScore!=null){
+                            Swal.fire({
+                                title: 'Result',
+                                text: `You already challenged this play, wait for the other to play`,
+                            })
+                        }else{
+                            userStore().configPlay.type = 'challenge'
+                            router.push('/questions');
+                        }
                     } else {
 
                         Swal.fire({
@@ -771,13 +757,24 @@ const MyProfile = {
                     changeView('history');
                 });
         },
-<<<<<<< HEAD
-        playChallenge(challengeId){
+        playChallenge(challengeId,accepted){
             userStore().configPlay.type='challenge';
-=======
-        playChallenge(challengeId) {
->>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
-            router.push({ path: '/questions', props: { idChallenge: challengeId } })
+
+            var challengeInfo = new FormData();
+            challengeInfo.append('quizz_id', quizzId);
+            challengeInfo.append('accepted',accepted);
+            
+            fetch(`../back/public/index.php/`, {
+                method: 'POST',
+                body: challengeInfo
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data=='ok') {
+                    router.push('/questions');
+                }                
+            });
+            // router.push({ path: '/questions', props: { idChallenge: challengeId } })
         },
         seeChallenge(quizzId, userId) {
             var userReq = new FormData();
@@ -793,13 +790,8 @@ const MyProfile = {
                     if (data.status == 'pending') {
                         Swal.fire({
                             title: 'Error',
-<<<<<<< HEAD
                             text:"There's an error with this match"
                           })
-=======
-                            text: "Challenge There's an error with this match"
-                        })
->>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
                     } else {
 
                         Swal.fire({
@@ -825,12 +817,7 @@ const MyProfile = {
         challengeFriends(idFriend) {
             var userReq = new FormData();
             userReq.append('quizz_id', this.quizzReq);
-<<<<<<< HEAD
             userReq.append('challenged_id', idFriend);  
-=======
-            userReq.append('challenged_id', idFriend);
-            userReq.append('challengeFromProfile', true);
->>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -958,46 +945,22 @@ const MyProfile = {
                                         <div class="info__tittle">
                                             <h1>Pending Challenges</h1>
                                         </div>
-<<<<<<< HEAD
-                                    </div>
-                                </b-card-text>
-                            </b-tab>
-                            
-                            <b-tab title="Complited">
-                                <b-card-text>
-                                    <div class="info__tittle">
-                                        <h1>Complited Challenges</h1>
-                                    </div>
-                                    <div class="info__content">
-                                    <div v-for="(challenge, index) in this.completedChallenges">
-                                        <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
-                                    </div>
-                                    </div>
-                                </b-card-text>
-                            </b-tab>
-
-                        </b-tabs>
-                    </b-card>
-                </div>
-            </div>
-=======
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.pendingChallenges">
-                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id)">Play</button> <button>Decline</button></p>
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.quizz_id,true)">Play</button><button @click="playChallenge(challenge.quizz_id,false)">Decline</button></p>
                                             </div>
                                         </div>
                                     </b-card-text>
                                 </b-tab>
->>>>>>> 8e620ba5807b51fc57238e076725d8043706f2c2
-
-                                <b-tab title="Completed">
+                            
+                                <b-tab title="Complited">
                                     <b-card-text>
                                         <div class="info__tittle">
-                                            <h1>Completed Challenges</h1>
+                                            <h1>Complited Challenges</h1>
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.completedChallenges">
-                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.id,challenge.challenged)">See</button></p>
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
                                             </div>
                                         </div>
                                     </b-card-text>
@@ -1095,16 +1058,19 @@ const Ranking = {
                 });
         }
     },
-    template: `<div>
+    // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+    template: `
+    <div>
         <div v-for="(player, index) in this.players">
             <div v-if="player.id!=user.idUser">
-                <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p>
+                <p><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id">{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p>
             </div>
+
             <div v-else>
-            <div>
-                <RouterLink class="wrapperIndex__routerProfile" to="/profile/"><p>{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink></p>
+                <RouterLink class="wrapperIndex__routerProfile" to="/profile/"><p>{{index + 1}} {{player.nickname}} {{player.elo}}</p></RouterLink>
             </div>
         </div>
+        
     </div>`
 
 }
