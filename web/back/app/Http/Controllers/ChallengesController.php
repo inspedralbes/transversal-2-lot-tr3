@@ -210,4 +210,18 @@ class ChallengesController extends Controller
 
         return response()->json($getChallenges);
     }
+
+    public function updateChallenge(Request $request)
+    {
+        if ($request -> saveChallenge) {
+            Session::put('challenge_id', $request -> challengeId);
+        } else {
+            $updateChallenge = Challenge::find($request -> challengeId);
+            $updateChallenge -> status = 'declined';
+            $updateChallenge -> save();
+        }
+
+        return response()->json('OK');
+    }
+    
 }
