@@ -1132,6 +1132,7 @@ Vue.component('question', {
                     })
                     .then((response) => response.json())
                     .then((data) => {
+                        this.infoPregunta.persentage=data.correct*100/data.all;
                         setTimeout(()=>{
                             // this.$emit('stopTimer');
                             this.showInfoPregunta=true;
