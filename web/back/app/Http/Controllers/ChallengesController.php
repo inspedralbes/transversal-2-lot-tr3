@@ -221,7 +221,7 @@ class ChallengesController extends Controller
             $updateChallenge -> save();
         }
 
-        return response()->json('OK');
+        return response()->json('ok');
     }
     
 }
