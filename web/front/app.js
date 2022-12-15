@@ -93,6 +93,13 @@ const Questions = {
                     });
                 // console.log('fetch');
             }
+        },
+        stopTimer(){
+            this.timer=false;
+        },
+        startTimer(){
+            this.timer=true;
+            this.countTimer();
         }
     },
     computed: {
@@ -178,7 +185,7 @@ const Questions = {
                 <div v-show="index==actualQ">
                     <p>{{index+1}}</p>
                     <p>Time:{{time}}</p>
-                    <question :question_info=question @answered='goNext'></question>
+                    <question :question_info=question @answered='goNext' @stopTimer="stopTimer" @startTimer="startTimer"></question>
                 </div>
             </div>
             <div v-show="nQuestion<actualQ">
@@ -756,9 +763,9 @@ const MyProfile = {
 
             var challengeInfo = new FormData();
             challengeInfo.append('quizz_id', quizzId);
-            challengeInfo.append('accepted',accepted);
+            challengeInfo.append('saveChallenge',accepted);
             
-            fetch(`../back/public/index.php/`, {
+            fetch(`../back/public/index.php/updateChallenge`, {
                 method: 'POST',
                 body: challengeInfo
             })
@@ -1094,15 +1101,25 @@ Vue.component('question', {
                     answer.correct = true;
                     console.log('correcto');
                     ok = true;
+                    this.infoPregunta.yourAnswer=true;
                 } else {
                     answer.incorrect = true;
                     console.log('incorrecto');
                     this.findCorrect();
+                    this.infoPregunta.yourAnswer=false;
                 }
 
+                this.$emit('stopTimer');
+                setTimeout(()=>{
+                    // this.$emit('stopTimer');
+                    this.showInfoPregunta=true;
+                },1000);
+
                 setTimeout(() => {
+                    this.showInfoPregunta=false;
+                    this.$emit('startTimer');
                     this.$emit('answered', ok);
-                }, "1000");
+                }, "5000");
                 
 
                 //form data question_id correct(true false)
