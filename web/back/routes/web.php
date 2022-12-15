@@ -61,6 +61,7 @@ Route::post('newChallenge', [ChallengesController::class , 'newChallenge']);
 Route::get('startChallenge', [QuizzsController::class , 'startChallenge']);
 Route::post('startChallenge', [QuizzsController::class , 'startChallenge']);
 Route::get('challengeCompleted', [ChallengesController::class , 'challengeCompleted']);
+Route::post('updateChallenge', [ChallengesController::class , 'updateChallenge']);
 
 Route::get('getPendingChallenges', [ChallengesController::class , 'getPendingChallenges']);
 Route::get('getCompletedChallenges', [ChallengesController::class , 'getCompletedChallenges']);
