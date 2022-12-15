@@ -1074,7 +1074,12 @@ Vue.component('question', {
     data: function() {
         return {
             answers: [],
-            answered: false
+            answered: false,
+            showInfoPregunta:false,
+            infoPregunta:{
+                yourAnswer:false,
+                persentage:0
+            }
         }
     },
     methods: {
@@ -1104,19 +1109,22 @@ Vue.component('question', {
                 }
 
                 this.$emit('stopTimer');
-                setTimeout(()=>{
-                    // this.$emit('stopTimer');
-                    this.showInfoPregunta=true;
-                },1000);
+                // setTimeout(()=>{
+                //     // this.$emit('stopTimer');
+                //     this.showInfoPregunta=true;
+                // },1000);
 
-                setTimeout(() => {
-                    this.showInfoPregunta=false;
-                    this.$emit('startTimer');
-                    this.$emit('answered', ok);
-                }, "5000");
+                // setTimeout(() => {
+                //     this.showInfoPregunta=false;
+                //     this.$emit('startTimer');
+                //     this.$emit('answered', ok);
+                // }, "5000");
                 
 
                 //form data question_id correct(true false)
+                var infoQ=new FormData();
+                infoQ.append('question_id',this.question_info.id);
+                infoQ.append('correct',ok);
 
                 fetch(`../back/public/index.php/addQuestion`, {
                         method: 'POST',
@@ -1124,7 +1132,16 @@ Vue.component('question', {
                     })
                     .then((response) => response.json())
                     .then((data) => {
+                        setTimeout(()=>{
+                            // this.$emit('stopTimer');
+                            this.showInfoPregunta=true;
+                        },1000);
 
+                        setTimeout(() => {
+                            this.showInfoPregunta=false;
+                            this.$emit('startTimer');
+                            this.$emit('answered', ok);
+                        }, "5000");
                     });
 
             }
@@ -1161,13 +1178,18 @@ Vue.component('question', {
 
     },
     template: `
-    <div class="cardQ">
-        <div class="cardQ__question">
-            <h1>{{this.question_info.question}}</h1>
+    <div>
+        <div v-if="showInfoPregunta" class="cardQ">
+            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
         </div>
-        <div class="cardQ__answers answers">
-            <div class="answers__answer" v-for="(answer,index) in this.answers">
-                <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+        <div v-else class="cardQ">
+            <div class="cardQ__question">
+                <h1>{{this.question_info.question}}</h1>
+            </div>
+            <div class="cardQ__answers answers">
+                <div class="answers__answer" v-for="(answer,index) in this.answers">
+                    <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+                </div>
             </div>
         </div>
     </div>`
