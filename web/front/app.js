@@ -761,7 +761,7 @@ const MyProfile = {
             userStore().configPlay.type='challenge';
 
             var challengeInfo = new FormData();
-            challengeInfo.append('quizz_id', quizzId);
+            challengeInfo.append('challenge_id', challengeId);
             challengeInfo.append('saveChallenge',accepted);
             
             fetch(`../back/public/index.php/updateChallenge`, {
@@ -940,7 +940,7 @@ const MyProfile = {
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.pendingChallenges">
-                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.quizz_id,true)">Play</button><button @click="playChallenge(challenge.quizz_id,false)">Decline</button></p>
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id,true)">Play</button><button @click="playChallenge(challenge.id,false)">Decline</button></p>
                                             </div>
                                         </div>
                                     </b-card-text>
