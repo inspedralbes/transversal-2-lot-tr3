@@ -932,7 +932,7 @@ const MyProfile = {
                         <h1>History</h1>
                     </div>
                     <div class="info__content">
-                        <playerHistory :quizzs='quizzs' :challenge='false' @challengeQuizz='challengeFriends'></playerHistory>
+                        <playerHistory :quizzs='quizzs' :challenge='false' @challengeQuizz='seeFriends'></playerHistory>
                     </div>
                 </div>
 
