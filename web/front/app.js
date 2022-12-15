@@ -1128,7 +1128,7 @@ Vue.component('question', {
 
                 fetch(`../back/public/index.php/addQuestion`, {
                         method: 'POST',
-                        body: user
+                        body: infoQ
                     })
                     .then((response) => response.json())
                     .then((data) => {
