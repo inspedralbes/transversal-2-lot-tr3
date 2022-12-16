@@ -93,11 +93,11 @@ const Questions = {
                 // console.log('fetch');
             }
         },
-        stopTimer(){
-            this.timer=false;
+        stopTimer() {
+            this.timer = false;
         },
-        startTimer(){
-            this.timer=true;
+        startTimer() {
+            this.timer = true;
             this.countTimer();
         }
     },
@@ -141,7 +141,7 @@ const Questions = {
                 });
 
         } else if (userStore().configPlay.type == 'challenge') {
-            
+
 
             fetch(`../back/public/index.php/startChallenge`)
                 .then((response) => response.json())
@@ -153,7 +153,7 @@ const Questions = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-            
+
 
         } else {
             //fetch a la api externa 
@@ -229,7 +229,7 @@ const Index = {
                     <RouterLink class="wrapperIndex__routerProfile" to="/profile"><button class="wrapperIndex__profile">Profile</button></RouterLink>
                 </div>
             </div>
-
+            <h1 class="indexTitle">✨THE CAT QUIZZ✨</h1>
             <div class="center">
                 <div v-if='!isLogged' class="center__grid">
                     <div class="center__grid1"><input type="text" placeholder="Introduce nickname" class="center__input"></div>
@@ -324,7 +324,7 @@ const Profile = {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
             userReq.append('challenged_id', this.user.id);
-            
+
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
                     body: userReq
@@ -332,12 +332,12 @@ const Profile = {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status == 'pending') {
-                        if(data.challengerId==userStore().loginInfo.idUser && data.challengerScore!=null){
+                        if (data.challengerId == userStore().loginInfo.idUser && data.challengerScore != null) {
                             Swal.fire({
                                 title: 'Result',
                                 text: `You already challenged this play, wait for the other to play`,
                             })
-                        }else{
+                        } else {
                             userStore().configPlay.type = 'challenge'
                             router.push('/questions');
                         }
@@ -757,23 +757,23 @@ const MyProfile = {
                     changeView('history');
                 });
         },
-        playChallenge(challengeId,accepted){
-            userStore().configPlay.type='challenge';
+        playChallenge(challengeId, accepted) {
+            userStore().configPlay.type = 'challenge';
 
             var challengeInfo = new FormData();
             challengeInfo.append('challenge_id', challengeId);
-            challengeInfo.append('saveChallenge',accepted);
-            
+            challengeInfo.append('saveChallenge', accepted);
+
             fetch(`../back/public/index.php/updateChallenge`, {
-                method: 'POST',
-                body: challengeInfo
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data=='ok') {
-                    router.push('/questions');
-                }                
-            });
+                    method: 'POST',
+                    body: challengeInfo
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data == 'ok') {
+                        router.push('/questions');
+                    }
+                });
             // router.push({ path: '/questions', props: { idChallenge: challengeId } })
         },
         seeChallenge(quizzId, userId) {
@@ -790,8 +790,8 @@ const MyProfile = {
                     if (data.status == 'pending') {
                         Swal.fire({
                             title: 'Error',
-                            text:"There's an error with this match"
-                          })
+                            text: "There's an error with this match"
+                        })
                     } else {
                         showResult(data);
                     }
@@ -810,7 +810,7 @@ const MyProfile = {
         challengeFriends(idFriend) {
             var userReq = new FormData();
             userReq.append('quizz_id', this.quizzReq);
-            userReq.append('challenged_id', idFriend);  
+            userReq.append('challenged_id', idFriend);
 
             fetch(`../back/public/index.php/newChallenge`, {
                     method: 'POST',
@@ -880,15 +880,17 @@ const MyProfile = {
                 <div class="info__friends" v-show="showFriends">
                     <div>
                         <b-card no-body>
-                            <b-tabs bg-variant="dark" pills card>
+                            <b-tabs pills card>
                                 <b-tab title="Friends" active>
                                     <b-card-text>
                                         <div class="info__tittle">
                                             <h1>Friends</h1>
                                         </div>
                                         <div class="info__content">
-                                            <div v-for="(friend, index) in this.friends">
-                                                <RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
+                                            <div v-for="(friend, index) in this.friends" >
+                                                <div class="wrapperFriends">
+                                                    <RouterLink class="infoFriends__routerProfile" :to="'/profile/'+friend.id">{{friend.name}}</RouterLink>
+                                                </div>
                                             </div>
                                         </div>
                                     </b-card-text>
@@ -901,7 +903,9 @@ const MyProfile = {
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(friend, index) in this.pendentFriends">
+                                            <div class="wrapperFriends">
                                                 <p>{{friend.name}} <i class="fa fa-check-circle" @click="acceptFriend(friend.id)"></i> <i class="fa fa-times-circle" @click="declineFriend(friend.id)"></i></p>
+                                            </div>
                                             </div>
                                         </div>
                                     </b-card-text>
@@ -932,7 +936,7 @@ const MyProfile = {
                 <div class="info__challenges" v-show="showChallenges">
                     <div>
                         <b-card no-body>
-                            <b-tabs card>
+                            <b-tabs pills card>
                                 <b-tab title="Pending" active>
                                     <b-card-text>
                                         <div class="info__tittle">
@@ -940,21 +944,26 @@ const MyProfile = {
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.pendingChallenges">
-                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id,true)">Play</button><button @click="playChallenge(challenge.id,false)">Decline</button></p>
+                                                <div class="wrapperChallenge">
+                                                    <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="playChallenge(challenge.id,true)">Play</button><button @click="playChallenge(challenge.id,false)">Decline</button></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </b-card-text>
                                 </b-tab>
                             
-                                <b-tab title="Complited">
+                                <b-tab title="Completed">
                                     <b-card-text>
                                         <div class="info__tittle">
-                                            <h1>Complited Challenges</h1>
+                                            <h1>Completed Challenges</h1>
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.completedChallenges">
+                                            <div class="wrapperChallenge">
                                                 <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
                                             </div>
+                                            </div>
+
                                         </div>
                                     </b-card-text>
                                 </b-tab>
@@ -970,7 +979,9 @@ const MyProfile = {
                     </div>
                     <div class="info__content">
                         <div v-for="(friend, index) in this.friends">
+                        <div class="wrapperChallenge">
                             <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -980,7 +991,9 @@ const MyProfile = {
                     </div>
                     <div class="info__content">
                         <div v-for="(friend, index) in this.friends">
+                        <div class="wrapperChallenge"></div>
                             <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -1054,16 +1067,47 @@ const Ranking = {
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
     template: `
     <div>
-        <div v-for="(player, index) in this.players">
-            <div v-if="player.id!=user.idUser">
-                <p><RouterLink class="wrapperIndex__routerProfile" :to="'/profile/'+player.id">{{index + 1}} {{player.nickname}} {{player.elo}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p>
+        <div class="ranking">
+        <h1 class="ranking__title">RANKING</h1>
+                <div class="ranking__players">
+                    <div class="ranking__table">
+                    <div>
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>TOP</th><th>NICKNAME</th><th>ELO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(player, index) in this.players" v-if="player.id!=user.idUser">
+                                    <td>{{index + 1}}</td>
+                                    <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
+                                    <td>{{player.elo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>   
+                    <div v-else>
+                    <div class="ranking__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TOP</th><th>NICKNAME</th><th>ELO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{index + 1}}</td>
+                                <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
+                                <td>{{player.elo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>   
             </div>
-
-            <div v-else>
-                <RouterLink class="wrapperIndex__routerProfile" to="/profile/"><p>{{index + 1}} {{player.nickname}} {{player.elo}}</p></RouterLink>
+                </div>
             </div>
         </div>
-        
     </div>`
 
 }
@@ -1075,10 +1119,10 @@ Vue.component('question', {
         return {
             answers: [],
             answered: false,
-            showInfoPregunta:false,
-            infoPregunta:{
-                yourAnswer:false,
-                persentage:0
+            showInfoPregunta: false,
+            infoPregunta: {
+                yourAnswer: false,
+                persentage: 0
             }
         }
     },
@@ -1100,12 +1144,12 @@ Vue.component('question', {
                     answer.correct = true;
                     console.log('correcto');
                     ok = true;
-                    this.infoPregunta.yourAnswer=true;
+                    this.infoPregunta.yourAnswer = true;
                 } else {
                     answer.incorrect = true;
                     console.log('incorrecto');
                     this.findCorrect();
-                    this.infoPregunta.yourAnswer=false;
+                    this.infoPregunta.yourAnswer = false;
                 }
 
                 this.$emit('stopTimer');
@@ -1119,12 +1163,12 @@ Vue.component('question', {
                 //     this.$emit('startTimer');
                 //     this.$emit('answered', ok);
                 // }, "5000");
-                
+
 
                 //form data question_id correct(true false)
-                var infoQ=new FormData();
-                infoQ.append('question_id',this.question_info.id);
-                infoQ.append('correct',ok);
+                var infoQ = new FormData();
+                infoQ.append('question_id', this.question_info.id);
+                infoQ.append('correct', ok);
 
                 fetch(`../back/public/index.php/addQuestion`, {
                         method: 'POST',
@@ -1132,14 +1176,14 @@ Vue.component('question', {
                     })
                     .then((response) => response.json())
                     .then((data) => {
-                        this.infoPregunta.persentage=data.correct*100/data.all;
-                        setTimeout(()=>{
+                        this.infoPregunta.persentage = data.correct * 100 / data.all;
+                        setTimeout(() => {
                             // this.$emit('stopTimer');
-                            this.showInfoPregunta=true;
-                        },1000);
+                            this.showInfoPregunta = true;
+                        }, 1000);
 
                         setTimeout(() => {
-                            this.showInfoPregunta=false;
+                            this.showInfoPregunta = false;
                             this.$emit('startTimer');
                             this.$emit('answered', ok);
                         }, "5000");
@@ -1413,11 +1457,11 @@ function gameType() {
     })
 }
 
-function showResult(data){
+function showResult(data) {
     console.log(data);
-    let htmlString=`<div>`;
+    let htmlString = `<div>`;
 
-    if(data.idChallenger==data.winner){
+    if (data.idChallenger == data.winner) {
         htmlString += `
             <div>
                 <div>WINNER</div>
@@ -1429,7 +1473,7 @@ function showResult(data){
                 <div>${data.nicknameChallenged} -> ${data.scoreChallenged}</div>
             </div>
         `;
-    }else{
+    } else {
         htmlString += `
             <div>
                 <div>Nice try</div>
