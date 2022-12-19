@@ -859,8 +859,7 @@ th {
     border: 5px dotted #fd94bc;
 }
 
-.rankingButton__Daily,
-.rankingButton__Home p {
+.rankingButton__Daily p {
     margin-bottom: 0;
 }
 
@@ -935,4 +934,9 @@ th {
     box-shadow: 0 0 0 2px #422c314d, 0 0 #422c314d;
     box-shadow: 0px 20px 18px -3px #000;
     transform: translate3d(0, 0, -1em);
+}
+
+.rankingButton__Home {
+    float: right;
+    margin-right: 50px;
 }
