@@ -291,7 +291,8 @@ const Profile = {
             },
             showStats: true,
             showHistory: false,
-            quizzs: []
+            quizzs: [],
+            quizzs_ready:false
         }
     },
     mounted() {
@@ -316,6 +317,7 @@ const Profile = {
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
+                this.quizzs_ready=true;
             });
         // console.log(this.$route.params.id);
     },
@@ -381,7 +383,7 @@ const Profile = {
                 <h1>Stats</h1>
             </div>
             <div class="info__content">
-                <playerStats :id='user.id'></playerStats>
+                <playerStats :games=quizzs :ready=quizzs_ready ></playerStats>
             </div>
         </div>
 
@@ -1163,26 +1165,7 @@ const Ranking = {
         </div> 
     </div>`
 
-    }
-    /* <div v-else>
-                        <div class="ranking__table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>TOP</th><th>NICKNAME</th><th>ELO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{index + 1}}</td>
-                                    <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
-                                    <td>{{player.elo}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>    */
-
-
+}
 
 Vue.component('question', {
     props: ['question_info', 'time'],
