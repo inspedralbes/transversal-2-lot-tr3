@@ -1,0 +1,54 @@
+/* -----------------------------------------INDEX----------------------------------------- */
+
+@media (max-width: 900px) {
+    .indexTitle {
+        margin: 0;
+        font-family: 'Shiny flakes';
+        font-size: 30px;
+    }
+    .center {
+        height: 40%;
+        width: 80%;
+        padding: 40px;
+        border-radius: 10px;
+    }
+    .center__input {
+        width: 100%;
+        font-size: 15px;
+        margin: auto;
+    }
+    .wrapperIndex__login,
+    .wrapperIndex__profile,
+    .wrapperIndex__ranking {
+        width: 90%;
+        font-size: 11px;
+        margin: auto;
+        height: 50px;
+        padding: 5px;
+    }
+    .center__play {
+        width: 100%;
+    }
+    .wrapperIndex__ranking {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+    .wrapperIndex__login,
+    .wrapperIndex__profile {
+        grid-area: 1 / 2 / 2 / 3;
+        float: right;
+        align-self: flex-end;
+    }
+    .wrapper__index {
+        padding: 30px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+        margin-bottom: 60px;
+    }
+    /* --------------------------------RANKING---------------------------------------- */
+    .ranking {
+        padding: 10px;
+    }
+}

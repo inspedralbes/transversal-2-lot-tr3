@@ -37,6 +37,23 @@ const Questions = {
             if (this.nQuestion < this.actualQ) {
                 this.recordGame();
             }
+            this.carousel();
+        },
+        carousel: function() {
+            let buttons = document.getElementsByClassName('answers__button');
+
+
+            for (const button of buttons) {
+                button.addEventListener("click", function girar(event) {
+                    let id = event.target.id;
+                    if (id == 3) {
+                        id = 0;
+                    }
+                    console.log(`item-${id}  y  item${id++}`);
+                    document.getElementById(`item-${id++}`).click();
+                });
+            }
+
         },
         countTimer() {
             // console.log('timer');
@@ -834,7 +851,7 @@ const MyProfile = {
                     }
                 });
         },
-        goHome(){
+        goHome() {
             router.push('/');
         }
     },
@@ -1010,72 +1027,77 @@ const MyProfile = {
 }
 
 const Ranking = {
-    data: function() {
-        return {
-            players: [],
-            dailyRanq:[],
-            viewGeneral:true
-        }
-    },
-    mounted() {
-        fetch(`../back/public/index.php/getRanking`)
-            .then((response) => response.json())
-            .then((data) => {
-                this.players = data;
-            }).catch((error) => {
-                console.error('Error:', error);
-            });
-        // this.players=[{
-        //     nickname:'',
-        //     elo: -1,
-        //     id: -1
-        // },
-        // {
-        //     nickname:'',
-        //     elo: -1,
-        //     id: -1
-        // }]
-    },
-    computed: {
-        isLogged() {
-            return userStore().logged;
+        data: function() {
+            return {
+                players: [],
+                dailyRanq: [],
+                viewGeneral: true
+            }
         },
-        user() {
-            return userStore().loginInfo;
-        }
-    },
-    methods: {
-        addFriend(id) {
-            var friendReq = new FormData();
-            friendReq.append('id', id);
-
-            fetch(`../back/public/index.php/addFriend`, {
-                    method: 'POST',
-                    body: friendReq
-                })
+        mounted() {
+            fetch(`../back/public/index.php/getRanking`)
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data == "ERROR") {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'this user is already your friend or already has a pending request',
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Done',
-                            text: 'Request sent, wait for your friend to accept it!',
-                        })
-                    }
+                    this.players = data;
+                }).catch((error) => {
+                    console.error('Error:', error);
                 });
-        }
-    },
-    // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
-    template: `
+            // this.players=[{
+            //     nickname:'',
+            //     elo: -1,
+            //     id: -1
+            // },
+            // {
+            //     nickname:'',
+            //     elo: -1,
+            //     id: -1
+            // }]
+        },
+        computed: {
+            isLogged() {
+                return userStore().logged;
+            },
+            user() {
+                return userStore().loginInfo;
+            }
+        },
+        methods: {
+            addFriend(id) {
+                var friendReq = new FormData();
+                friendReq.append('id', id);
+
+                fetch(`../back/public/index.php/addFriend`, {
+                        method: 'POST',
+                        body: friendReq
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data == "ERROR") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'this user is already your friend or already has a pending request',
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Done',
+                                text: 'Request sent, wait for your friend to accept it!',
+                            })
+                        }
+                    });
+            },
+            goHome() {
+                router.push('/');
+            }
+        },
+
+        // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+        template: `
     <div>
-    <button @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
-        <div class="ranking" v-if="viewGeneral">
+    <button class="rankingButton__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
+    <button class="rankingButton__Home" @click="goHome">Go home</button>   
+    <div class="ranking" v-if="viewGeneral">
             <h1 class="ranking__title">RANKING</h1>
             <div class="ranking__players">
                 <div class="ranking__table">
@@ -1141,28 +1163,29 @@ const Ranking = {
         </div> 
     </div>`
 
-}
-{/* <div v-else>
-                    <div class="ranking__table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>TOP</th><th>NICKNAME</th><th>ELO</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{index + 1}}</td>
-                                <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
-                                <td>{{player.elo}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>    */}
+    }
+    /* <div v-else>
+                        <div class="ranking__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>TOP</th><th>NICKNAME</th><th>ELO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{index + 1}}</td>
+                                    <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
+                                    <td>{{player.elo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    */
+
 
 
 Vue.component('question', {
-    props: ['question_info','time'],
+    props: ['question_info', 'time'],
     data: function() {
         return {
             answers: [],
@@ -1171,7 +1194,8 @@ Vue.component('question', {
             infoPregunta: {
                 yourAnswer: false,
                 persentage: 0
-            }
+            },
+            defaultClass: 'answers__button'
         }
     },
     methods: {
@@ -1268,21 +1292,46 @@ Vue.component('question', {
 
         this.answers.push(a);
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
-
+        //     <div v-if="showInfoPregunta" class="cardQ">
+        //     <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+        // </div>
     },
     template: `
     <div>
-        <div v-if="showInfoPregunta" class="cardQ">
-            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
-        </div>
-        <div v-else class="cardQ">
-            <b-progress :value="15-time" :max="15" class="mb-3"></b-progress>
-            <div class="cardQ__question">
-                <h1>{{this.question_info.question}}</h1>
-            </div>
-            <div class="cardQ__answers answers">
-                <div class="answers__answer" v-for="(answer,index) in this.answers">
-                    <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+        <div class="cardContainer">
+            <input type="radio" name="slider" id="item-1" checked>
+            <input type="radio" name="slider" id="item-2">
+            <input type="radio" name="slider" id="item-3">
+            <div class="cards">
+                <div class="cardQ" for="item-1" id="card-1">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="1" @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardQ" for="item-2" id="card-2">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="2"  @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardQ" for="item-3" id="card-3">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="3"  @click="validate(index)"  :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
