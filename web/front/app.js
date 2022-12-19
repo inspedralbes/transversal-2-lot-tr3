@@ -37,6 +37,23 @@ const Questions = {
             if (this.nQuestion < this.actualQ) {
                 this.recordGame();
             }
+            this.carousel();
+        },
+        carousel: function() {
+            let buttons = document.getElementsByClassName('answers__button');
+
+
+            for (const button of buttons) {
+                button.addEventListener("click", function girar(event) {
+                    let id = event.target.id;
+                    if (id == 3) {
+                        id = 0;
+                    }
+                    console.log(`item-${id}  y  item${id++}`);
+                    document.getElementById(`item-${id++}`).click();
+                });
+            }
+
         },
         countTimer() {
             // console.log('timer');
@@ -1123,7 +1140,8 @@ Vue.component('question', {
             infoPregunta: {
                 yourAnswer: false,
                 persentage: 0
-            }
+            },
+            defaultClass: 'answers__button'
         }
     },
     methods: {
@@ -1220,20 +1238,46 @@ Vue.component('question', {
 
         this.answers.push(a);
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
-
+        //     <div v-if="showInfoPregunta" class="cardQ">
+        //     <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+        // </div>
     },
     template: `
     <div>
-        <div v-if="showInfoPregunta" class="cardQ">
-            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
-        </div>
-        <div v-else class="cardQ">
-            <div class="cardQ__question">
-                <h1>{{this.question_info.question}}</h1>
-            </div>
-            <div class="cardQ__answers answers">
-                <div class="answers__answer" v-for="(answer,index) in this.answers">
-                    <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
+        <div class="cardContainer">
+            <input type="radio" name="slider" id="item-1" checked>
+            <input type="radio" name="slider" id="item-2">
+            <input type="radio" name="slider" id="item-3">
+            <div class="cards">
+                <div class="cardQ" for="item-1" id="card-1">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="1" @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardQ" for="item-2" id="card-2">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="2"  @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardQ" for="item-3" id="card-3">
+                    <div class="cardQ__question">
+                        <h1>{{this.question_info.question}}</h1>
+                    </div>
+                    <div class="cardQ__answers answers">
+                        <div class="answers__answer" v-for="(answer,index) in this.answers">
+                            <button id="3"  @click="validate(index)"  :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
