@@ -574,7 +574,8 @@ const MyProfile = {
             quizzs: null,
             pendingChallenges: [],
             completedChallenges: [],
-            quizzReq: -1
+            quizzReq: -1,
+            quizzs_ready:false
 
         }
     },
@@ -595,6 +596,7 @@ const MyProfile = {
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
+                this.quizzs_ready=true;
             });
 
 
@@ -867,7 +869,7 @@ const MyProfile = {
                         <h1>Stats</h1>
                     </div>
                     <div class="info__content">
-                        <playerStats :id=infoPlayer.id></playerStats>
+                        <playerStats :games=quizzs :ready=quizzs_ready ></playerStats>
                     </div>
                 </div>
 
@@ -1316,16 +1318,134 @@ Vue.component('playerHistory', {
 
 
 Vue.component('playerStats', {
-    props: ['id'],
+    props: ['games','ready'],
     data: function() {
-        return {}
+        return {
+            // config : {
+            //     type: 'pie',
+            //     data: this.dataChar,
+            // },
+            // dataChar : {
+            //     labels: [
+            //       'Hard',
+            //       'Medium',
+            //       'Easy'
+            //     ],
+            //     datasets: [{
+            //       label: 'Played',
+            //       data: [this.hard, this.medium, this.easy],
+            //       backgroundColor: [
+            //         'rgb(165, 99, 247)',
+            //         'rgb(187, 134, 252)',
+            //         'rgb(208, 172, 252)'
+            //       ],
+            //       hoverOffset: 4
+            //     }]
+            // },
+            ctx : null
+        }
     },
-    mounted() {},
+    watch:{
+        ready (_new, _old){
+            let hard=0;
+            let medium=0;
+            let easy=0;
+            console.log("new:"+_new+" - old:"+_old);
+            this.games.forEach(game => {
+                if(game.difficulty=='easy'){
+                    // console.log(this.dataChar);
+                    // this.data.datasets.data[2]++;
+                    easy++;
+                }
+                
+                if(game.difficulty=='medium'){
+                    // this.data.datasets.data[1]++;
+                    medium++;
+                }
+
+                if(game.difficulty=='hard'){
+                    // this.data.datasets.data[0]++;
+                    hard++;
+                }
+            });
+              
+            let dataChar = {
+                labels: [
+                  'Hard',
+                  'Medium',
+                  'Easy'
+                ],
+                datasets: [{
+                  label: 'Played',
+                  data: [hard, medium, easy],
+                  backgroundColor: [
+                    'rgb(165, 99, 247)',
+                    'rgb(187, 134, 252)',
+                    'rgb(208, 172, 252)'
+                  ],
+                  hoverOffset: 4
+                }]
+            }
+
+            let config = {
+                type: 'pie',
+                data: dataChar,
+            }
+
+           
+            this.ctx=document.getElementById('myChart');
+
+            let myChart=new Chart(this.ctx, {
+                type: config.type,
+                data:dataChar
+            });
+            myChart.canvas.parentNode.style.height = '50vh';
+            myChart.canvas.parentNode.style.width = '50vw';
+        }
+    },
+    mounted() {
+        // this.ctx=document.getElementById('myChart');
+        // let dataChar = {
+        //     labels: [
+        //       'Hard',
+        //       'Medium',
+        //       'Easy'
+        //     ],
+        //     datasets: [{
+        //       label: 'Played',
+        //       data: [1, 2, 3],
+        //       backgroundColor: [
+        //         'rgb(165, 99, 247)',
+        //         'rgb(187, 134, 252)',
+        //         'rgb(208, 172, 252)'
+        //       ],
+        //       hoverOffset: 4
+        //     }]
+        // }
+
+        // new Chart(this.ctx, {
+        //     type: 'pie',
+        //     data:dataChar
+        // });
+        // setTimeout(() => {
+        //     this.impr();
+        //     console.log(this.games);
+        //     console.log(this.games, this.$refs);
+        //   }, 3000);
+    },
     computed: {},
     methods: {
-
+        impr(){
+            console.log(this.games);
+        }
     },
-    template: `<div></div>`
+    template: `<div>
+        <div v-if="!ready">
+            <img src="img/loadingCat.gif" alt="LOADING...">
+        </div>
+            <canvas id="myChart"></canvas>
+        
+    </div>`
 });
 //Rutas
 const routes = [{
