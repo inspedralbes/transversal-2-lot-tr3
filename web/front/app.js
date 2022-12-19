@@ -594,7 +594,7 @@ const MyProfile = {
             pendingChallenges: [],
             completedChallenges: [],
             quizzReq: -1,
-            quizzs_ready:false
+            quizzs_ready: false
 
         }
     },
@@ -615,7 +615,7 @@ const MyProfile = {
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
-                this.quizzs_ready=true;
+                this.quizzs_ready = true;
             });
 
 
@@ -1287,6 +1287,7 @@ Vue.component('question', {
             <input type="radio" name="slider" id="item-3">
             <div class="cards">
                 <div class="cardQ" for="item-1" id="card-1">
+                    <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
                     <div class="cardQ__question">
                         <h1>{{this.question_info.question}}</h1>
                     </div>
@@ -1297,6 +1298,8 @@ Vue.component('question', {
                     </div>
                 </div>
                 <div class="cardQ" for="item-2" id="card-2">
+                <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
+
                     <div class="cardQ__question">
                         <h1>{{this.question_info.question}}</h1>
                     </div>
@@ -1307,6 +1310,8 @@ Vue.component('question', {
                     </div>
                 </div>
                 <div class="cardQ" for="item-3" id="card-3">
+                <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
+
                     <div class="cardQ__question">
                         <h1>{{this.question_info.question}}</h1>
                     </div>
@@ -1350,7 +1355,7 @@ Vue.component('playerHistory', {
 
 
 Vue.component('playerStats', {
-    props: ['games','ready'],
+    props: ['games', 'ready'],
     data: function() {
         return {
             // config : {
@@ -1374,48 +1379,48 @@ Vue.component('playerStats', {
             //       hoverOffset: 4
             //     }]
             // },
-            ctx : null
+            ctx: null
         }
     },
-    watch:{
-        ready (_new, _old){
-            let hard=0;
-            let medium=0;
-            let easy=0;
-            console.log("new:"+_new+" - old:"+_old);
+    watch: {
+        ready(_new, _old) {
+            let hard = 0;
+            let medium = 0;
+            let easy = 0;
+            console.log("new:" + _new + " - old:" + _old);
             this.games.forEach(game => {
-                if(game.difficulty=='easy'){
+                if (game.difficulty == 'easy') {
                     // console.log(this.dataChar);
                     // this.data.datasets.data[2]++;
                     easy++;
                 }
-                
-                if(game.difficulty=='medium'){
+
+                if (game.difficulty == 'medium') {
                     // this.data.datasets.data[1]++;
                     medium++;
                 }
 
-                if(game.difficulty=='hard'){
+                if (game.difficulty == 'hard') {
                     // this.data.datasets.data[0]++;
                     hard++;
                 }
             });
-              
+
             let dataChar = {
                 labels: [
-                  'Hard',
-                  'Medium',
-                  'Easy'
+                    'Hard',
+                    'Medium',
+                    'Easy'
                 ],
                 datasets: [{
-                  label: 'Played',
-                  data: [hard, medium, easy],
-                  backgroundColor: [
-                    'rgb(165, 99, 247)',
-                    'rgb(187, 134, 252)',
-                    'rgb(208, 172, 252)'
-                  ],
-                  hoverOffset: 4
+                    label: 'Played',
+                    data: [hard, medium, easy],
+                    backgroundColor: [
+                        'rgb(165, 99, 247)',
+                        'rgb(187, 134, 252)',
+                        'rgb(208, 172, 252)'
+                    ],
+                    hoverOffset: 4
                 }]
             }
 
@@ -1424,12 +1429,12 @@ Vue.component('playerStats', {
                 data: dataChar,
             }
 
-           
-            this.ctx=document.getElementById('myChart');
 
-            let myChart=new Chart(this.ctx, {
+            this.ctx = document.getElementById('myChart');
+
+            let myChart = new Chart(this.ctx, {
                 type: config.type,
-                data:dataChar
+                data: dataChar
             });
             myChart.canvas.parentNode.style.height = '50vh';
             myChart.canvas.parentNode.style.width = '50vw';
@@ -1467,7 +1472,7 @@ Vue.component('playerStats', {
     },
     computed: {},
     methods: {
-        impr(){
+        impr() {
             console.log(this.games);
         }
     },
