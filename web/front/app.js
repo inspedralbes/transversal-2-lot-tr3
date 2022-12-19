@@ -184,7 +184,7 @@ const Questions = {
                 <div v-show="index==actualQ">
                     <p>{{index+1}}</p>
                     <p>Time:{{time}}</p>
-                    <question :question_info=question @answered='goNext' @stopTimer="stopTimer" @startTimer="startTimer"></question>
+                    <question :question_info=question :time=questionTime @answered='goNext' @stopTimer="stopTimer" @startTimer="startTimer"></question>
                 </div>
             </div>
             <div v-show="nQuestion<actualQ">
@@ -831,6 +831,9 @@ const MyProfile = {
                         })
                     }
                 });
+        },
+        goHome(){
+            router.push('/');
         }
     },
     template: ` 
@@ -853,7 +856,7 @@ const MyProfile = {
                         <li @click="changeView('challenges')">challenges</li>
                     </ul>
                     <div class="info__buttons">
-                    <button class="profile__home home" @click="router.push('/')">Go home</button>
+                    <button class="profile__home home" @click="goHome">Go home</button>
                     <button class="profile__logOut" @click="logOut">Log Out</button>
                 </div>
                 </div>
@@ -1007,7 +1010,9 @@ const MyProfile = {
 const Ranking = {
     data: function() {
         return {
-            players: []
+            players: [],
+            dailyRanq:[],
+            viewGeneral:true
         }
     },
     mounted() {
@@ -1067,10 +1072,11 @@ const Ranking = {
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
     template: `
     <div>
-        <div class="ranking">
-        <h1 class="ranking__title">RANKING</h1>
-                <div class="ranking__players">
-                    <div class="ranking__table">
+    <button @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
+        <div class="ranking" v-if="viewGeneral">
+            <h1 class="ranking__title">RANKING</h1>
+            <div class="ranking__players">
+                <div class="ranking__table">
                     <div>
                         <table >
                             <thead>
@@ -1079,15 +1085,62 @@ const Ranking = {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(player, index) in this.players" v-if="player.id!=user.idUser">
+                                <tr v-for="(player, index) in this.players">
                                     <td>{{index + 1}}</td>
-                                    <td><p><RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink><i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i></p></td>
+                                    <td>
+                                        <p v-if="player.id!=user.idUser">
+                                            <RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink>
+                                            <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+                                        </p>
+                                        <p v-else>
+                                            <RouterLink class="ranking__routerProfile" to="/profile"> {{player.nickname}}</RouterLink>
+                                        </p>
+                                    </td>
                                     <td>{{player.elo}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>   
-                    <div v-else>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ranking" v-else>
+            <h1 class="ranking__title">DAILY RANKING</h1>
+            <div class="ranking__players">
+                <div class="ranking__table">
+                    <div>
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>TOP</th><th>NICKNAME</th><th>ELO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(player, index) in this.dailyRanq">
+                                    <td>{{index + 1}}</td>
+                                    <td>
+                                        <p v-if="player.id!=user.idUser">
+                                            <RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink>
+                                            <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+                                        </p>
+                                        <p v-else>
+                                            <RouterLink class="ranking__routerProfile" to="/profile"> {{player.nickname}}</RouterLink>
+                                        </p>
+                                    </td>
+                                    <td>{{player.elo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>   
+                </div>
+            </div>
+        </div> 
+    </div>`
+
+}
+{/* <div v-else>
                     <div class="ranking__table">
                     <table>
                         <thead>
@@ -1103,18 +1156,11 @@ const Ranking = {
                             </tr>
                         </tbody>
                     </table>
-                </div>   
-            </div>
-                </div>
-            </div>
-        </div>
-    </div>`
-
-}
+                </div>    */}
 
 
 Vue.component('question', {
-    props: ['question_info'],
+    props: ['question_info','time'],
     data: function() {
         return {
             answers: [],
@@ -1228,6 +1274,7 @@ Vue.component('question', {
             <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
         </div>
         <div v-else class="cardQ">
+            <b-progress :value="15-time" :max="15" class="mb-3"></b-progress>
             <div class="cardQ__question">
                 <h1>{{this.question_info.question}}</h1>
             </div>
