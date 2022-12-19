@@ -940,3 +940,7 @@ th {
     float: right;
     margin-right: 50px;
 }
+
+.progress-bar {
+    background-color: rgb(255, 189, 189);
+}
