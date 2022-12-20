@@ -470,6 +470,20 @@ const Login = {
             user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
+
+            let infoOk=true;
+            let msgError="";
+
+            if(!this.validateName(this.name)){
+                infoOk=false;
+                msgError+="The name can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateMail(this.email)){
+                msgError+="Invalid mail";
+                infoOk=false;
+            }
+            
             //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
             if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
@@ -556,6 +570,33 @@ const Login = {
                         })
                     }
                 });
+        },
+        validateName(name){
+            let validation=false;
+
+            if(name.length>0 && name.length<=15){
+                validation=true;
+            }
+
+            return validation;
+        },
+        validateMail(mail){
+            let validation=false;
+
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+                validation=true;
+            }
+                
+            return validation;
+        },
+        validatePassword(psswd){
+            let validation=false;
+
+            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)){
+                validation=true;
+            }
+
+            return validation;
         }
     },
     template: `
