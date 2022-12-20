@@ -218,6 +218,10 @@ const Questions = {
                 <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="home">Home</button></RouterLink>
             </div>
         </div>
+        <div v-else style="  display: flex; align-items: center; justify-content: center;">
+            <p>LOADING...</p>
+            <img src="img/loadingCat.gif" alt="LOADING...">
+        </div>
     </div>`
 
 }
