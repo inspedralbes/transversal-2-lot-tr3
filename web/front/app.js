@@ -1387,23 +1387,18 @@ Vue.component('question', {
 
         this.answers.push(a);
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
-        // v-if="showInfoPregunta"
+
     },
     template: `
     <div>
-    <div  class="cardQ">
+    <div v-if="showInfoPregunta" class="cardQ">
         <h1>You answered <i style="color:green" v-if="infoPregunta.yourAnswer">RIGHT</i> <i style="color:red" v-else>WRONG</i>!</h1>
         <p class="cardQ__text" v-if="infoPregunta.all==1"> You are the first person to answer this question</p>
         <p class="cardQ__text" v-else>The {{parseFloat(infoPregunta.persentage).toFixed(2)}}% of de people answered right</p>
         <img class="cardQ__cat" v-if="infoPregunta.yourAnswer" src="img/happy_cat.gif" alt="Happy cat">
         <img class="cardQ__cat" v-else src="img/cat_peach.gif" alt="Sad cat">
     </div>
-    
-</div>`
-
-});
-
-{/* <div v-else class="cardQ">
+    <div v-else class="cardQ">
     <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
         <div class="cardQ__question">
             <h1>{{this.question_info.question}}</h1>
@@ -1413,7 +1408,10 @@ Vue.component('question', {
                 <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
         </div>
-    </div> */}
+    </div>
+</div>`
+
+});
 
 Vue.component('playerHistory', {
     props: ['quizzs', 'challenge'],
