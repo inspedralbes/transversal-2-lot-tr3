@@ -51,4 +51,12 @@
     .ranking {
         padding: 10px;
     }
+    td,
+    th {
+        max-width: 100px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        white-space: initial;
+    }
 }

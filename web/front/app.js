@@ -292,7 +292,7 @@ const Profile = {
             showStats: true,
             showHistory: false,
             quizzs: [],
-            quizzs_ready:false
+            quizzs_ready: false
         }
     },
     mounted() {
@@ -317,7 +317,7 @@ const Profile = {
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
-                this.quizzs_ready=true;
+                this.quizzs_ready = true;
             });
         // console.log(this.$route.params.id);
     },
@@ -928,7 +928,7 @@ const MyProfile = {
                                         <div class="info__content">
                                             <div v-for="(friend, index) in this.pendentFriends">
                                             <div class="wrapperFriends">
-                                                <p>{{friend.name}} <i class="fa fa-check-circle" @click="acceptFriend(friend.id)"></i> <i class="fa fa-times-circle" @click="declineFriend(friend.id)"></i></p>
+                                                <p>{{friend.name}} <button class="ranking__addFriend" @click="acceptFriend(friend.id)"></button> <button class="ranking__declineFriend" @click="declineFriend(friend.id)"></button></p>
                                             </div>
                                             </div>
                                         </div>
@@ -1017,73 +1017,73 @@ const MyProfile = {
 }
 
 const Ranking = {
-        data: function() {
-            return {
-                players: [],
-                dailyRanq: [],
-                viewGeneral: true
-            }
+    data: function() {
+        return {
+            players: [],
+            dailyRanq: [],
+            viewGeneral: true
+        }
+    },
+    mounted() {
+        fetch(`../back/public/index.php/getRanking`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.players = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        // this.players=[{
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
+        // },
+        // {
+        //     nickname:'',
+        //     elo: -1,
+        //     id: -1
+        // }]
+    },
+    computed: {
+        isLogged() {
+            return userStore().logged;
         },
-        mounted() {
-            fetch(`../back/public/index.php/getRanking`)
+        user() {
+            return userStore().loginInfo;
+        }
+    },
+    methods: {
+        addFriend(id) {
+            var friendReq = new FormData();
+            friendReq.append('id', id);
+
+            fetch(`../back/public/index.php/addFriend`, {
+                    method: 'POST',
+                    body: friendReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
-                    this.players = data;
-                }).catch((error) => {
-                    console.error('Error:', error);
+                    if (data == "ERROR") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'this user is already your friend or already has a pending request',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Done',
+                            text: 'Request sent, wait for your friend to accept it!',
+                        })
+                    }
                 });
-            // this.players=[{
-            //     nickname:'',
-            //     elo: -1,
-            //     id: -1
-            // },
-            // {
-            //     nickname:'',
-            //     elo: -1,
-            //     id: -1
-            // }]
         },
-        computed: {
-            isLogged() {
-                return userStore().logged;
-            },
-            user() {
-                return userStore().loginInfo;
-            }
-        },
-        methods: {
-            addFriend(id) {
-                var friendReq = new FormData();
-                friendReq.append('id', id);
+        goHome() {
+            router.push('/');
+        }
+    },
 
-                fetch(`../back/public/index.php/addFriend`, {
-                        method: 'POST',
-                        body: friendReq
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data == "ERROR") {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'this user is already your friend or already has a pending request',
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Done',
-                                text: 'Request sent, wait for your friend to accept it!',
-                            })
-                        }
-                    });
-            },
-            goHome() {
-                router.push('/');
-            }
-        },
-
-        // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
-        template: `
+    // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+    template: `
     <div>
     <button class="rankingButton__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
     <button class="rankingButton__Home" @click="goHome">Go home</button>   
@@ -1102,11 +1102,11 @@ const Ranking = {
                                 <tr v-for="(player, index) in this.players">
                                     <td>{{index + 1}}</td>
                                     <td>
-                                        <p v-if="player.id!=user.idUser">
+                                        <p v-if="player.id!=user.idUser" class = "ranking__centerColumn">
                                             <RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink>
-                                            <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+                                            <button v-if="isLogged" class="ranking__addFriend" @click="addFriend(player.id)">ADD FRIEND</button>
                                         </p>
-                                        <p v-else>
+                                        <p v-else class = "ranking__centerColumn">
                                             <RouterLink class="ranking__routerProfile" to="/profile"> {{player.nickname}}</RouterLink>
                                         </p>
                                     </td>
@@ -1135,11 +1135,11 @@ const Ranking = {
                                 <tr v-for="(player, index) in this.dailyRanq">
                                     <td>{{index + 1}}</td>
                                     <td>
-                                        <p v-if="player.id!=user.idUser">
+                                        <p v-if="player.id!=user.idUser" class = "ranking__centerColumn">
                                             <RouterLink class="ranking__routerProfile" :to="'/profile/'+player.id"> {{player.nickname}} </RouterLink>
-                                            <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
+                                            <button v-if="isLogged" class="ranking__addFriend" @click="addFriend(player.id)">ADD FRIEND</button>
                                         </p>
-                                        <p v-else>
+                                        <p v-else class = "ranking__centerColumn">
                                             <RouterLink class="ranking__routerProfile" to="/profile"> {{player.nickname}}</RouterLink>
                                         </p>
                                     </td>
@@ -1245,6 +1245,7 @@ Vue.component('question', {
         }
     },
     mounted() {
+
         this.question_info.incorrectAnswers.forEach(element => {
             let a = {
                 correct: false,
@@ -1271,7 +1272,7 @@ Vue.component('question', {
     <div>
         <div class="cardContainer">
             <input type="radio" name="slider" id="item-1" checked>
-            <input type="radio" name="slider" id="item-2">
+            <input type="radio" name="slider" id="item-2" >
             <input type="radio" name="slider" id="item-3">
             <div class="cards">
                 <div class="cardQ" for="item-1" id="card-1">

@@ -27,19 +27,20 @@
     footer {
         z-index: -1;
         text-align: center;
-        padding: 20px;
+        padding: 10px;
         bottom: 0;
         position: absolute;
         margin: 0;
         width: 100%;
         color: rgb(255, 191, 223);
-        background: rgb(22, 6, 47);
-        background: linear-gradient(0deg, rgba(22, 6, 47, 1) 17%, rgba(22, 6, 47, 0.798739564185049) 47%, rgba(22, 6, 47, 0.5466387238489145) 76%, rgba(22, 6, 47, 0.1656863428965336) 100%);
+        background: rgb(47, 6, 6);
+        background: linear-gradient(0deg, rgb(47, 6, 6) 17%, rgba(47, 6, 6, 0.799) 47%, rgba(47, 6, 6, 0.336) 76%, rgba(47, 6, 6, 0.055) 100%);
     }
     
     footer a {
         color: rgb(255, 191, 223);
         text-decoration: none;
+        margin: 0;
     }
     
     footer a:hover {
@@ -199,25 +200,25 @@
         background-color: #962626;
     }
     
-    #item-1:checked~.cards #card-3,
-    #item-2:checked~.cards #card-1,
-    #item-3:checked~.cards #card-2 {
+    #item-1[checked="checked"]~.cards #card-3,
+    #item-2[checked="checked"]~.cards #card-1,
+    #item-3[checked="checked"]~.cards #card-2 {
         transform: translatex(-40%) scale(.8);
         opacity: .4;
         z-index: 0;
     }
     
-    #item-1:checked~.cards #card-2,
-    #item-2:checked~.cards #card-3,
-    #item-3:checked~.cards #card-1 {
+    #item-1[checked="checked"]~.cards #card-3,
+    #item-2[checked="checked"]~.cards #card-1,
+    #item-3[checked="checked"]~.cards #card-2 {
         transform: translatex(40%) scale(.8);
         opacity: .4;
         z-index: 0;
     }
     
-    #item-1:checked~.cards #card-1,
-    #item-2:checked~.cards #card-2,
-    #item-3:checked~.cards #card-3 {
+    #item-1[checked="checked"]~.cards #card-3,
+    #item-2[checked="checked"]~.cards #card-1,
+    #item-3[checked="checked"]~.cards #card-2 {
         transform: translatex(0) scale(1);
         opacity: 1;
         z-index: 1;
@@ -840,7 +841,13 @@
         text-align: center;
     }
     
+    .ranking__routerProfile {
+        text-align: center;
+        margin: auto;
+    }
+    
     .ranking__routerProfile:hover {
+        text-align: center;
         color: white;
         text-shadow: 0 0 1px hsla(0, 0%, 100%, .667), 0 0 2px #d892d8, 0 0 4px #d892d8, 0 0 6px #d892d8;
     }
@@ -866,11 +873,21 @@
         text-align: center;
         margin: auto;
         padding: 10px;
-        border: 5px dotted #fd94bc;
+        border: 5px solid #fd94bc;
+        overflow-wrap: break-word;
     }
     
     .rankingButton__Daily p {
         margin-bottom: 0;
+    }
+    
+    .ranking__centerColumn {
+        display: flex;
+        text-align: center;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        white-space: initial;
     }
     
     .rankingButton__Daily,
@@ -953,4 +970,120 @@
     
     .progress-bar {
         background-color: rgb(255, 189, 189);
+    }
+    
+    .ranking__addFriend {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        font-size: 1.5rem;
+        color: rgb(106, 163, 137);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-family: inherit;
+    }
+    
+    .ranking__addFriend {
+        padding: 1em 2em;
+        border: 2px solid rgb(106, 163, 137);
+        border-radius: 1em;
+        font-size: 10px;
+        background: rgb(205, 255, 232);
+        transform-style: preserve-3d;
+        transition: all 175ms cubic-bezier(0, 0, 1, 1);
+    }
+    
+    .ranking__addFriend::before {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin-left: 0;
+        background: rgb(150, 232, 195);
+        border-radius: inherit;
+        transform: translate3d(0, 0.75em, -1em);
+        transition: all 175ms cubic-bezier(0, 0, 1, 1);
+    }
+    
+    .ranking__addFriend:hover {
+        background: rgb(187, 232, 211);
+        transform: translate(0, 0.375em);
+    }
+    
+    .ranking__addFriend:hover::before {
+        transform: translate3d(0, 0.75em, -1em);
+    }
+    
+    .ranking__addFriend:active {
+        transform: translate(0em, 0.75em);
+    }
+    
+    .ranking__addFriend:active::before {
+        transform: translate3d(0, 0, -1em);
+    }
+    
+    .ranking__declineFriend {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        font-size: 1.5rem;
+        color: rgb(163, 106, 106);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-family: inherit;
+    }
+    
+    .ranking__declineFriend {
+        padding: 10px;
+        border: 2px solid rgb(163, 106, 106);
+        border-radius: 1em;
+        background: rgb(255, 205, 205);
+        transform-style: preserve-3d;
+        transition: all 175ms cubic-bezier(0, 0, 1, 1);
+    }
+    
+    .ranking__declineFriend::before {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgb(232, 150, 150);
+        border-radius: inherit;
+        box-shadow: 0 0 0 2px rgb(186, 121, 121), 0 0.75em 0 0 rgb(163, 106, 106);
+        transform: translate3d(0, 0.75em, -1em);
+        transition: all 175ms cubic-bezier(0, 0, 1, 1);
+    }
+    
+    .ranking__declineFriend:hover {
+        background: rgb(232, 187, 187);
+        transform: translate(0, 0.375em);
+    }
+    
+    .ranking__declineFriend:hover::before {
+        transform: translate3d(0, 0.75em, -1em);
+    }
+    
+    .ranking__declineFriend:active {
+        transform: translate(0em, 0.75em);
+    }
+    
+    .ranking__declineFriend:active::before {
+        transform: translate3d(0, 0, -1em);
+        box-shadow: 0 0 0 2px rgb(186, 121, 121), 0 0.25em 0 0 rgb(186, 121, 121);
     }
