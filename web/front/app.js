@@ -107,7 +107,6 @@ const Questions = {
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
-                // console.log('fetch');
             }
         },
         stopTimer() {
@@ -128,9 +127,7 @@ const Questions = {
     },
     mounted() {
         if (!userStore().logged) {
-
-            // fetch a demo
-            // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            //The user will play the demo if he's not logged in.
             fetch(`../back/public/index.php/demo`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -141,11 +138,8 @@ const Questions = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-            console.log('fetch');
-
         } else if (userStore().configPlay.type == 'daily') {
-
-            //fetch a diaria
+            //A logged user can play once the daily question
             var userInfo = new FormData();
             userInfo.append('id_user', userStore().loginInfo.idUser);
             fetch(`../back/public/index.php/daily`,{
@@ -171,17 +165,13 @@ const Questions = {
                             left top
                             no-repeat`
                         }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
                             router.push('/');
                         })
                     }
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-
         } else if (userStore().configPlay.type == 'challenge') {
-
-
             fetch(`../back/public/index.php/startChallenge`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -192,17 +182,12 @@ const Questions = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-
-
         } else {
-            //fetch a la api externa 
-
             var question = new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
             question.append('nickname', userStore().loginInfo.nickname);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
-            // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
             fetch(`../back/public/index.php/newGame`, {
                     method: 'POST',
                     body: question
@@ -319,10 +304,9 @@ const Profile = {
     },
     mounted() {
         this.user.id = this.$route.params.id
-
         var userReq = new FormData();
-        userReq.append('user_id', this.$route.params.id);
 
+        userReq.append('user_id', this.$route.params.id);
         fetch(`../back/public/index.php/getUserInfo`, {
                 method: 'POST',
                 body: userReq
@@ -359,8 +343,6 @@ const Profile = {
                 this.showStats = false;
             }
         },
-        //getPendingChallenges
-        //getComplitedChallenges
         challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
@@ -386,6 +368,31 @@ const Profile = {
                         showResult(data);
                     }
                 });
+        },
+        addFriend() {
+            var friendReq = new FormData();
+            friendReq.append('id', this.user.id);
+
+            fetch(`../back/public/index.php/addFriend`, {
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data == "ERROR") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'this user is already your friend or already has a pending request',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Done',
+                            text: 'Request sent, wait for your friend to accept it!',
+                        })
+                    }
+                });
         }
     },
     template: `<div>
@@ -397,6 +404,7 @@ const Profile = {
             <li @click="changeView('stats')">Estadísticas</li>
             <li @click="changeView('history')">Historial</li>
         </ul>
+        <button v-if="isLogged" class="ranking__addFriend" @click="addFriend()">ADD FRIEND</button>
     </div>
 
     <div class="info">
@@ -479,19 +487,34 @@ const Login = {
                 msgError+="The name can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateMail(this.email)){
-                msgError+="Invalid mail";
+            if(!this.validateName(this.surname)){
                 infoOk=false;
+                msgError+="The surname can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateName(this.nickname)){
+                infoOk=false;
+                msgError+="The nickname can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateMail(this.email)){
+                msgError+="Invalid mail <br/>";
+                infoOk=false;
+            }
+
+            if(!this.validatePassword(this.password)){
+                infoOk=false;
+                msgError+="The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
             }
             
             //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-            if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
+            if (!infoOk) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Oops... Something went wrong :[',
                     color: 'white',
-                    text: "Something went wrong :[",
+                    html: msgError,
                     background: '#434c7a',
                     buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
                     showClass: {
