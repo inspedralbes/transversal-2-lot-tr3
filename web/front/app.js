@@ -564,7 +564,7 @@ const Login = {
                             userStore().logged = true;
                             userStore().loginInfo.nickname = this.nickname;
                             userStore().loginInfo.idUser = data;
-                            userStore().loginInfo.img=this.img;
+                            userStore().loginInfo.img = this.img;
 
                             router.push('/');
                         } else {
@@ -1107,7 +1107,7 @@ const MyProfile = {
                                         <div class="info__content">
                                             <div v-for="(challenge, index) in this.completedChallenges">
                                             <div class="wrapperChallenge">
-                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
+                                                <p>{{challenge.id}} {{challenge.challenger}} VS {{challenge.challenged}} <button class="button" @click="seeChallenge(challenge.quizz_id,challenge.challenged)">See</button></p>
                                             </div>
                                             </div>
 
@@ -1296,7 +1296,7 @@ Vue.component('question', {
             infoPregunta: {
                 yourAnswer: false,
                 persentage: 0,
-                all:0
+                all: 0
             },
             defaultClass: 'answers__button'
         }
@@ -1385,7 +1385,7 @@ Vue.component('question', {
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
 
     },
-    template:`
+    template: `
     <div>
     <div v-if="showInfoPregunta" class="cardQ">
         <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>!</p>
@@ -1427,11 +1427,22 @@ Vue.component('playerHistory', {
     // v-if='challenge && confPlay.type=="normal" && isLogged'
     template: `
     <div>
-        <div v-for="(quizz, index) in this.quizzs">
-        <div class="wrapperHistory">
-                <p>{{quizz.category}} {{quizz.difficulty}} Score:{{quizz.score}} Time:{{quizz.time_resolution}}s<div v-if="isLogged && quizz.type=='normal'"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
-        </div>
-        </div>
+        <table style="padding:30px;">
+            <thead>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Score</th>
+                <th>Time</th>
+                <th v-if="isLogged">Challenge</th>
+            </thead>
+            <tr v-for="(quizz, index) in this.quizzs">
+                <td>{{quizz.category}}</td>
+                <td>{{quizz.difficulty}}</td>
+                <td>{{quizz.score}}</td>
+                <td>{{quizz.time_resolution}}s</td>
+                <td><p v-if="isLogged && quizz.type=='normal'"><button class="ranking__addFriend" @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button></p></td>
+            </tr>
+        </table>
     </div>
     `
 });
