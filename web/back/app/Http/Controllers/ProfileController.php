@@ -184,6 +184,12 @@ class ProfileController extends Controller
     {
         $userFound = User::where('id', $request -> user_id) -> first();
 
-        return response()->json($userFound -> nickname);
+        $userInfo = (object) [
+            'nickname' => '',
+            'picture' => ''
+        ];
+        $userInfo -> nickname = $userFound -> nickname;
+        $userInfo -> picture = $userFound -> picture;
+        return response()->json($userInfo);
     }
 }
