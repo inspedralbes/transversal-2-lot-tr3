@@ -36,6 +36,7 @@ class ProfileController extends Controller
             $createUser -> nickname = $request -> nickname;
             $createUser -> email = strtolower($request -> email);
             $createUser -> password = Hash::make($request->password);
+            $createUser -> picture = $request -> picture;
             $createUser -> save();
             $idUserCreated = $createUser -> id;
             Session::put('user_id', $idUserCreated);
@@ -59,6 +60,7 @@ class ProfileController extends Controller
                 $returnUser -> surname = $userInfo -> surname;
                 $returnUser -> nickname = $userInfo -> nickname;
                 $returnUser -> email = strtolower($userInfo -> email);
+                $returnUser -> picture = $userInfo -> picture;
                 Session::put('user_id', $userId);        
             }
         }
