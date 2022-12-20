@@ -480,34 +480,34 @@ const Login = {
             user.append('password', this.password);
             user.append('picture', this.img);
 
-            let infoOk=true;
-            let msgError="";
+            let infoOk = true;
+            let msgError = "";
 
-            if(!this.validateName(this.name)){
-                infoOk=false;
-                msgError+="The name can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.name)) {
+                infoOk = false;
+                msgError += "The name can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateName(this.surname)){
-                infoOk=false;
-                msgError+="The surname can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.surname)) {
+                infoOk = false;
+                msgError += "The surname can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateName(this.nickname)){
-                infoOk=false;
-                msgError+="The nickname can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.nickname)) {
+                infoOk = false;
+                msgError += "The nickname can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateMail(this.email)){
-                msgError+="Invalid mail <br/>";
-                infoOk=false;
+            if (!this.validateMail(this.email)) {
+                msgError += "Invalid mail <br/>";
+                infoOk = false;
             }
 
-            if(!this.validatePassword(this.password)){
-                infoOk=false;
-                msgError+="The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
+            if (!this.validatePassword(this.password)) {
+                infoOk = false;
+                msgError += "The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
             }
-            
+
             //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
             if (!infoOk) {
@@ -554,13 +554,9 @@ const Login = {
                             })
                         }
                     });
-
-
-                // console.log('new');
             }
         },
         logUser() {
-            // console.log('login');
             var user = new FormData();
             user.append('email', this.logMail);
             user.append('password', this.logPass);
@@ -596,36 +592,40 @@ const Login = {
                     }
                 });
         },
-        validateName(name){
-            let validation=false;
+        validateName(name) {
+            let validation = false;
 
-            if(name.length>0 && name.length<=15){
-                validation=true;
+            if (name.length > 0 && name.length <= 15) {
+                validation = true;
             }
 
             return validation;
         },
-        validateMail(mail){
-            let validation=false;
+        validateMail(mail) {
+            let validation = false;
 
-            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
-                validation=true;
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+                validation = true;
             }
-                
+
             return validation;
         },
-        validatePassword(psswd){
-            let validation=false;
+        validatePassword(psswd) {
+            let validation = false;
 
-            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)){
-                validation=true;
+            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)) {
+                validation = true;
             }
 
             return validation;
+        },
+        goHome() {
+            router.push('/');
         }
     },
     template: `
         <div>
+        <button class="login__home" @click="goHome">Go home</button>
             <div class="containerLogin" id="container">
             <div class="container__form signUp">
             <div class="signUp__title"><h1>Create Account</h1></div>
@@ -692,8 +692,6 @@ const MyProfile = {
         }
     },
     mounted() {
-
-
         this.getFriends();
         this.getPendingRequests();
         this.getPendingChallenges();
@@ -710,8 +708,6 @@ const MyProfile = {
                 this.quizzs = data;
                 this.quizzs_ready = true;
             });
-
-
     },
     computed: {
         infoPlayer() {
@@ -799,18 +795,13 @@ const MyProfile = {
 
         },
         getFriends() {
-
             fetch(`../back/public/index.php/friends`)
                 .then((response) => response.json())
                 .then((data) => {
-                    // console.log(data);
                     this.friends = data;
                 });
-
-
         },
         declineFriend(id) {
-
             var friendReq = new FormData();
             friendReq.append('id', id);
 
@@ -823,8 +814,6 @@ const MyProfile = {
                     this.getPendingRequests();
                     this.getFriends();
                 });
-
-            // console.log('decline '+id);
         },
         logOut() {
             userStore().logged = false;
@@ -1277,21 +1266,7 @@ Vue.component('question', {
                     this.findCorrect();
                     this.infoPregunta.yourAnswer = false;
                 }
-
                 this.$emit('stopTimer');
-                // setTimeout(()=>{
-                //     // this.$emit('stopTimer');
-                //     this.showInfoPregunta=true;
-                // },1000);
-
-                // setTimeout(() => {
-                //     this.showInfoPregunta=false;
-                //     this.$emit('startTimer');
-                //     this.$emit('answered', ok);
-                // }, "5000");
-
-
-                //form data question_id correct(true false)
                 var infoQ = new FormData();
                 infoQ.append('question_id', this.question_info.id);
                 infoQ.append('correct', ok);
@@ -1347,13 +1322,14 @@ Vue.component('question', {
 
         this.answers.push(a);
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
-        //     <div v-if="showInfoPregunta" class="cardQ">
-        //     <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
-        // </div>
+
     },
     template: `
     <div>
-        <div class="cardContainer">
+        <div v-if="showInfoPregunta" class="cardQ">
+            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+        </div>
+        <div v-else class="cardContainer">
             <input type="radio" name="slider" id="item-1" checked>
             <input type="radio" name="slider" id="item-2" >
             <input type="radio" name="slider" id="item-3">
