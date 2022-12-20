@@ -56,7 +56,7 @@ class FriendsController extends Controller
 
             $friend= (object) [
                 'id' => $infoFriend->id,
-                'name' => $user->name,
+                'name' => $user->nickname,
             ];
             
             $list[]=$friend;
