@@ -471,6 +471,7 @@ const Login = {
             user.append('email', this.email);
             user.append('password', this.password);
             //alert de cuando se registren con campos vacíos
+            //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
             if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
                 Swal.fire({
                     icon: 'error',
@@ -487,7 +488,6 @@ const Login = {
                     },
                 })
             } else {
-
                 fetch(`../back/public/index.php/register`, {
                         method: 'POST',
                         body: user
