@@ -218,6 +218,10 @@ const Questions = {
                 <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="home">Home</button></RouterLink>
             </div>
         </div>
+        <div v-else style="  display: flex; align-items: center; justify-content: center;">
+            <p>LOADING...</p>
+            <img src="img/loadingCat.gif" alt="LOADING...">
+        </div>
     </div>`
 
 }
@@ -417,15 +421,15 @@ const Profile = {
         <div class="profile">
             <div class="profile__left">
                 <div class="profile__img">
-                    <img :src="'IMG/profile/'+user.img" alt="">
+                    <img :src="'img/profile/'+user.img" alt="">
                 </div>
                 <div class="profile__nickname">
                     <h1>{{user.nickname}}</h1>
                 </div>
                 <div class="profile__list">
                     <ul class="profile__listUl">
-                        <li @click="changeView('stats')">Estadísticas</li>
-                        <li @click="changeView('history')">Historial</li>
+                        <li @click="changeView('stats')">Stats</li>
+                        <li @click="changeView('history')">History</li>
                     </ul>
                     <div class="info__buttons">
                         <button style="margin: auto; padding:10px; font-size:1rem;" class="ranking__addFriend" @click="goHome">GO HOME</button>
@@ -663,16 +667,16 @@ const Login = {
                 
                 <div class="profile__selectImg">
                 <input v-model="img" type="radio" id="otter" name="icon" value="cute_otter.jpg" checked="true"></input>
-                <label for="otter"><img height="70px" width="70px" src="IMG/profile/cute_otter.jpg" alt="otter" :class="{img_selected: checked }"></label><br>
+                <label for="otter"><img height="70px" width="70px" src="img/profile/cute_otter.jpg" alt="otter" :class="{img_selected: checked }"></label><br>
                     
                 <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"></input>
-                <label for="pig"><img height="70px" width="70px" src="IMG/profile/cute_pig.jpg" alt="pig"></label><br>
+                <label for="pig"><img height="70px" width="70px" src="img/profile/cute_pig.jpg" alt="pig"></label><br>
 
                 <input v-model="img" type="radio" id="hamster" name="icon" value="cute_hamster.jpg"></input>
-                <label for="hamster"><img height="70px" width="70px" src="IMG/profile/cute_hamster.jpg" alt="hamster"></label><br>
+                <label for="hamster"><img height="70px" width="70px" src="img/profile/cute_hamster.jpg" alt="hamster"></label><br>
                 
                 <input v-model="img" type="radio" id="hedgehog" name="icon" value="cute_hedgehog.jpg"></input>
-                <label for="hedgehog"><img height="70px" width="70px" src="IMG/profile/cute_hedgehog.jpg" alt="hedgehog"></label><br>
+                <label for="hedgehog"><img height="70px" width="70px" src="img/profile/cute_hedgehog.jpg" alt="hedgehog"></label><br>
                 </div>
                 
                     <input type="text" placeholder="Name" v-model="name" required/>
@@ -1005,16 +1009,16 @@ const MyProfile = {
         <div class="profile">
             <div class="profile__left">
                 <div class="profile__img">
-                    <img :src="'IMG/profile/'+infoPlayer.img" alt="">
+                    <img :src="'img/profile/'+infoPlayer.img" alt="">
                 </div>
                 <div class="profile__nickname">
                     <h1>{{infoPlayer.nickname}}</h1>
                 </div>
                 <div class="profile__list">
                     <ul class="profile__listUl">
-                        <li @click="changeView('stats')">Estadísticas</li>
-                        <li @click="changeView('friends')">Amigos</li>
-                        <li @click="changeView('history')">Historial</li>
+                        <li @click="changeView('stats')">Stats</li>
+                        <li @click="changeView('friends')">Friends</li>
+                        <li @click="changeView('history')">History</li>
                         <li @click="changeView('challenges')">challenges</li>
                     </ul>
                     <div class="info__buttons">
