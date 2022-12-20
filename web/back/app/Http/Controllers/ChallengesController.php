@@ -235,5 +235,4 @@ class ChallengesController extends Controller
 
         return response()->json('ok');
     }
-    
 }
