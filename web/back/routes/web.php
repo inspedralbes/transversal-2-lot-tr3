@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('demo', [QuizzsController::class , 'getDemo']);
-Route::get('daily', [QuizzsController::class , 'getDaily']);
+Route::post('daily', [QuizzsController::class , 'getDaily']);
 
 Route::post('newGame', [QuizzsController::class , 'newGame']);
 Route::post('recordGame', [QuizzsController::class , 'recordGame']);

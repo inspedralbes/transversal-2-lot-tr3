@@ -22,12 +22,27 @@ class QuizzsController extends Controller
     }
 
     public function getDaily(Request $request) {
-        $daily = Quizz::inRandomOrder()
-            ->limit(1)
-            ->where('type', 'daily')
+        $daily = Quizz::where('type', 'daily')
             ->where('date_creation', date('Y-m-d'))
             ->first();
         $quizz = json_decode($daily->game); 
+
+        //Check if the user has already played the daily
+        $dailyPlayed = Users_quizz::where('quizz_id', $daily -> id)
+        ->where('user_id', $request -> id_user)
+        ->count();
+        
+        if ($dailyPlayed > 0) {
+            $quizz = 'error';
+        } else {
+            $addNewGame = new Users_quizz();
+            $addNewGame -> user_id = $request -> id_user;
+            $addNewGame -> quizz_id = $daily -> id;
+            $addNewGame -> save();
+    
+            Session::put('quizz_id', $addNewGame -> quizz_id);
+            Session::put('user_id', $request -> id_user);
+        }
         return response()->json($quizz);
     }
 

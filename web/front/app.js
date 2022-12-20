@@ -146,13 +146,35 @@ const Questions = {
         } else if (userStore().configPlay.type == 'daily') {
 
             //fetch a diaria
-            fetch(`../back/public/index.php/daily`)
+            var userInfo = new FormData();
+            userInfo.append('id_user', userStore().loginInfo.idUser);
+            fetch(`../back/public/index.php/daily`,{
+                method: 'POST',
+                body: userInfo
+            })
                 .then((response) => response.json())
                 .then((data) => {
-                    this.quizz = data;
-                    this.nQuestion = Object.keys(this.quizz).length - 1;
-                    this.timer = true;
-                    this.countTimer();
+                    if(data!='error'){
+                        this.quizz = data;
+                        this.nQuestion = Object.keys(this.quizz).length - 1;
+                        this.timer = true;
+                        this.countTimer();
+                    }else{
+                        Swal.fire({
+                            title: 'Error',
+                            icon:'info',
+                            text:'You already play the daily game',
+                            confirmButtonText: 'OK',
+                            backdrop: `
+                            rgba(0,0,123,0.4)
+                            url("/img/nyan-cat.gif")
+                            left top
+                            no-repeat`
+                        }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            router.push('/');
+                        })
+                    }
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
@@ -1032,6 +1054,14 @@ const Ranking = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
+
+                fetch(`../back/public/index.php/getDailyRanking`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.dailyRanq = data;
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
             // this.players=[{
             //     nickname:'',
             //     elo: -1,
@@ -1143,7 +1173,7 @@ const Ranking = {
                                             <RouterLink class="ranking__routerProfile" to="/profile"> {{player.nickname}}</RouterLink>
                                         </p>
                                     </td>
-                                    <td>{{player.elo}}</td>
+                                    <td>{{player.score}}</td>
                                 </tr>
                             </tbody>
                         </table>

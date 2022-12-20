@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Quizz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -75,6 +76,7 @@ class ProfileController extends Controller
                 'id' => -1,
                 'name' => '',
                 'surname' => '',
+                'nickname' => '',
                 'elo' => -1
             ];
             $user -> id = $infoUser -> id;
@@ -88,33 +90,38 @@ class ProfileController extends Controller
     }
     
     public function getDailyRanking(Request $request) {
-        $allDaily = Users_quizz::where('type', 'daily')
+        $daily = Quizz::where('type', 'daily')
         ->where('date_creation', date('Y-m-d'))
-        ->all();
+        ->first();
 
         $results = DB::table('users_quizzs')
                      ->distinct()
-                     ->innerJoin('bookings', function($join)
+                     ->join('users', function($join)
                          {
-                             $join->on('rooms.id', '=', 'bookings.room_type_id');
-                             $join->on('arrival','>=',DB::raw("'2012-05-01'"));
-                             $join->on('arrival','<=',DB::raw("'2012-05-10'"));
-                             $join->on('departure','>=',DB::raw("'2012-05-01'"));
-                             $join->on('departure','<=',DB::raw("'2012-05-10'"));
+                             $join->on('users_quizzs.user_id', '=', 'users.id');
                          })
-                     ->where('bookings.type', '=', 'daily')
-                     ->where('users_quizzs.date_creation', date('Y-m-d'))
+                     ->where('users_quizzs.quizz_id', '=', $daily -> id)
+                     ->orderBy('users_quizzs.score', 'DESC')
+                     ->orderBy('users_quizzs.time_resolution', 'ASC')
                      ->get();
+        error_log($results);
+
         $ranking = [];
-        foreach ($allDaily as $gameInfo) {
+        foreach ($results as $infoUser) {
             $user = (object) [
-                'quizz_id' => -1,
-                'user_id' => -1,
+                'id' => -1,
+                'name' => '',
+                'surname' => '',
+                'nickname' => '',
                 'score' => -1,
-                'time_resolution' => -1,
+                'time_resolution' => -1
             ];
-            $user -> score = $gameInfo -> score;
-            $user -> time_resolution = $gameInfo -> time_resolution;
+            $user -> id = $infoUser -> user_id;
+            $user -> name = $infoUser -> name;
+            $user -> surname = $infoUser -> surname;
+            $user -> nickname = $infoUser -> nickname;
+            $user -> score = $infoUser -> score;
+            $user -> time_resolution = $infoUser -> time_resolution;
             $ranking[] = $user;
         }
         return response()->json($ranking);
