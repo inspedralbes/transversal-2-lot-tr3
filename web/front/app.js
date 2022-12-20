@@ -1009,18 +1009,6 @@ const MyProfile = {
                         </div>
                     </div>
                 </div>
-                <div class="history" v-show="showChooseFriend">
-                    <div class="info__tittle">
-                        <h1>Choose a friend</h1>
-                    </div>
-                    <div class="info__content">
-                        <div v-for="(friend, index) in this.friends">
-                        <div class="wrapperChallenge"></div>
-                            <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
