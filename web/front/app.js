@@ -1005,7 +1005,7 @@ const MyProfile = {
         <div class="profile">
             <div class="profile__left">
                 <div class="profile__img">
-                    <img :src="'IMG/profile/'+infoPlayer.img" alt="">
+                    <img :src="'img/profile/'+infoPlayer.img" alt="">
                 </div>
                 <div class="profile__nickname">
                     <h1>{{infoPlayer.nickname}}</h1>
