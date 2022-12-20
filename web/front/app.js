@@ -107,7 +107,6 @@ const Questions = {
                     }).catch((error) => {
                         console.error('Error:', error);
                     });
-                // console.log('fetch');
             }
         },
         stopTimer() {
@@ -128,9 +127,7 @@ const Questions = {
     },
     mounted() {
         if (!userStore().logged) {
-
-            // fetch a demo
-            // fetch(`https://the-trivia-api.com/api/questions?limit=10`)
+            //The user will play the demo if he's not logged in.
             fetch(`../back/public/index.php/demo`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -141,11 +138,8 @@ const Questions = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-            console.log('fetch');
-
         } else if (userStore().configPlay.type == 'daily') {
-
-            //fetch a diaria
+            //A logged user can play once the daily question
             var userInfo = new FormData();
             userInfo.append('id_user', userStore().loginInfo.idUser);
             fetch(`../back/public/index.php/daily`,{
@@ -171,17 +165,13 @@ const Questions = {
                             left top
                             no-repeat`
                         }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
                             router.push('/');
                         })
                     }
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-
         } else if (userStore().configPlay.type == 'challenge') {
-
-
             fetch(`../back/public/index.php/startChallenge`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -192,17 +182,12 @@ const Questions = {
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-
-
         } else {
-            //fetch a la api externa 
-
             var question = new FormData();
             question.append('id_user', userStore().loginInfo.idUser);
             question.append('nickname', userStore().loginInfo.nickname);
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
-            // fetch(`https://the-trivia-api.com/api/questions?categories=${userStore().configPlay.category}&limit=10&difficulty=${ userStore().configPlay.difficulty}`)
             fetch(`../back/public/index.php/newGame`, {
                     method: 'POST',
                     body: question
@@ -319,10 +304,9 @@ const Profile = {
     },
     mounted() {
         this.user.id = this.$route.params.id
-
         var userReq = new FormData();
-        userReq.append('user_id', this.$route.params.id);
 
+        userReq.append('user_id', this.$route.params.id);
         fetch(`../back/public/index.php/getUserInfo`, {
                 method: 'POST',
                 body: userReq
@@ -359,8 +343,6 @@ const Profile = {
                 this.showStats = false;
             }
         },
-        //getPendingChallenges
-        //getComplitedChallenges
         challengeQuizz(quizzId) {
             var userReq = new FormData();
             userReq.append('quizz_id', quizzId);
@@ -470,7 +452,6 @@ const Login = {
             user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
-            //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
             if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
                 Swal.fire({
