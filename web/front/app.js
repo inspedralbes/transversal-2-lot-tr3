@@ -948,7 +948,7 @@ const MyProfile = {
         <div class="profile">
             <div class="profile__left">
                 <div class="profile__img">
-                    <img src="IMG/cute_otter.jpg" alt="">
+                    <img :src="'IMG/profile/'+infoPlayer.img" alt="">
                 </div>
                 <div class="profile__nickname">
                     <h1>{{infoPlayer.nickname}}</h1>
@@ -1596,7 +1596,8 @@ const userStore = Pinia.defineStore('usuario', {
             logged: false,
             loginInfo: {
                 nickname: '',
-                idUser: -1
+                idUser: -1,
+                img:'cute_pig.jpg'
             },
             configPlay: {
                 category: '',
