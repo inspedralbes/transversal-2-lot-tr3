@@ -37,8 +37,8 @@ En el nostre cas, hem utilitzat "FileZilla" per pujar els arxius.
 Per fer-ho, accedim a FileZilla:
 1. Al paràmetre 'Servidor' posem: labs.inspedralbes.cat
 2. Nombre de usuario posem el nom d'usuari del labs. 
-3. I a 'contraseña'
-4. 
+3. I a 'contraseña' la contrassenya del nostre labs.
+4. Accedim llavors a /web/domini/public_html on domini és el creat anteriorment, i copiem els arxius de dins de la carpeta 'web'.
 
 ## Configurar CRON per les preguntes diàries
 1. Accedim a https://labs.inspedralbes.cat:8083/list/cron
