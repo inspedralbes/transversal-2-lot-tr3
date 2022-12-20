@@ -290,7 +290,8 @@ const Profile = {
         return {
             user: {
                 id: -1,
-                nickname: ''
+                nickname: '',
+                img:'cute_otter.jpg'
             },
             showStats: true,
             showHistory: false,
@@ -309,7 +310,8 @@ const Profile = {
             })
             .then((response) => response.json())
             .then((data) => {
-                this.user.nickname = data;
+                this.user.nickname = data.nickname;
+                this.user.img=data.picture;
             });
 
         fetch(`../back/public/index.php/getUserQuizzs`, {
@@ -439,6 +441,7 @@ const Login = {
             password: '',
             logMail: '',
             logPass: '',
+            img:'',
             signIn: true
 
 
@@ -475,6 +478,7 @@ const Login = {
             user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
+            user.append('picture', this.img);
 
             let infoOk=true;
             let msgError="";
@@ -571,6 +575,8 @@ const Login = {
                         userStore().logged = true;
                         userStore().loginInfo.nickname = data.nickname;
                         userStore().loginInfo.idUser = data.id;
+                        userStore().loginInfo.img = data.picture;
+
                         router.push('/');
                     } else {
                         Swal.fire({
@@ -624,6 +630,11 @@ const Login = {
             <div class="container__form signUp">
             <div class="signUp__title"><h1>Create Account</h1></div>
                 <div class="signUp__inputs">
+
+                <input v-model="img" type="radio" id="otter" name="icon" value="cute_otter.jpg" checked><img src="IMG/profile/cute_otter.jpg" alt="otter"></input>
+                    
+                <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"><img src="IMG/profile/cute_pig.jpg" alt="pig"></input>
+                
                     <input type="text" placeholder="Name" v-model="name" required/>
                     <input type="text" placeholder="Surname" v-model="surname" required/>
                     <input type="text" placeholder="Nickname" v-model="nickname" required/>
