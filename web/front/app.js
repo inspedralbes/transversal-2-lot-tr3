@@ -365,6 +365,31 @@ const Profile = {
                         showResult(data);
                     }
                 });
+        },
+        addFriend() {
+            var friendReq = new FormData();
+            friendReq.append('id', this.user.id);
+
+            fetch(`../back/public/index.php/addFriend`, {
+                    method: 'POST',
+                    body: friendReq
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data == "ERROR") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'this user is already your friend or already has a pending request',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Done',
+                            text: 'Request sent, wait for your friend to accept it!',
+                        })
+                    }
+                });
         }
     },
     template: `<div>
@@ -376,6 +401,7 @@ const Profile = {
             <li @click="changeView('stats')">Estadísticas</li>
             <li @click="changeView('history')">Historial</li>
         </ul>
+        <button v-if="isLogged" class="ranking__addFriend" @click="addFriend()">ADD FRIEND</button>
     </div>
 
     <div class="info">
@@ -449,13 +475,43 @@ const Login = {
             user.append('nickname', this.nickname);
             user.append('email', this.email);
             user.append('password', this.password);
+
+            let infoOk=true;
+            let msgError="";
+
+            if(!this.validateName(this.name)){
+                infoOk=false;
+                msgError+="The name can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateName(this.surname)){
+                infoOk=false;
+                msgError+="The surname can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateName(this.nickname)){
+                infoOk=false;
+                msgError+="The nickname can't be empty and must be less than 15 characters <br/>"
+            }
+
+            if(!this.validateMail(this.email)){
+                msgError+="Invalid mail <br/>";
+                infoOk=false;
+            }
+
+            if(!this.validatePassword(this.password)){
+                infoOk=false;
+                msgError+="The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
+            }
+            
+            //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-            if (this.name.length == 0 || this.surname.length == 0 || this.nickname.length == 0 || this.email.length == 0 || this.password.length == 0) {
+            if (!infoOk) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Oops... Something went wrong :[',
                     color: 'white',
-                    text: "Something went wrong :[",
+                    html: msgError,
                     background: '#434c7a',
                     buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
                     showClass: {
@@ -533,6 +589,33 @@ const Login = {
                         })
                     }
                 });
+        },
+        validateName(name){
+            let validation=false;
+
+            if(name.length>0 && name.length<=15){
+                validation=true;
+            }
+
+            return validation;
+        },
+        validateMail(mail){
+            let validation=false;
+
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+                validation=true;
+            }
+                
+            return validation;
+        },
+        validatePassword(psswd){
+            let validation=false;
+
+            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)){
+                validation=true;
+            }
+
+            return validation;
         }
     },
     template: `
