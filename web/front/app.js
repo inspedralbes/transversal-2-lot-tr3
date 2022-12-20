@@ -652,6 +652,12 @@ const Login = {
                     
                 <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"></input>
                 <label for="pig"><img height="70px" width="70px" src="IMG/profile/cute_pig.jpg" alt="pig"></label><br>
+
+                <input v-model="img" type="radio" id="hamster" name="icon" value="cute_hamster.jpg"></input>
+                <label for="hamster"><img height="70px" width="70px" src="IMG/profile/cute_hamster.jpg" alt="hamster"></label><br>
+                
+                <input v-model="img" type="radio" id="hedgehog" name="icon" value="cute_hedgehog.jpg"></input>
+                <label for="hedgehog"><img height="70px" width="70px" src="IMG/profile/cute_hedgehog.jpg" alt="hedgehog"></label><br>
                 </div>
                 
                     <input type="text" placeholder="Name" v-model="name" required/>
@@ -1274,7 +1280,8 @@ Vue.component('question', {
             showInfoPregunta: false,
             infoPregunta: {
                 yourAnswer: false,
-                persentage: 0
+                persentage: 0,
+                all:0
             },
             defaultClass: 'answers__button'
         }
@@ -1316,6 +1323,7 @@ Vue.component('question', {
                     .then((response) => response.json())
                     .then((data) => {
                         this.infoPregunta.persentage = data.correct * 100 / data.all;
+                        this.infoPregunta.all = data.all;
                         setTimeout(() => {
                             // this.$emit('stopTimer');
                             this.showInfoPregunta = true;
@@ -1325,7 +1333,7 @@ Vue.component('question', {
                             this.showInfoPregunta = false;
                             this.$emit('startTimer');
                             this.$emit('answered', ok);
-                        }, "5000");
+                        }, "3000");
                     });
 
             }
@@ -1362,10 +1370,14 @@ Vue.component('question', {
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
 
     },
-    template: `
+    template:`
     <div>
     <div v-if="showInfoPregunta" class="cardQ">
-        <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+        <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>!</p>
+        <p v-if="infoPregunta.all==1"> You are the first person to answer this question</p>
+        <p v-else>The {{parseFloat(infoPregunta.persentage).toFixed(2)}}% of de people answered right</p>
+        <img v-if="infoPregunta.yourAnswer" src="img/happy_cat.gif" alt="Happy cat">
+        <img v-else src="img/cat_peach.gif" alt="Sad cat">
     </div>
     <div v-else class="cardQ">
     <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
@@ -1402,7 +1414,7 @@ Vue.component('playerHistory', {
     <div>
         <div v-for="(quizz, index) in this.quizzs">
         <div class="wrapperHistory">
-                <p>{{quizz.category}} {{quizz.difficulty}} Score:{{quizz.score}} Time:{{quizz.time_resolution}}s<div v-if="isLogged"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
+                <p>{{quizz.category}} {{quizz.difficulty}} Score:{{quizz.score}} Time:{{quizz.time_resolution}}s<div v-if="isLogged && quizz.type=='normal'"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
         </div>
         </div>
     </div>

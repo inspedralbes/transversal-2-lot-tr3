@@ -376,6 +376,9 @@
         display: flex;
     }
 
+    .profile__selectImg input{
+        display: none;
+    }
     .profile__selectImg label img{
         border-radius: 50%;
         margin: auto;
