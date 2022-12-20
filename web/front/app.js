@@ -142,28 +142,24 @@ const Questions = {
             //A logged user can play once the daily question
             var userInfo = new FormData();
             userInfo.append('id_user', userStore().loginInfo.idUser);
-            fetch(`../back/public/index.php/daily`,{
-                method: 'POST',
-                body: userInfo
-            })
+            fetch(`../back/public/index.php/daily`, {
+                    method: 'POST',
+                    body: userInfo
+                })
                 .then((response) => response.json())
                 .then((data) => {
-                    if(data!='error'){
+                    if (data != 'error') {
                         this.quizz = data;
                         this.nQuestion = Object.keys(this.quizz).length - 1;
                         this.timer = true;
                         this.countTimer();
-                    }else{
+                    } else {
                         Swal.fire({
                             title: 'Error',
-                            icon:'info',
-                            text:'You already play the daily game',
+                            icon: 'info',
+                            text: 'You already play the daily game',
                             confirmButtonText: 'OK',
-                            backdrop: `
-                            rgba(0,0,123,0.4)
-                            url("/img/nyan-cat.gif")
-                            left top
-                            no-repeat`
+                            background: '#434c7a',
                         }).then((result) => {
                             router.push('/');
                         })
@@ -358,6 +354,7 @@ const Profile = {
                         if (data.challengerId == userStore().loginInfo.idUser && data.challengerScore != null) {
                             Swal.fire({
                                 title: 'Result',
+                                background: '#434c7a',
                                 text: `You already challenged this play, wait for the other to play`,
                             })
                         } else {
@@ -542,7 +539,6 @@ const Login = {
                                 title: 'Oops...',
                                 color: 'white',
                                 text: "Something went wrong :[",
-                                buttonsStyling: 'background: linear-gradient(to right, #3d395c, #351632)',
                                 background: '#434c7a',
                                 confirmButtonColor: 'linear-gradient(to right, #3d395c, #351632)',
                                 showClass: {
@@ -838,11 +834,15 @@ const MyProfile = {
                     if (data.status = 'pending') {
                         Swal.fire({
                             title: 'Result',
+                            background: '#434c7a',
+
                             text: 'Challenge send'
                         })
                     } else {
                         Swal.fire({
                             title: 'Result',
+                            background: '#434c7a',
+
                             text: 'This friend already has played this match'
                         })
                     }
@@ -881,6 +881,8 @@ const MyProfile = {
                 .then((data) => {
                     if (data.status == 'pending') {
                         Swal.fire({
+                            background: '#434c7a',
+
                             title: 'Error',
                             text: "There's an error with this match"
                         })
@@ -913,12 +915,14 @@ const MyProfile = {
                     if (data.status = 'pending') {
                         Swal.fire({
                             title: 'Result',
+                            background: '#434c7a',
                             text: 'Challenge send'
                         })
                     } else {
 
                         Swal.fire({
                             title: 'Result',
+                            background: '#434c7a',
                             text: 'This friend already has played this match'
                         })
                     }
@@ -941,10 +945,8 @@ const MyProfile = {
                 <div class="profile__list">
                     <ul class="profile__listUl">
                         <li @click="changeView('stats')">Estadísticas</li>
-                        <li @click="changeView('account')">Mi cuenta</li>
                         <li @click="changeView('friends')">Amigos</li>
                         <li @click="changeView('history')">Historial</li>
-                        <li @click="changeView('privacy')">Terminos de privacidad</li>
                         <li @click="changeView('challenges')">challenges</li>
                     </ul>
                     <div class="info__buttons">
@@ -960,15 +962,6 @@ const MyProfile = {
                     </div>
                     <div class="info__content">
                         <playerStats :games=quizzs :ready=quizzs_ready ></playerStats>
-                    </div>
-                </div>
-
-                <div class="info__account" v-show="showAccount">
-                    <div class="info__tittle">
-                        <h1>Account</h1>
-                    </div>
-                    <div class="info__content">
-                        <p>Aquí va la info de mi cuenta</p>
                     </div>
                 </div>
 
@@ -1007,15 +1000,6 @@ const MyProfile = {
                                 </b-tab>
                             </b-tabs>
                         </b-card>
-                    </div>
-                </div>
-
-                <div class="privacy" v-show="showPrivacy">
-                    <div class="info__tittle">
-                        <h1>Privacy</h1>
-                    </div>
-                    <div class="info__content">
-                        <p>Aquí van las politicas de privacidad</p>
                     </div>
                 </div>
 
@@ -1104,12 +1088,12 @@ const Ranking = {
                 console.error('Error:', error);
             });
         fetch(`../back/public/index.php/getDailyRanking`)
-        .then((response) => response.json())
-        .then((data) => {
-            this.dailyRanq = data;
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                this.dailyRanq = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
     },
     computed: {
         isLogged() {
@@ -1119,7 +1103,7 @@ const Ranking = {
             return userStore().loginInfo;
         }
     },
-    methods: {       
+    methods: {
         addFriend(id) {
             var friendReq = new FormData();
             friendReq.append('id', id);
@@ -1134,12 +1118,16 @@ const Ranking = {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
+                            background: '#434c7a',
+                            color: 'white',
                             text: 'this user is already your friend or already has a pending request',
                         })
                     } else {
                         Swal.fire({
                             icon: 'success',
                             title: 'Done',
+                            background: '#434c7a',
+                            color: 'white',
                             text: 'Request sent, wait for your friend to accept it!',
                         })
                     }
@@ -1153,8 +1141,10 @@ const Ranking = {
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
     template: `
     <div>
-    <button class="rankingButton__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
-    <button class="rankingButton__Home" @click="goHome">Go home</button>   
+    <div class="rankingButtons">
+        <button class="rankingButtons__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
+        <button class="rankingButtons__Home" @click="goHome">Go home</button>
+    </div>   
     <div class="ranking" v-if="viewGeneral">
             <h1 class="ranking__title">RANKING</h1>
             <div class="ranking__players">
@@ -1625,8 +1615,11 @@ var app = new Vue({
 // import 'sweetalert2/src/sweetalert2.scss';
 function alertPartida() {
     Swal.fire({
+        background: '#434c7a',
+        color: 'white',
         title: 'Are you sure?',
         html: `
+        <div class="settings">
             <div class="category">
                 <div class="selectCat">
                     <select name="select" id="selectCategory">
@@ -1652,17 +1645,13 @@ function alertPartida() {
                         <option value="hard">Hard</option>
                     </select>
                 </div>
+            </div>
             </div>`,
         // icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Play',
-        backdrop: `
-            rgba(0,0,123,0.4)
-            url("/img/nyan-cat.gif")
-            left top
-            no-repeat`
+        confirmButtonText: 'Play'
     }).then((result) => {
         if (result.isConfirmed) {
             let selectCategory = document.getElementById("selectCategory");
@@ -1690,11 +1679,9 @@ function gameType() {
         denyButtonText: `Daily`,
         denyButtonColor: '#b18597',
         cancelButtonColor: '#d33',
-        backdrop: `
-        rgba(0,0,123,0.4)
-        url("/img/nyan-cat.gif")
-        left top
-        no-repeat`
+        background: '#434c7a',
+
+        color: 'white'
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
@@ -1740,6 +1727,7 @@ function showResult(data) {
 
     Swal.fire({
         title: 'Result',
+        background: '#434c7a',
         html: htmlString
     })
 }

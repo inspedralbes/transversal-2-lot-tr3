@@ -260,6 +260,11 @@
         grid-row-gap: 15px;
     }
     
+    .settings {
+        display: flex;
+        margin: 20px;
+    }
+    
     .center__input {
         padding: 20px;
         border-radius: 10px;
@@ -418,22 +423,6 @@
     .container__form h2 {
         text-align: center;
         color: #ffffff;
-    }
-    
-    .container__form p {
-        font-size: 14px;
-        font-weight: 100;
-        line-height: 20px;
-        letter-spacing: 0.5px;
-        margin: 20px 0 30px;
-        color: #fdfdfd;
-    }
-    
-    .container__form a {
-        color: #333;
-        font-size: 14px;
-        text-decoration: none;
-        margin: 15px 0;
     }
     
     .login {
@@ -596,23 +585,6 @@
         transition: transform 0.6s ease-in-out;
     }
     
-    .overlay-left {
-        transform: translateX(-20%);
-    }
-    
-    .containerLogin.right-panel-active .overlay-left {
-        transform: translateX(0);
-    }
-    
-    .overlay-right {
-        right: 0;
-        transform: translateX(0);
-    }
-    
-    .containerLogin.right-panel-active .overlay-right {
-        transform: translateX(20%);
-    }
-    
     .signUp__inputs,
     .signIn__inputs {
         padding: 10px;
@@ -653,11 +625,9 @@
     
     .info {
         font-family: Arial, Helvetica, sans-serif;
-        margin: auto;
         justify-content: center;
         align-items: center;
-        display: flex;
-        align-items: center;
+        display: flexbox;
         float: left;
         height: 800px;
         width: 60%;
@@ -877,7 +847,7 @@
         overflow-wrap: break-word;
     }
     
-    .rankingButton__Daily p {
+    .rankingButtons__Daily p {
         margin-bottom: 0;
     }
     
@@ -890,8 +860,8 @@
         white-space: initial;
     }
     
-    .rankingButton__Daily,
-    .rankingButton__Home {
+    .rankingButtons__Daily,
+    .rankingButtons__Home {
         text-transform: uppercase;
         margin-left: 50px;
         margin-top: 30px;
@@ -917,8 +887,8 @@
         transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
     }
     
-    .rankingButton__Daily::before,
-    .rankingButton__Home::before {
+    .rankingButtons__Daily::before,
+    .rankingButtons__Home::before {
         position: absolute;
         content: "";
         width: 100%;
@@ -935,35 +905,35 @@
         transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
     }
     
-    .rankingButton__Daily:hover,
-    .rankingButton__Home:hover,
-    .rankingButton__Daily:focus,
-    .rankingButton__Home:focus {
+    .rankingButtons__Daily:hover,
+    .rankingButtons__Home:hover,
+    .rankingButtons__Daily:focus,
+    .rankingButtons__Home:focus {
         background: #ffe9e9;
         transform: translate(0, 0.25em);
     }
     
-    .rankingButton__Daily:hover::before,
-    .rankingButton__Home:hover::before {
+    .rankingButtons__Daily:hover::before,
+    .rankingButtons__Home:hover::before {
         box-shadow: 0 0 0 2px #422c31, 0 0.5em 0 0 #422c314d;
         box-shadow: 0px 20px 18px -3px #000;
         transform: translate3d(0, 0.5em, -1em);
     }
     
-    .rankingButton__Daily:active,
-    .rankingButton__Home:active {
+    .rankingButtons__Daily:active,
+    .rankingButtons__Home:active {
         background: #ffe9e9;
         transform: translate(0em, 0.75em);
     }
     
-    .rankingButton__Daily:active::before,
-    .rankingButton__Home:active::before {
+    .rankingButtons__Daily:active::before,
+    .rankingButtons__Home:active::before {
         box-shadow: 0 0 0 2px #422c314d, 0 0 #422c314d;
         box-shadow: 0px 20px 18px -3px #000;
         transform: translate3d(0, 0, -1em);
     }
     
-    .rankingButton__Home {
+    .rankingButtons__Home {
         float: right;
         margin-right: 50px;
     }
@@ -1028,6 +998,11 @@
     
     .ranking__addFriend:active::before {
         transform: translate3d(0, 0, -1em);
+    }
+    
+    .rankingButtons {
+        display: flex;
+        padding: 30px;
     }
     
     .ranking__declineFriend {
