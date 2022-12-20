@@ -1,9 +1,9 @@
 # Aquest document explica com desplegar l'aplicació
 
 ## Credencials de la BBDD de producció 
-Database: a21alecrinor_trivial3Prod
-Username: a21alecrinor_trivial3Prod
-Password: Qwerty123456
+<br>Database: a21alecrinor_trivial3Prod
+<br>Username: a21alecrinor_trivial3Prod
+<br>Password: Qwerty123456
 
 ## Per desplegar d'aplicació executar els següents comandaments a la consola de Visual Studio Code
 1. Git clone https://github.com/inspedralbes/transversal-2-lot-tr3.git
@@ -15,12 +15,12 @@ Password: Qwerty123456
 ## Configurar .env
 Farem una copia del fitxer ".env.example" i l'anomenarem ".env".
 Dins modificarem les línies:
-    DB_CONNECTION=mysql
-    DB_HOST=labs.inspedralbes.cat
-    DB_PORT=3306
-    DB_DATABASE=''
-    DB_USERNAME=''
-    DB_PASSWORD=''
+DB_CONNECTION=mysql
+DB_HOST=labs.inspedralbes.cat
+DB_PORT=3306
+DB_DATABASE=''
+DB_USERNAME=''
+DB_PASSWORD=''
 A Database, username i password posarem les dades especifícades al principi del document. 
 També podem crear una BBDD nova a https://labs.inspedralbes.cat:8083/add/db/ 
 
