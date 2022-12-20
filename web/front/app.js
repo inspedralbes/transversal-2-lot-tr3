@@ -550,13 +550,9 @@ const Login = {
                             })
                         }
                     });
-
-
-                // console.log('new');
             }
         },
         logUser() {
-            // console.log('login');
             var user = new FormData();
             user.append('email', this.logMail);
             user.append('password', this.logPass);
@@ -685,8 +681,6 @@ const MyProfile = {
         }
     },
     mounted() {
-
-
         this.getFriends();
         this.getPendingRequests();
         this.getPendingChallenges();
@@ -703,8 +697,6 @@ const MyProfile = {
                 this.quizzs = data;
                 this.quizzs_ready = true;
             });
-
-
     },
     computed: {
         infoPlayer() {
@@ -792,18 +784,13 @@ const MyProfile = {
 
         },
         getFriends() {
-
             fetch(`../back/public/index.php/friends`)
                 .then((response) => response.json())
                 .then((data) => {
-                    // console.log(data);
                     this.friends = data;
                 });
-
-
         },
         declineFriend(id) {
-
             var friendReq = new FormData();
             friendReq.append('id', id);
 
@@ -816,8 +803,6 @@ const MyProfile = {
                     this.getPendingRequests();
                     this.getFriends();
                 });
-
-            // console.log('decline '+id);
         },
         logOut() {
             userStore().logged = false;
@@ -1270,21 +1255,7 @@ Vue.component('question', {
                     this.findCorrect();
                     this.infoPregunta.yourAnswer = false;
                 }
-
                 this.$emit('stopTimer');
-                // setTimeout(()=>{
-                //     // this.$emit('stopTimer');
-                //     this.showInfoPregunta=true;
-                // },1000);
-
-                // setTimeout(() => {
-                //     this.showInfoPregunta=false;
-                //     this.$emit('startTimer');
-                //     this.$emit('answered', ok);
-                // }, "5000");
-
-
-                //form data question_id correct(true false)
                 var infoQ = new FormData();
                 infoQ.append('question_id', this.question_info.id);
                 infoQ.append('correct', ok);
@@ -1340,13 +1311,14 @@ Vue.component('question', {
 
         this.answers.push(a);
         this.answers = this.answers.sort((a, b) => 0.5 - Math.random());
-        //     <div v-if="showInfoPregunta" class="cardQ">
-        //     <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
-        // </div>
+
     },
     template: `
     <div>
-        <div class="cardContainer">
+        <div v-if="showInfoPregunta" class="cardQ">
+            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+        </div>
+        <div v-else class="cardContainer">
             <input type="radio" name="slider" id="item-1" checked>
             <input type="radio" name="slider" id="item-2" >
             <input type="radio" name="slider" id="item-3">
