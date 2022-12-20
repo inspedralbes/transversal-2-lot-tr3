@@ -897,7 +897,12 @@ const MyProfile = {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data == 'ok') {
-                        router.push('/questions');
+                        if (accepted) {
+                            router.push('/questions');
+                        } else {
+                            this.getPendingChallenges();
+                            this.getCompletedChallenges();
+                        }
                     }
                 });
             // router.push({ path: '/questions', props: { idChallenge: challengeId } })

@@ -222,7 +222,7 @@ class ChallengesController extends Controller
 
     public function updateChallenge(Request $request)
     {
-        if ($request -> saveChallenge) {
+        if ($request -> saveChallenge == "true") {
             Session::put('challenge_id', $request -> challenge_id);
             $updateChallenge = Challenge::find($request -> challenge_id);
             $updateChallenge -> status = 'completed';
