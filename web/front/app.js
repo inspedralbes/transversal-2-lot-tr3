@@ -551,6 +551,8 @@ const Login = {
                             userStore().logged = true;
                             userStore().loginInfo.nickname = this.nickname;
                             userStore().loginInfo.idUser = data;
+                            userStore().loginInfo.img=this.img;
+
                             router.push('/');
                         } else {
                             Swal.fire({
