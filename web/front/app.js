@@ -424,8 +424,8 @@ const Profile = {
                 </div>
                 <div class="profile__list">
                     <ul class="profile__listUl">
-                        <li @click="changeView('stats')">Estadísticas</li>
-                        <li @click="changeView('history')">Historial</li>
+                        <li @click="changeView('stats')">Stats</li>
+                        <li @click="changeView('history')">History</li>
                     </ul>
                     <div class="info__buttons">
                         <button style="margin: auto; padding:10px; font-size:1rem;" class="ranking__addFriend" @click="goHome">GO HOME</button>
@@ -1012,9 +1012,9 @@ const MyProfile = {
                 </div>
                 <div class="profile__list">
                     <ul class="profile__listUl">
-                        <li @click="changeView('stats')">Estadísticas</li>
-                        <li @click="changeView('friends')">Amigos</li>
-                        <li @click="changeView('history')">Historial</li>
+                        <li @click="changeView('stats')">Stats</li>
+                        <li @click="changeView('friends')">Friends</li>
+                        <li @click="changeView('history')">History</li>
                         <li @click="changeView('challenges')">challenges</li>
                     </ul>
                     <div class="info__buttons">
