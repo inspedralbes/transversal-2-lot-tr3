@@ -198,12 +198,11 @@ const Questions = {
         }
     },
     template: `
-    <b-container>
+    <div>
         <div v-if="this.quizz">
             <div v-for="(question,index) in this.quizz">
                 <div v-show="index==actualQ">
-                    <p>{{index+1}}</p>
-                    <p>Time:{{time}}</p>
+                    <h1>Question {{index+1}} of 10</h1>
                     <question :question_info=question :time=questionTime @answered='goNext' @stopTimer="stopTimer" @startTimer="startTimer"></question>
                 </div>
             </div>
@@ -212,7 +211,7 @@ const Questions = {
                 <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="home">Home</button></RouterLink>
             </div>
         </div>
-    </b-container>`
+    </div>`
 
 }
 
@@ -1315,53 +1314,20 @@ Vue.component('question', {
     },
     template: `
     <div>
-        <div v-if="showInfoPregunta" class="cardQ">
-            <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+    <div v-if="showInfoPregunta" class="cardQ">
+        <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
+    </div>
+    <div v-else class="cardQ">
+        <div class="cardQ__question">
+            <h1>{{this.question_info.question}}</h1>
         </div>
-        <div v-else class="cardContainer">
-            <input type="radio" name="slider" id="item-1" checked>
-            <input type="radio" name="slider" id="item-2" >
-            <input type="radio" name="slider" id="item-3">
-            <div class="cards">
-                <div class="cardQ" for="item-1" id="card-1">
-                    <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
-                    <div class="cardQ__question">
-                        <h1>{{this.question_info.question}}</h1>
-                    </div>
-                    <div class="cardQ__answers answers">
-                        <div class="answers__answer" v-for="(answer,index) in this.answers">
-                            <button id="1" @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardQ" for="item-2" id="card-2">
-                <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
-
-                    <div class="cardQ__question">
-                        <h1>{{this.question_info.question}}</h1>
-                    </div>
-                    <div class="cardQ__answers answers">
-                        <div class="answers__answer" v-for="(answer,index) in this.answers">
-                            <button id="2"  @click="validate(index)" :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardQ" for="item-3" id="card-3">
-                <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
-
-                    <div class="cardQ__question">
-                        <h1>{{this.question_info.question}}</h1>
-                    </div>
-                    <div class="cardQ__answers answers">
-                        <div class="answers__answer" v-for="(answer,index) in this.answers">
-                            <button id="3"  @click="validate(index)"  :class="[defaultClass,{  resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}]">{{answer.answer}}</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="cardQ__answers answers">
+            <div class="answers__answer" v-for="(answer,index) in this.answers">
+                <button @click="validate(index)" class="answers__button" :class="{ resposta__correcte: answer.correct, resposta__incorrecte:answer.incorrect}">{{answer.answer}}</button>
             </div>
         </div>
-    </div>`
-        // template:`<p>{{info.Title}}</p>`
+    </div>
+</div>`
 
 });
 
