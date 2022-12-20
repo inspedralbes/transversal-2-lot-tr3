@@ -44,7 +44,7 @@ En el nostre cas, hem utilitzat "FileZilla" per pujar els arxius.
 1. Accedim a https://labs.inspedralbes.cat:8083/list/cron
 2. A l'input "command" escrivim la ruta absoluta de la nostra web amb el següent paràmetre:
     <br>cd 'ruta' && php artisan schedule:run >> /dev/null 2>&1
-<br>En el meu cas queda de la següent forma: cd /home/a21alecrinor/web/trivial3.alumnes.inspedralbes.cat/public_html/web/back && php artisan schedule:run >> /dev/null 2>&1
+<br>En el meu cas queda de la següent manera: cd /home/a21alecrinor/web/trivial3.alumnes.inspedralbes.cat/public_html/web/back && php artisan schedule:run >> /dev/null 2>&1
 3. A la pestanya "minutes" marquem "every minute" a "run command" i fem clic a "Generate".
 
 Ara el cron s'executarà cada minut, i revisarà si ha d'executar alguna tasca.
