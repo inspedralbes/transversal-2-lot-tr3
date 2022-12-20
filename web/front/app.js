@@ -441,7 +441,7 @@ const Login = {
             password: '',
             logMail: '',
             logPass: '',
-            img:'',
+            img:'cute_otter.jpg',
             signIn: true
 
 
@@ -630,10 +630,14 @@ const Login = {
             <div class="container__form signUp">
             <div class="signUp__title"><h1>Create Account</h1></div>
                 <div class="signUp__inputs">
-
-                <input v-model="img" type="radio" id="otter" name="icon" value="cute_otter.jpg" checked><img src="IMG/profile/cute_otter.jpg" alt="otter"></input>
+                
+                <div class="profile__selectImg">
+                <input v-model="img" type="radio" id="otter" name="icon" value="cute_otter.jpg" checked="true"></input>
+                <label for="otter"><img height="70px" width="70px" src="IMG/profile/cute_otter.jpg" alt="otter" :class="{img_selected: checked }"></label><br>
                     
-                <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"><img src="IMG/profile/cute_pig.jpg" alt="pig"></input>
+                <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"></input>
+                <label for="pig"><img height="70px" width="70px" src="IMG/profile/cute_pig.jpg" alt="pig"></label><br>
+                </div>
                 
                     <input type="text" placeholder="Name" v-model="name" required/>
                     <input type="text" placeholder="Surname" v-model="surname" required/>
