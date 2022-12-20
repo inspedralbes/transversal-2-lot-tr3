@@ -1364,7 +1364,9 @@ Vue.component('playerHistory', {
     template: `
     <div>
         <div v-for="(quizz, index) in this.quizzs">
-                <p>{{quizz.category}} {{quizz.difficulty}} {{quizz.score}} {{quizz.time_resolution}}<div v-if="isLogged"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
+        <div class="wrapperHistory">
+                <p>{{quizz.category}} {{quizz.difficulty}} Score:{{quizz.score}} Time:{{quizz.time_resolution}}s<div v-if="isLogged"><button @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button> </div></p>
+        </div>
         </div>
     </div>
     `
