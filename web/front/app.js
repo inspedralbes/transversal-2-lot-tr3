@@ -421,7 +421,7 @@ const Profile = {
         <div class="profile">
             <div class="profile__left">
                 <div class="profile__img">
-                    <img :src="'IMG/profile/'+user.img" alt="">
+                    <img :src="'img/profile/'+user.img" alt="">
                 </div>
                 <div class="profile__nickname">
                     <h1>{{user.nickname}}</h1>
@@ -667,16 +667,16 @@ const Login = {
                 
                 <div class="profile__selectImg">
                 <input v-model="img" type="radio" id="otter" name="icon" value="cute_otter.jpg" checked="true"></input>
-                <label for="otter"><img height="70px" width="70px" src="IMG/profile/cute_otter.jpg" alt="otter" :class="{img_selected: checked }"></label><br>
+                <label for="otter"><img height="70px" width="70px" src="img/profile/cute_otter.jpg" alt="otter" :class="{img_selected: checked }"></label><br>
                     
                 <input v-model="img" type="radio" id="pig" name="icon" value="cute_pig.jpg"></input>
-                <label for="pig"><img height="70px" width="70px" src="IMG/profile/cute_pig.jpg" alt="pig"></label><br>
+                <label for="pig"><img height="70px" width="70px" src="img/profile/cute_pig.jpg" alt="pig"></label><br>
 
                 <input v-model="img" type="radio" id="hamster" name="icon" value="cute_hamster.jpg"></input>
-                <label for="hamster"><img height="70px" width="70px" src="IMG/profile/cute_hamster.jpg" alt="hamster"></label><br>
+                <label for="hamster"><img height="70px" width="70px" src="img/profile/cute_hamster.jpg" alt="hamster"></label><br>
                 
                 <input v-model="img" type="radio" id="hedgehog" name="icon" value="cute_hedgehog.jpg"></input>
-                <label for="hedgehog"><img height="70px" width="70px" src="IMG/profile/cute_hedgehog.jpg" alt="hedgehog"></label><br>
+                <label for="hedgehog"><img height="70px" width="70px" src="img/profile/cute_hedgehog.jpg" alt="hedgehog"></label><br>
                 </div>
                 
                     <input type="text" placeholder="Name" v-model="name" required/>
