@@ -53,12 +53,19 @@ class ChallengesController extends Controller
 
                 $scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
                 $scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                
                 if ($scoreChallenger != null) {
                     $challengePlayed->scoreChallenger = Users_quizz::where('user_id', $challengeFound->challenger)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                } else {
+                    $challengePlayed->scoreChallenger = 0;
                 }
+
                 if ($scoreChallenged  != null) {
                     $challengePlayed->scoreChallenged = Users_quizz::where('user_id', $challengeFound->challenged)->where('quizz_id', $challengeFound->quizz_id)->first()->score;
+                } else {
+                    $challengePlayed->scoreChallenged = 0;
                 }
+
                 if ($scoreChallenger != null && $scoreChallenged != null) {
                     $challengeFound->status  = 'completed';
                 }
@@ -93,6 +100,8 @@ class ChallengesController extends Controller
                 
                 if ($scoreChallenger != null) {
                     $challengePlayed->scoreChallenger = $scoreChallenger;
+                } else {
+                    $challengePlayed->scoreChallenger = 0;
                 }
 
                 if ($challengedFound > 0) {
