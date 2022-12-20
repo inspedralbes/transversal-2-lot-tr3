@@ -1054,16 +1054,13 @@ const Ranking = {
             }).catch((error) => {
                 console.error('Error:', error);
             });
-        // this.players=[{
-        //     nickname:'',
-        //     elo: -1,
-        //     id: -1
-        // },
-        // {
-        //     nickname:'',
-        //     elo: -1,
-        //     id: -1
-        // }]
+        fetch(`../back/public/index.php/getDailyRanking`)
+        .then((response) => response.json())
+        .then((data) => {
+            this.dailyRanq = data;
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
     },
     computed: {
         isLogged() {
@@ -1073,7 +1070,7 @@ const Ranking = {
             return userStore().loginInfo;
         }
     },
-    methods: {
+    methods: {       
         addFriend(id) {
             var friendReq = new FormData();
             friendReq.append('id', id);
@@ -1098,61 +1095,10 @@ const Ranking = {
                         })
                     }
                 });
-                fetch(`../back/public/index.php/getDailyRanking`)
-                .then((response) => response.json())
-                .then((data) => {
-                    this.dailyRanq = data;
-                }).catch((error) => {
-                    console.error('Error:', error);
-                });
-            // this.players=[{
-            //     nickname:'',
-            //     elo: -1,
-            //     id: -1
-            // },
-            // {
-            //     nickname:'',
-            //     elo: -1,
-            //     id: -1
-            // }]
         },
-        computed: {
-            isLogged() {
-                return userStore().logged;
-            },
-            user() {
-                return userStore().loginInfo;
-            }
-        },
-        methods: {
-            addFriend(id) {
-                var friendReq = new FormData();
-                friendReq.append('id', id);
-
-                fetch(`../back/public/index.php/addFriend`, {
-                        method: 'POST',
-                        body: friendReq
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data == "ERROR") {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'this user is already your friend or already has a pending request',
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Done',
-                                text: 'Request sent, wait for your friend to accept it!',
-                            })
-                        }
-                    });
-            },
-            goHome() {
-                router.push('/');
-            }
+        goHome() {
+            router.push('/');
+        }
     },
 
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
@@ -1225,8 +1171,7 @@ const Ranking = {
             </div>
         </div> 
     </div>`
-
-}}
+}
 
 Vue.component('question', {
     props: ['question_info', 'time'],
