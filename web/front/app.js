@@ -476,34 +476,34 @@ const Login = {
             user.append('email', this.email);
             user.append('password', this.password);
 
-            let infoOk=true;
-            let msgError="";
+            let infoOk = true;
+            let msgError = "";
 
-            if(!this.validateName(this.name)){
-                infoOk=false;
-                msgError+="The name can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.name)) {
+                infoOk = false;
+                msgError += "The name can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateName(this.surname)){
-                infoOk=false;
-                msgError+="The surname can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.surname)) {
+                infoOk = false;
+                msgError += "The surname can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateName(this.nickname)){
-                infoOk=false;
-                msgError+="The nickname can't be empty and must be less than 15 characters <br/>"
+            if (!this.validateName(this.nickname)) {
+                infoOk = false;
+                msgError += "The nickname can't be empty and must be less than 15 characters <br/>"
             }
 
-            if(!this.validateMail(this.email)){
-                msgError+="Invalid mail <br/>";
-                infoOk=false;
+            if (!this.validateMail(this.email)) {
+                msgError += "Invalid mail <br/>";
+                infoOk = false;
             }
 
-            if(!this.validatePassword(this.password)){
-                infoOk=false;
-                msgError+="The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
+            if (!this.validatePassword(this.password)) {
+                infoOk = false;
+                msgError += "The password must be at least 8 charactes and must contain 1 Upper, 1 Lower , 1 number and not special characters";
             }
-            
+
             //alert de cuando se registren con campos vacíos
             //rgex /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
             if (!infoOk) {
@@ -590,36 +590,40 @@ const Login = {
                     }
                 });
         },
-        validateName(name){
-            let validation=false;
+        validateName(name) {
+            let validation = false;
 
-            if(name.length>0 && name.length<=15){
-                validation=true;
+            if (name.length > 0 && name.length <= 15) {
+                validation = true;
             }
 
             return validation;
         },
-        validateMail(mail){
-            let validation=false;
+        validateMail(mail) {
+            let validation = false;
 
-            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
-                validation=true;
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+                validation = true;
             }
-                
+
             return validation;
         },
-        validatePassword(psswd){
-            let validation=false;
+        validatePassword(psswd) {
+            let validation = false;
 
-            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)){
-                validation=true;
+            if (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(psswd)) {
+                validation = true;
             }
 
             return validation;
+        },
+        goHome() {
+            router.push('/');
         }
     },
     template: `
         <div>
+        <button class="login__home" @click="goHome">Go home</button>
             <div class="containerLogin" id="container">
             <div class="container__form signUp">
             <div class="signUp__title"><h1>Create Account</h1></div>
