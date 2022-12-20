@@ -160,6 +160,13 @@ const Questions = {
                             text: 'You already play the daily game',
                             confirmButtonText: 'OK',
                             background: '#434c7a',
+                            color: 'white',
+                            showClass: {
+                                popup: 'animate__animated animate__tada'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutDownBig'
+                            }
                         }).then((result) => {
                             router.push('/');
                         })
@@ -354,6 +361,7 @@ const Profile = {
                             Swal.fire({
                                 title: 'Result',
                                 background: '#434c7a',
+                                color: 'white',
                                 text: `You already challenged this play, wait for the other to play`,
                             })
                         } else {
@@ -377,12 +385,20 @@ const Profile = {
                 .then((data) => {
                     if (data == "ERROR") {
                         Swal.fire({
+                            color: 'white',
                             icon: 'error',
                             title: 'Error',
+                            showClass: {
+                                popup: 'animate__animated animate__tada'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutDownBig'
+                            },
                             text: 'this user is already your friend or already has a pending request',
                         })
                     } else {
                         Swal.fire({
+                            color: 'white',
                             icon: 'success',
                             title: 'Done',
                             text: 'Request sent, wait for your friend to accept it!',
@@ -838,14 +854,14 @@ const MyProfile = {
                         Swal.fire({
                             title: 'Result',
                             background: '#434c7a',
-
+                            color: 'white',
                             text: 'Challenge send'
                         })
                     } else {
                         Swal.fire({
                             title: 'Result',
                             background: '#434c7a',
-
+                            color: 'white',
                             text: 'This friend already has played this match'
                         })
                     }
@@ -885,8 +901,14 @@ const MyProfile = {
                     if (data.status == 'pending') {
                         Swal.fire({
                             background: '#434c7a',
-
+                            color: 'white',
                             title: 'Error',
+                            showClass: {
+                                popup: 'animate__animated animate__tada'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutDownBig'
+                            },
                             text: "There's an error with this match"
                         })
                     } else {
@@ -917,6 +939,7 @@ const MyProfile = {
                 .then((data) => {
                     if (data.status = 'pending') {
                         Swal.fire({
+                            color: 'white',
                             title: 'Result',
                             background: '#434c7a',
                             text: 'Challenge send'
@@ -924,6 +947,7 @@ const MyProfile = {
                     } else {
 
                         Swal.fire({
+                            color: 'white',
                             title: 'Result',
                             background: '#434c7a',
                             text: 'This friend already has played this match'
@@ -1123,6 +1147,12 @@ const Ranking = {
                             title: 'Error',
                             background: '#434c7a',
                             color: 'white',
+                            showClass: {
+                                popup: 'animate__animated animate__tada'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutDownBig'
+                            },
                             text: 'this user is already your friend or already has a pending request',
                         })
                     } else {
@@ -1318,6 +1348,7 @@ Vue.component('question', {
         <p>You answered <i v-if="infoPregunta.yourAnswer">RIGHT</i> <i v-else>WRONG</i>! <br/> The {{infoPregunta.persentage}}% of de people answered right</p>
     </div>
     <div v-else class="cardQ">
+    <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
         <div class="cardQ__question">
             <h1>{{this.question_info.question}}</h1>
         </div>
@@ -1642,7 +1673,7 @@ function alertPartida() {
 function gameType() {
     Swal.fire({
         title: 'Type of game',
-        // html: ``,
+        color: 'white',
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: 'New',
@@ -1650,7 +1681,6 @@ function gameType() {
         denyButtonColor: '#b18597',
         cancelButtonColor: '#d33',
         background: '#434c7a',
-
         color: 'white'
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
@@ -1698,6 +1728,7 @@ function showResult(data) {
     Swal.fire({
         title: 'Result',
         background: '#434c7a',
+        color: 'white',
         html: htmlString
     })
 }
