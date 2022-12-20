@@ -14,7 +14,7 @@ class QuestionsController extends Controller
         if ($questionFound > 0) {
             //Question is already on the table
             $updateQuestion = Question::where('question_id', $request -> question_id) -> first(); 
-            if ($request -> correct=='true') {
+            if ($request -> correct =='true') {
                 $updateQuestion -> correct += 1;
             } 
             $updateQuestion -> all += 1;
@@ -25,13 +25,12 @@ class QuestionsController extends Controller
             //First time the question is being played
             $question = new Question;
             $question -> question_id = $request -> question_id;
-            if ($request -> correct=='true') {
+            if ($request -> correct =='true') {
                 $question -> correct = 1;
             } else {
                 $question -> correct = 0;
             }
             $question -> all = 1;
-            // $question -> question_id = 1;
             $question -> save();
             $returnQuestion = $question;
         }
