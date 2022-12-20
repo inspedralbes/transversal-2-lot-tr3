@@ -38,6 +38,7 @@ Per fer-ho, accedim a FileZilla:
 1. Al paràmetre 'Servidor' posem: labs.inspedralbes.cat
 2. Nombre de usuario posem el nom d'usuari del labs. 
 3. I a 'contraseña'
+4. 
 
 ## Configurar CRON per les preguntes diàries
 1. Accedim a https://labs.inspedralbes.cat:8083/list/cron
