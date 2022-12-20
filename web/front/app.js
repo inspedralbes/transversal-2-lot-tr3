@@ -148,22 +148,22 @@ const Questions = {
             //fetch a diaria
             var userInfo = new FormData();
             userInfo.append('id_user', userStore().loginInfo.idUser);
-            fetch(`../back/public/index.php/daily`,{
-                method: 'POST',
-                body: userInfo
-            })
+            fetch(`../back/public/index.php/daily`, {
+                    method: 'POST',
+                    body: userInfo
+                })
                 .then((response) => response.json())
                 .then((data) => {
-                    if(data!='error'){
+                    if (data != 'error') {
                         this.quizz = data;
                         this.nQuestion = Object.keys(this.quizz).length - 1;
                         this.timer = true;
                         this.countTimer();
-                    }else{
+                    } else {
                         Swal.fire({
                             title: 'Error',
-                            icon:'info',
-                            text:'You already play the daily game',
+                            icon: 'info',
+                            text: 'You already play the daily game',
                             confirmButtonText: 'OK',
                             backdrop: `
                             rgba(0,0,123,0.4)
@@ -1055,12 +1055,12 @@ const Ranking = {
                 console.error('Error:', error);
             });
         fetch(`../back/public/index.php/getDailyRanking`)
-        .then((response) => response.json())
-        .then((data) => {
-            this.dailyRanq = data;
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                this.dailyRanq = data;
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
     },
     computed: {
         isLogged() {
@@ -1070,7 +1070,7 @@ const Ranking = {
             return userStore().loginInfo;
         }
     },
-    methods: {       
+    methods: {
         addFriend(id) {
             var friendReq = new FormData();
             friendReq.append('id', id);
@@ -1104,8 +1104,10 @@ const Ranking = {
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
     template: `
     <div>
-    <button class="rankingButton__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
-    <button class="rankingButton__Home" @click="goHome">Go home</button>   
+    <div class="rankingButtons">
+        <button class="rankingButtons__Daily" @click="viewGeneral=!viewGeneral"><p v-if="viewGeneral">See daily</p><p v-else>See general</p></button>
+        <button class="rankingButtons__Home" @click="goHome">Go home</button>
+    </div>   
     <div class="ranking" v-if="viewGeneral">
             <h1 class="ranking__title">RANKING</h1>
             <div class="ranking__players">
