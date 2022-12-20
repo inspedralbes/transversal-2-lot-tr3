@@ -1098,8 +1098,6 @@ const Ranking = {
                         })
                     }
                 });
-<<<<<<< HEAD
-
                 fetch(`../back/public/index.php/getDailyRanking`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -1155,12 +1153,6 @@ const Ranking = {
             goHome() {
                 router.push('/');
             }
-=======
->>>>>>> 100239014b22c0e9e313e211a626d04e47cb1b94
-        },
-        goHome() {
-            router.push('/');
-        }
     },
 
     // <i v-if="isLogged" class="fa fa-times-circle" @click="addFriend(player.id)"></i>
@@ -1234,7 +1226,7 @@ const Ranking = {
         </div> 
     </div>`
 
-}
+}}
 
 Vue.component('question', {
     props: ['question_info', 'time'],
