@@ -1,10 +1,10 @@
 //Componentes
 const Template = {
     params: true,
-    data: function () {
+    data: function() {
         return {}
     },
-    mounted() { },
+    mounted() {},
     computed: {},
     methods: {
 
@@ -16,7 +16,7 @@ const Template = {
 const Questions = {
     params: true,
     props: [],
-    data: function () {
+    data: function() {
         return {
             quizz: null,
             correct: 0,
@@ -28,7 +28,7 @@ const Questions = {
         }
     },
     methods: {
-        goNext: function (correct) {
+        goNext: function(correct) {
             this.questionTime = 0;
             if (correct == true) {
                 this.correct++
@@ -39,7 +39,7 @@ const Questions = {
             }
             this.carousel();
         },
-        carousel: function () {
+        carousel: function() {
             let buttons = document.getElementsByClassName('answers__button');
 
 
@@ -89,9 +89,9 @@ const Questions = {
                 score.append('time_resolution', this.time);
 
                 fetch(`../back/public/index.php/recordGame`, {
-                    method: 'POST',
-                    body: score
-                })
+                        method: 'POST',
+                        body: score
+                    })
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
@@ -143,9 +143,9 @@ const Questions = {
             var userInfo = new FormData();
             userInfo.append('id_user', userStore().loginInfo.idUser);
             fetch(`../back/public/index.php/daily`, {
-                method: 'POST',
-                body: userInfo
-            })
+                    method: 'POST',
+                    body: userInfo
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data != 'error') {
@@ -192,9 +192,9 @@ const Questions = {
             question.append('difficulty', userStore().configPlay.difficulty);
             question.append('category', userStore().configPlay.category);
             fetch(`../back/public/index.php/newGame`, {
-                method: 'POST',
-                body: question
-            })
+                    method: 'POST',
+                    body: question
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     this.quizz = data;
@@ -229,7 +229,7 @@ const Questions = {
 const Index = {
     //params:true,
     // props: ['', ''],
-    data: function () {
+    data: function() {
         return {
             quizz: null,
             category: 'film_and_tv',
@@ -247,7 +247,7 @@ const Index = {
             return userStore().loginInfo;
         }
     },
-    mounted() { },
+    mounted() {},
     template: `
         <div>
             <div class="wrapper__index wrapper">
@@ -277,7 +277,7 @@ const Index = {
 
 const Prueva = {
     params: true,
-    data: function () {
+    data: function() {
         return {}
     },
     mounted() {
@@ -296,7 +296,7 @@ const Prueva = {
 const Profile = {
     //router.push({ name: 'user', params: { username } })
     params: true,
-    data: function () {
+    data: function() {
         return {
             user: {
                 id: -1,
@@ -315,9 +315,9 @@ const Profile = {
 
         userReq.append('user_id', this.$route.params.id);
         fetch(`../back/public/index.php/getUserInfo`, {
-            method: 'POST',
-            body: userReq
-        })
+                method: 'POST',
+                body: userReq
+            })
             .then((response) => response.json())
             .then((data) => {
                 this.user.nickname = data.nickname;
@@ -325,9 +325,9 @@ const Profile = {
             });
 
         fetch(`../back/public/index.php/getUserQuizzs`, {
-            method: 'POST',
-            body: userReq
-        })
+                method: 'POST',
+                body: userReq
+            })
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
@@ -357,9 +357,9 @@ const Profile = {
             userReq.append('challenged_id', this.user.id);
 
             fetch(`../back/public/index.php/newChallenge`, {
-                method: 'POST',
-                body: userReq
-            })
+                    method: 'POST',
+                    body: userReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status == 'pending') {
@@ -384,9 +384,9 @@ const Profile = {
             friendReq.append('id', this.user.id);
 
             fetch(`../back/public/index.php/addFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
+                    method: 'POST',
+                    body: friendReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data == "ERROR") {
@@ -464,7 +464,7 @@ const Profile = {
 
 const Login = {
     params: true,
-    data: function () {
+    data: function() {
         return {
             name: '',
             surname: '',
@@ -559,9 +559,9 @@ const Login = {
                 })
             } else {
                 fetch(`../back/public/index.php/register`, {
-                    method: 'POST',
-                    body: user
-                })
+                        method: 'POST',
+                        body: user
+                    })
                     .then((response) => response.json())
                     .then((data) => {
                         if (data != -1) {
@@ -596,9 +596,9 @@ const Login = {
             user.append('password', this.logPass);
 
             fetch(`../back/public/index.php/login`, {
-                method: 'POST',
-                body: user
-            })
+                    method: 'POST',
+                    body: user
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data != "null") {
@@ -715,7 +715,7 @@ const Login = {
 }
 
 const MyProfile = {
-    data: function () {
+    data: function() {
         return {
             showStats: false,
             showAccount: false,
@@ -744,9 +744,9 @@ const MyProfile = {
         var userReq = new FormData();
         userReq.append('user_id', userStore().loginInfo.idUser);
         fetch(`../back/public/index.php/getUserQuizzs`, {
-            method: 'POST',
-            body: userReq
-        })
+                method: 'POST',
+                body: userReq
+            })
             .then((response) => response.json())
             .then((data) => {
                 this.quizzs = data;
@@ -817,9 +817,9 @@ const MyProfile = {
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/acceptFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
+                    method: 'POST',
+                    body: friendReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     this.getPendingRequests();
@@ -850,9 +850,9 @@ const MyProfile = {
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/declineFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
+                    method: 'POST',
+                    body: friendReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     this.getPendingRequests();
@@ -885,9 +885,9 @@ const MyProfile = {
             userReq.append('challenged_id', userId);
 
             fetch(`../back/public/index.php/newChallenge`, {
-                method: 'POST',
-                body: userReq
-            })
+                    method: 'POST',
+                    body: userReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status = 'pending') {
@@ -916,9 +916,9 @@ const MyProfile = {
             challengeInfo.append('saveChallenge', accepted);
 
             fetch(`../back/public/index.php/updateChallenge`, {
-                method: 'POST',
-                body: challengeInfo
-            })
+                    method: 'POST',
+                    body: challengeInfo
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data == 'ok') {
@@ -938,9 +938,9 @@ const MyProfile = {
             userReq.append('challenged_id', userId);
 
             fetch(`../back/public/index.php/newChallenge`, {
-                method: 'POST',
-                body: userReq
-            })
+                    method: 'POST',
+                    body: userReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status == 'pending') {
@@ -977,9 +977,9 @@ const MyProfile = {
             userReq.append('challenged_id', idFriend);
 
             fetch(`../back/public/index.php/newChallenge`, {
-                method: 'POST',
-                body: userReq
-            })
+                    method: 'POST',
+                    body: userReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status = 'pending') {
@@ -1144,7 +1144,7 @@ const MyProfile = {
 }
 
 const Ranking = {
-    data: function () {
+    data: function() {
         return {
             players: [],
             dailyRanq: [],
@@ -1181,9 +1181,9 @@ const Ranking = {
             friendReq.append('id', id);
 
             fetch(`../back/public/index.php/addFriend`, {
-                method: 'POST',
-                body: friendReq
-            })
+                    method: 'POST',
+                    body: friendReq
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data == "ERROR") {
@@ -1292,7 +1292,7 @@ const Ranking = {
 
 Vue.component('question', {
     props: ['question_info', 'time'],
-    data: function () {
+    data: function() {
         return {
             answers: [],
             answered: false,
@@ -1336,9 +1336,9 @@ Vue.component('question', {
                 infoQ.append('correct', ok);
 
                 fetch(`../back/public/index.php/addQuestion`, {
-                    method: 'POST',
-                    body: infoQ
-                })
+                        method: 'POST',
+                        body: infoQ
+                    })
                     .then((response) => response.json())
                     .then((data) => {
                         this.infoPregunta.persentage = data.correct * 100 / data.all;
@@ -1352,7 +1352,7 @@ Vue.component('question', {
                             this.showInfoPregunta = false;
                             this.$emit('startTimer');
                             this.$emit('answered', ok);
-                        }, "3000");
+                        }, "4000");
                     });
 
             }
@@ -1395,8 +1395,10 @@ Vue.component('question', {
         <h1>You answered <i style="color:green" v-if="infoPregunta.yourAnswer">RIGHT</i> <i style="color:red" v-else>WRONG</i>!</h1>
         <p class="cardQ__text" v-if="infoPregunta.all==1"> You are the first person to answer this question</p>
         <p class="cardQ__text" v-else>The {{parseFloat(infoPregunta.persentage).toFixed(2)}}% of de people answered right</p>
-        <img class="cardQ__cat" v-if="infoPregunta.yourAnswer" src="img/happy_cat.gif" alt="Happy cat">
-        <img class="cardQ__cat" v-else src="img/cat_peach.gif" alt="Sad cat">
+        <div style="display:flex; text-align:center; align-items:center; justify-content:center;">
+            <img class="cardQ__cat" v-if="infoPregunta.yourAnswer" src="img/happy_cat.gif" alt="Happy cat">
+            <img class="cardQ__cat" v-else src="img/cat_peach.gif" alt="Sad cat">
+        </div>
     </div>
     <div v-else class="cardQ">
     <b-progress :value="15-this.time" show-value :max="15" class="mb-3"></b-progress>
@@ -1415,10 +1417,10 @@ Vue.component('question', {
 
 Vue.component('playerHistory', {
     props: ['quizzs', 'challenge'],
-    data: function () {
+    data: function() {
         return {}
     },
-    mounted() { },
+    mounted() {},
     computed: {
         isLogged() {
             return userStore().logged;
@@ -1454,7 +1456,7 @@ Vue.component('playerHistory', {
 
 Vue.component('playerStats', {
     props: ['games', 'ready'],
-    data: function () {
+    data: function() {
         return {
             // config : {
             //     type: 'pie',
@@ -1534,8 +1536,8 @@ Vue.component('playerStats', {
                 type: config.type,
                 data: dataChar
             });
-            myChart.canvas.parentNode.style.height = '70vh';
-            myChart.canvas.parentNode.style.width = '70vw';
+            myChart.canvas.parentNode.style.height = '50vh';
+            myChart.canvas.parentNode.style.width = '50vw';
         }
     },
     mounted() {
@@ -1575,7 +1577,7 @@ Vue.component('playerStats', {
         }
     },
     template: `<div>
-        <div v-if="!ready">
+        <div v-if="!ready" style="justify-content:center; margin:auto;">
             <img src="img/loadingCat.gif" alt="LOADING...">
         </div>
             <canvas id="myChart"></canvas>
@@ -1584,30 +1586,30 @@ Vue.component('playerStats', {
 });
 //Rutas
 const routes = [{
-    path: '/',
-    component: Index
-},
-{
-    path: '/questions',
-    component: Questions,
-},
-{
-    path: '/login',
-    component: Login,
-},
-{
-    path: '/profile',
-    component: MyProfile,
-},
-{
-    path: '/ranking',
-    component: Ranking,
-},
-{
-    path: '/profile/:id',
-    component: Profile,
-    params: true
-},
+        path: '/',
+        component: Index
+    },
+    {
+        path: '/questions',
+        component: Questions,
+    },
+    {
+        path: '/login',
+        component: Login,
+    },
+    {
+        path: '/profile',
+        component: MyProfile,
+    },
+    {
+        path: '/ranking',
+        component: Ranking,
+    },
+    {
+        path: '/profile/:id',
+        component: Profile,
+        params: true
+    },
 ]
 
 const router = new VueRouter({
