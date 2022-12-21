@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elección</title>
+</head>
+
+<body>
+    <div class="containerButtons">
+        <div v-show='!isLogged'>
+            <RouterLink class="containerButtons__routerDemo" :to="{ path: `/ruta`, params: {}"><button class="containerButtons__demo">Start demo</button></RouterLink>
+        </div>
+        <div v-show='isLogged'>
+            <RouterLink class="containerButtons__routerDaily" :to="{ path: `/ruta`, params: {}"><button class="containerButtons__daily">Daily quizz</button></RouterLink>
+            <RouterLink class="containerButtons__newQuizz" :to="{ path: `/ruta`, params: {}"><button class="containerButtons__newQuizz">Start new quizz</button></RouterLink>
+        </div>
+    </div>
+</body>
+
+</html>

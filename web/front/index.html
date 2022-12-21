@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+        crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+    <!-- Para las rutas-->
+    <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+
+    <!-- Para pinia  -->
+    <script src="https://unpkg.com/@vue/composition-api"></script>
+    <script src="https://unpkg.com/vue-demi"></script>
+    <script src="https://unpkg.com/pinia"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" href="style/normalize.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" media="(max-width: 900px)" href="style/mobile.css" />
+    <!-- Media queries -->
+
+    <!-- Animate.css (Animaciones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- sweet alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <link rel="stylesheet" href="sweetalert2.min.css">
+    <link rel="stylesheet" href="@sweetalert2/themes/dark/dark.css"> -->
+
+
+    <!-- font awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- chart.js graficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <img src="" alt="">
+    <div id="app">
+        <!-- <div class="card">
+            <div class="card__pregunta"></div>
+            <div class="card__respuestas respuesta">
+                <div class="respuestas_respuesta"></div>
+                <div class="respuestas_respuesta"></div>
+                <div class="respuestas_respuesta"></div>
+                <div class="respuestas_respuesta"></div>
+            </div>
+        </div> -->
+        <router-view @userLogged='userLogged' @userUnlogged='userUnlogged'></router-view>
+    </div>
+    <footer>
+        <p>All questions and information regarding them is the work of<a href="https://the-trivia-api.com/license/"> The
+                Trivia Api.</a></p>
+    </footer>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
