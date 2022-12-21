@@ -6,3 +6,5 @@
  * URL de producció: http://trivial3.alumnes.inspedralbes.cat/front/#/questions 
  * Endpoints i JSONs d'exemple: https://app.swaggerhub.com/apis/alessiacrisafo/LOT3/0.1
  * Com desplegar l'aplicació: [DESPLEGAMENT.md](DESPLEGAMENT.md)
+ * Link a diagrama de components Vue https://lucid.app/lucidchart/b17ca12d-3bf5-4fd5-b4cf-49b1afc2eaa7/edit?invitationId=inv_fca3f49b-601c-4383-9bce-66942f8e7ffe
+ * [Diagrama de components de Vue](Vue_components.png)

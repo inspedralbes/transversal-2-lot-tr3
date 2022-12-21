@@ -1064,9 +1064,7 @@ const MyProfile = {
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(friend, index) in this.pendentFriends">
-                                            <div class="wrapperFriends">
-                                                <p>{{friend.name}} <button class="ranking__addFriend" @click="acceptFriend(friend.id)"></button> <button class="ranking__declineFriend" @click="declineFriend(friend.id)"></button></p>
-                                            </div>
+                                                <p>{{friend.name}} <button class="ranking__addFriend" @click="acceptFriend(friend.id)">Accept</button> <button class="ranking__declineFriend" @click="declineFriend(friend.id)">Decline</button></p>
                                             </div>
                                         </div>
                                     </b-card-text>
@@ -1442,12 +1440,12 @@ Vue.component('playerHistory', {
                 <th>Time</th>
                 <th v-if="isLogged">Challenge</th>
             </thead>
-            <tr v-for="(quizz, index) in this.quizzs">
+            <tr v-for="(quizz, index) in this.quizzs" v-if v-if="isLogged && quizz.type=='normal'">
                 <td>{{quizz.category}}</td>
                 <td>{{quizz.difficulty}}</td>
                 <td>{{quizz.score}}</td>
                 <td>{{quizz.time_resolution}}s</td>
-                <td><p v-if="isLogged && quizz.type=='normal'"><button class="ranking__addFriend" @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button></p></td>
+                <td><p><button class="ranking__addFriend" @click="$emit('challengeQuizz', quizz.quizz_id)">Challenge</button></p></td>
             </tr>
         </table>
     </div>
