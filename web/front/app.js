@@ -1063,9 +1063,7 @@ const MyProfile = {
                                         </div>
                                         <div class="info__content">
                                             <div v-for="(friend, index) in this.pendentFriends">
-                                            <div class="wrapperFriends">
-                                                <p>{{friend.name}} <button class="ranking__addFriend" @click="acceptFriend(friend.id)"></button> <button class="ranking__declineFriend" @click="declineFriend(friend.id)"></button></p>
-                                            </div>
+                                                <p>{{friend.name}} <button class="ranking__addFriend" @click="acceptFriend(friend.id)">Accept</button> <button class="ranking__declineFriend" @click="declineFriend(friend.id)">Decline</button></p>
                                             </div>
                                         </div>
                                     </b-card-text>
