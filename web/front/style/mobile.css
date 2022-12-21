@@ -6,20 +6,17 @@
         font-family: 'Shiny flakes';
         font-size: 30px;
     }
-
     .center {
         height: 40%;
         width: 80%;
         padding: 40px;
         border-radius: 10px;
     }
-
     .center__input {
         width: 100%;
         font-size: 15px;
         margin: auto;
     }
-
     .wrapperIndex__login,
     .wrapperIndex__profile,
     .wrapperIndex__ranking {
@@ -29,22 +26,18 @@
         height: 50px;
         padding: 5px;
     }
-
     .center__play {
         width: 100%;
     }
-
     .wrapperIndex__ranking {
         grid-area: 1 / 1 / 2 / 2;
     }
-
     .wrapperIndex__login,
     .wrapperIndex__profile {
         grid-area: 1 / 2 / 2 / 3;
         float: right;
         align-self: flex-end;
     }
-
     .wrapper__index {
         padding: 30px;
         display: grid;
@@ -54,12 +47,10 @@
         grid-row-gap: 0px;
         margin-bottom: 60px;
     }
-
     /* --------------------------------RANKING---------------------------------------- */
     .ranking {
         padding: 10px;
     }
-
     .rankingButtons__Daily,
     .rankingButtons__Home {
         width: 90%;
@@ -68,17 +59,14 @@
         height: 50px;
         padding: 5px;
     }
-
     .rankingButton__Daily {
         grid-area: 1 / 1 / 2 / 2;
     }
-
     .rankingButtons__Home {
         grid-area: 1 / 2 / 2 / 3;
         float: right;
         align-self: flex-end;
     }
-
     .rankingButtons {
         padding: 30px;
         display: grid;
@@ -88,7 +76,6 @@
         grid-row-gap: 0px;
         margin-bottom: 60px;
     }
-
     td,
     th {
         max-width: 100px;
@@ -98,15 +85,12 @@
         white-space: initial;
         word-break: break-all;
     }
-
     th {
         font-size: 1rem;
     }
-
     footer {
         display: none;
     }
-
     /* --------------------------------LOGIN---------------------------------------- */
     .containerLogin {
         background-color: #0a0a0a86;
@@ -120,70 +104,69 @@
         min-height: 30vh;
         margin: 100px auto;
     }
-
     .signUp__inputs,
     .signIn__inputs {
         padding: 5px;
         width: 90%;
         font-size: 0.7rem;
     }
-
     .container__form {
         width: 60%;
         padding: 40px;
     }
-
     .signIn {
         padding-left: 5px;
     }
-
     .containerLogin.right-panel-active .signIn {
         transform: translateX(20%);
     }
-
     .containerLogin.right-panel-active .signUp {
         transform: translateX(75%);
         opacity: 1;
         z-index: 5;
         animation: show 0.6s;
     }
-
     .overlay-left {
         transform: translateX(-20%);
     }
-
     .containerLogin.right-panel-active .overlay-left {
         transform: translateX(0);
     }
-
     .overlay-right {
         right: 0;
         transform: translateX(0);
     }
-
     .containerLogin.right-panel-active .overlay-right {
         transform: translateX(20%);
     }
-
     /* --------------------------------QUIZZ---------------------------------------- */
-
     .cardQ {
         width: 80%;
     }
-
     .cardQ h1 {
         font-size: 1rem;
     }
-
     .cardQ__answers {
         display: block;
         margin: 10px;
     }
-
     .answers__button {
         font-size: 1rem;
         width: 90%;
-        height: 40px;
+        min-height: 40px;
+        max-height: fit-content;
         margin-left: 0;
+    }
+    .login__home {
+        margin-bottom: 30px;
+    }
+    .div__loading {
+        display: block;
+    }
+    .loading {
+        font-size: 1.5rem;
+    }
+    .correct {
+        font-size: 1rem;
     }
 }

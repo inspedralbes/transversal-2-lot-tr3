@@ -213,13 +213,14 @@ const Questions = {
                     <question :question_info=question :time=questionTime @answered='goNext' @stopTimer="stopTimer" @startTimer="startTimer"></question>
                 </div>
             </div>
-            <div v-show="nQuestion<actualQ">
-                <h1>Correct answers: {{this.correct}}/{{this.nQuestion+1}}</h1>
-                <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="home">Home</button></RouterLink>
+            <div v-show="nQuestion<actualQ" style="margin:30px auto">
+            <RouterLink class="wrapperIndex__routerProfile" to="/"><button class="login__home">Home</button></RouterLink>
+                <h1 class= "correct">Correct answers: {{this.correct}}/{{this.nQuestion+1}}</h1>
+                <div style="justify-content:center; text-align:center; margin:auto;"><img src="img/partyCat.gif" alt="party cat uwu" height="400px" width="400px"></div>
             </div>
         </div>
-        <div v-else style="  display: flex; align-items: center; justify-content: center;">
-            <p>LOADING...</p>
+        <div class="div__loading" v-else style="display: flex; align-items: center; justify-content: center; margin: 300px auto">
+            <p class="loading">LOADING...</p>
             <img src="img/loadingCat.gif" alt="LOADING...">
         </div>
     </div>`
@@ -1131,7 +1132,7 @@ const MyProfile = {
                     <div class="info__content">
                         <div v-for="(friend, index) in this.friends">
                         <div class="wrapperChallenge">
-                            <button @click="challengeFriends(friend.id)">{{friend.name}}</button>
+                            <button class="button" @click="challengeFriends(friend.id)">{{friend.name}}</button>
                         </div>
                         </div>
                     </div>
@@ -1577,7 +1578,7 @@ Vue.component('playerStats', {
         }
     },
     template: `<div>
-        <div v-if="!ready" style="justify-content:center; margin:auto;">
+        <div v-if="!ready" style="justify-content:center; margin-top:auto;">
             <img src="img/loadingCat.gif" alt="LOADING...">
         </div>
             <canvas id="myChart"></canvas>
@@ -1760,30 +1761,30 @@ function gameType() {
 
 function showResult(data) {
     console.log(data);
-    let htmlString = `<div>`;
+    let htmlString = `<div style="display:flex; align-items:center; justify-content:center;">`;
 
     if (data.idChallenger == data.winner) {
         htmlString += `
-            <div>
-                <div>WINNER</div>
-                <div>${data.nicknameChallenger} -> ${data.scoreChallenger}</div>
+            <div style="margin:20px" >
+                <div><h1 style="color:green">WINNER</h1></div>
+                <div>${data.nicknameChallenger} with score: ${data.scoreChallenger}</div>
             </div>
 
-            <div>
-                <div>Nice try</div>
-                <div>${data.nicknameChallenged} -> ${data.scoreChallenged}</div>
+            <div style="margin:20px">
+                <div><h1 style="color:red">LOSER</h1></div>
+                <div>${data.nicknameChallenged} with score: ${data.scoreChallenged}</div>
             </div>
         `;
     } else {
         htmlString += `
-            <div>
-                <div>Nice try</div>
-                <div>${data.nicknameChallenger} -> ${data.scoreChallenger}</div>
+            <div style="margin:20px">
+                <div><h1 style="color:red">LOSER</h1></div>
+                <div>${data.nicknameChallenger} with score: ${data.scoreChallenger}</div>
             </div>
 
-            <div>
-                <div>WINNER</div>
-                <div>${data.nicknameChallenged} -> ${data.scoreChallenged}</div>
+            <div style="margin:20px">
+                <div><h1 style="color:green">WINNER</h1></div>
+                <div>${data.nicknameChallenged} with score: ${data.scoreChallenged}</div>
             </div>
         `;
     }

@@ -826,7 +826,9 @@
     }
     
     #__BVID__6___BV_tab_button__,
+    .nav-link,
     #__BVID__8___BV_tab_button__,
+    .nav-link,
     #__BVID__14___BV_tab_button__.nav-link,
     #__BVID__12___BV_tab_button__.nav-link {
         color: white;
@@ -949,6 +951,13 @@
         text-align: center;
         color: white;
         text-shadow: 0 0 1px hsla(0, 0%, 100%, .667), 0 0 2px #d892d8, 0 0 4px #d892d8, 0 0 6px #d892d8;
+    }
+    
+    .loading {
+        font-family: 'Shiny flakes';
+        margin-right: 20px;
+        color: #fd94bc;
+        font-size: 100px;
     }
     
     table {
@@ -1201,6 +1210,10 @@
         justify-content: center;
         text-align: center;
         margin-bottom: 30px;
+    }
+    
+    .correct {
+        font-size: 100px;
     }
     
     .cardQ__cat {
